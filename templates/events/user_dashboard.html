@@ -1,0 +1,398 @@
+{% extends 'base.html' %}
+
+{% block title %}
+User Dashboard
+{% endblock %}
+
+{% block content %}
+
+<!-- ==========================
+     WELCOME
+=========================== -->
+
+<div class="card">
+
+    <div class="actions">
+
+        <div>
+
+            <h1>
+                👋 Welcome,
+                {{ user.username }}
+            </h1>
+
+            <p class="muted">
+                Discover events, join activities and manage your wishlist.
+            </p>
+
+        </div>
+
+        <a href="{% url 'available_events' %}"
+           class="btn success">
+
+            Browse Events
+
+        </a>
+
+    </div>
+
+</div>
+
+<!-- ==========================
+     STATISTICS
+=========================== -->
+
+<div class="grid">
+
+    <div class="stat">
+
+        <span>Available Events</span>
+
+        <b>{{ available_events_count }}</b>
+
+    </div>
+
+    <div class="stat">
+
+        <span>Joined Events</span>
+
+        <b>{{ joined_events_count }}</b>
+
+    </div>
+
+    <div class="stat">
+
+        <span>Wishlist</span>
+
+        <b>{{ wishlist_count }}</b>
+
+    </div>
+
+    <div class="stat">
+
+        <span>Profile Status</span>
+
+        <b>100%</b>
+
+    </div>
+
+</div>
+
+<!-- ==========================
+     QUICK ACTIONS
+=========================== -->
+
+<div class="card">
+
+    <h2>
+
+        ⚡ Quick Actions
+
+    </h2>
+
+    <div class="grid">
+
+        <a href="{% url 'available_events' %}"
+           class="btn success"
+           style="padding:18px;text-align:center;">
+
+            📅<br><br>
+
+            Browse Events
+
+        </a>
+
+        <a href="{% url 'my_joined_events' %}"
+           class="btn secondary"
+           style="padding:18px;text-align:center;">
+
+            🎟️<br><br>
+
+            My Events
+
+        </a>
+
+        <a href="{% url 'wishlist' %}"
+           class="btn warning"
+           style="padding:18px;text-align:center;">
+
+            ❤️<br><br>
+
+            Wishlist
+
+        </a>
+
+        <a href="{% url 'calendar' %}"
+           class="btn"
+           style="padding:18px;text-align:center;">
+
+            📅<br><br>
+
+            Calendar
+
+        </a>
+
+    </div>
+
+</div>
+
+<!-- ==========================
+     FEATURED EVENTS
+=========================== -->
+
+<div class="card">
+
+    <div class="actions">
+
+        <h2 style="margin-right:auto;">
+
+            ⭐ Featured Events
+
+        </h2>
+
+        <a href="{% url 'available_events' %}"
+           class="btn">
+
+            View All
+
+        </a>
+
+    </div>
+
+    {% if events %}
+
+        {% for event in events|slice:":5" %}
+
+        <div class="event">
+
+            <div style="display:flex;gap:20px;align-items:center;">
+
+                <div>
+
+                    {% if event.event_image %}
+
+                    <img
+                        src="{{ event.event_image.url }}"
+                        width="130"
+                        height="90"
+                        style="
+                            object-fit:cover;
+                            border-radius:10px;
+                        ">
+
+                    {% else %}
+
+                    <div style="
+                        width:130px;
+                        height:90px;
+                        background:#eee;
+                        border-radius:10px;
+                        display:flex;
+                        align-items:center;
+                        justify-content:center;
+                        font-size:35px;
+                    ">
+                        📅
+                    </div>
+
+                    {% endif %}
+
+                </div>
+
+                <div style="flex:1;">
+
+                    <h3>
+
+                        {{ event.name }}
+
+                    </h3>
+
+                    <p class="muted">
+
+                        📍 {{ event.location }}
+
+                    </p>
+
+                    <p>
+
+                        <span class="badge">
+
+                            {{ event.category }}
+
+                        </span>
+
+                        <span class="badge">
+
+                            {{ event.status }}
+
+                        </span>
+
+                    </p>
+
+                    <p>
+
+                        📅
+
+                        {{ event.start_date }}
+
+                        -
+
+                        {{ event.end_date }}
+
+                    </p>
+
+                </div>
+
+                <div>
+
+                    <a
+                        href="{% url 'event_detail' event.pk %}"
+                        class="btn">
+
+                        View
+
+                    </a>
+
+                    <br><br>
+
+                    <a
+                        href="{% url 'join_event' event.pk %}"
+                        class="btn success">
+
+                        Join
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    {% else %}
+
+        <div class="alert">
+
+            No events available.
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+<!-- ==========================
+     DASHBOARD GRID
+=========================== -->
+
+<div class="grid">
+
+    <div class="card">
+
+        <h2>
+
+            ❤️ Wishlist
+
+        </h2>
+
+        <p>
+
+            Saved events are available here.
+
+        </p>
+
+        <a href="{% url 'wishlist' %}"
+           class="btn secondary">
+
+            Open Wishlist
+
+        </a>
+
+    </div>
+
+    <div class="card">
+
+        <h2>
+
+            📅 Calendar
+
+        </h2>
+
+        <p>
+
+            View all your upcoming schedules.
+
+        </p>
+
+        <a href="{% url 'calendar' %}"
+           class="btn">
+
+            Open Calendar
+
+        </a>
+
+    </div>
+
+</div>
+
+<!-- ==========================
+     RECENT ACTIVITY
+=========================== -->
+
+<div class="card">
+
+    <h2>
+
+        📌 Recent Activity
+
+    </h2>
+
+    <table>
+
+        <thead>
+
+            <tr>
+
+                <th>#</th>
+
+                <th>Activity</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            <tr>
+
+                <td>1</td>
+
+                <td>Logged into the system</td>
+
+            </tr>
+
+            <tr>
+
+                <td>2</td>
+
+                <td>Viewed available events</td>
+
+            </tr>
+
+            <tr>
+
+                <td>3</td>
+
+                <td>Opened dashboard</td>
+
+            </tr>
+
+        </tbody>
+
+    </table>
+
+</div>
+
+{% endblock %}

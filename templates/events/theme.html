@@ -1,0 +1,185 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Theme
+{% endblock %}
+
+{% block content %}
+
+<h1>🎨 Theme</h1>
+
+<div class="card">
+
+    <h2>📄 Select Page</h2>
+
+    <form method="POST" action="{% url 'theme_settings' %}">
+
+        {% csrf_token %}
+
+        <div class="theme-page-grid">
+
+            <label>
+                <input type="radio" name="page_name" value="dashboard" checked>
+                📊 Dashboard
+            </label>
+
+            <label>
+                <input type="radio" name="page_name" value="events">
+                📅 Events
+            </label>
+
+            <label>
+                <input type="radio" name="page_name" value="available_events">
+                📅 Available Events
+            </label>
+
+            <label>
+                <input type="radio" name="page_name" value="joined_events">
+                🎟️ Joined Events
+            </label>
+
+            <label>
+                <input type="radio" name="page_name" value="wishlist">
+                ❤️ Wishlist
+            </label>
+
+            <label>
+                <input type="radio" name="page_name" value="calendar">
+                🗓️ Calendar
+            </label>
+
+            <label>
+                <input type="radio" name="page_name" value="profile">
+                👤 Profile
+            </label>
+
+            <label>
+                <input type="radio" name="page_name" value="settings">
+                ⚙️ Settings
+            </label>
+
+            <label>
+                <input type="radio" name="page_name" value="categories">
+                📁 Categories
+            </label>
+
+            <label>
+                <input type="radio" name="page_name" value="venues">
+                🏢 Venues
+            </label>
+
+            <label>
+                <input type="radio" name="page_name" value="resources">
+                🛠️ Resources
+            </label>
+
+            <label>
+                <input type="radio" name="page_name" value="admin_dashboard">
+                🛡️ Admin Dashboard
+            </label>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>🎨 Choose Color</h2>
+
+            <div class="theme-color-area">
+
+                <label for="accent_color">
+                    Select Color
+                </label>
+
+                <input
+                    type="color"
+                    id="accent_color"
+                    name="accent_color"
+                    value="#2563eb"
+                >
+
+                <span id="color_code">
+                    #2563eb
+                </span>
+
+            </div>
+
+
+            <div class="theme-presets">
+
+                <button
+                    type="button"
+                    data-color="#2563eb"
+                    style="background:#2563eb;">
+                </button>
+
+                <button
+                    type="button"
+                    data-color="#7c3aed"
+                    style="background:#7c3aed;">
+                </button>
+
+                <button
+                    type="button"
+                    data-color="#16a34a"
+                    style="background:#16a34a;">
+                </button>
+
+                <button
+                    type="button"
+                    data-color="#f59e0b"
+                    style="background:#f59e0b;">
+                </button>
+
+                <button
+                    type="button"
+                    data-color="#dc2626"
+                    style="background:#dc2626;">
+                </button>
+
+                <button
+                    type="button"
+                    data-color="#ec4899"
+                    style="background:#ec4899;">
+                </button>
+
+                <button
+                    type="button"
+                    data-color="#0891b2"
+                    style="background:#0891b2;">
+                </button>
+
+                <button
+                    type="button"
+                    data-color="#111827"
+                    style="background:#111827;">
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="actions">
+
+            <a
+                href="{% url 'admin_dashboard' %}"
+                class="btn secondary"
+            >
+                ← Back
+            </a>
+
+            <button
+                type="submit"
+                class="btn primary"
+            >
+                💾 Save Theme
+            </button>
+
+        </div>
+
+    </form>
+
+</div>
+
+{% endblock %}

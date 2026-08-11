@@ -1,0 +1,413 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Event Management
+{% endblock %}
+
+{% block content %}
+
+<!-- =======================
+     PAGE HEADER
+======================== -->
+
+<div class="card">
+
+    <div class="actions">
+
+        <h1 style="margin-right:auto;">
+            📅 Event Management
+        </h1>
+
+        <form method="GET"
+              action="{% url 'event_list' %}"
+              style="display:flex;gap:10px;">
+
+            <input
+                type="text"
+                name="search"
+                value="{{ search }}"
+                placeholder="Search Events...">
+
+            <button class="btn">
+                Search
+            </button>
+
+        </form>
+
+        {% if not user.is_staff %}
+
+        <a href="{% url 'event_create' %}"
+           class="btn success">
+
+            ➕ Create Event
+
+        </a>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+
+<!-- =======================
+     FILTERS
+======================== -->
+
+<div class="card">
+
+    <form method="GET">
+
+        <div class="grid">
+
+            <div>
+
+                <label>Category</label>
+
+                <select name="category">
+
+                    <option value="">
+                        All Categories
+                    </option>
+
+                    {% for category in categories %}
+
+                    <option
+                        value="{{ category.id }}"
+                        {% if selected_category == category.id|stringformat:"s" %}
+                            selected
+                        {% endif %}
+                    >
+
+                        {{ category.name }}
+
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+
+            <div>
+
+                <label>Status</label>
+
+                <select name="status">
+
+                    <option value="">
+                        All Status
+                    </option>
+
+                    <option value="Upcoming">
+                        Upcoming
+                    </option>
+
+                    <option value="Active">
+                        Active
+                    </option>
+
+                    <option value="Completed">
+                        Completed
+                    </option>
+
+                    <option value="Cancelled">
+                        Cancelled
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div>
+
+                <label>Approval</label>
+
+                <select name="approval">
+
+                    <option value="">
+                        All
+                    </option>
+
+                    <option value="DRAFT">
+                        Draft
+                    </option>
+
+                    <option value="PENDING">
+                        Pending
+                    </option>
+
+                    <option value="APPROVED">
+                        Approved
+                    </option>
+
+                    <option value="REJECTED">
+                        Rejected
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div style="display:flex;align-items:end;">
+
+                <button class="btn">
+                    Apply Filters
+                </button>
+
+            </div>
+
+        </div>
+
+    </form>
+
+</div>
+
+
+<!-- =======================
+     EVENTS TABLE
+======================== -->
+
+<div class="card">
+
+<table>
+
+    <thead>
+
+        <tr>
+
+            <th>Image</th>
+
+            <th>Event</th>
+
+            <th>Category</th>
+
+            <th>Approval</th>
+
+            <th>Status</th>
+
+            <th>Participants</th>
+
+            <th>QR Code</th>
+
+            <th>Actions</th>
+
+        </tr>
+
+    </thead>
+
+
+    <tbody>
+
+    {% for event in events %}
+
+        <tr>
+
+            <!-- IMAGE -->
+
+            <td>
+
+                {% if event.event_image %}
+
+                <img
+                    src="{{ event.event_image.url }}"
+                    width="70"
+                    height="70"
+                    style="border-radius:10px;object-fit:cover;">
+
+                {% else %}
+
+                📅
+
+                {% endif %}
+
+            </td>
+
+
+            <!-- EVENT -->
+
+            <td>
+
+                <strong>
+                    {{ event.name }}
+                </strong>
+
+                <br>
+
+                <small>
+
+                    {{ event.start_date }}
+
+                    |
+
+                    {{ event.organizer }}
+
+                </small>
+
+            </td>
+
+
+            <!-- CATEGORY -->
+
+            <td>
+
+                {{ event.category }}
+
+            </td>
+
+
+            <!-- APPROVAL -->
+
+            <td>
+
+                <span class="badge">
+
+                    {{ event.get_approval_status_display }}
+
+                </span>
+
+            </td>
+
+
+            <!-- STATUS -->
+
+            <td>
+
+                {{ event.status }}
+
+            </td>
+
+
+            <!-- PARTICIPANTS -->
+
+            <td>
+
+                {{ event.participant_count }}
+
+            </td>
+
+
+            <!-- QR CODE -->
+
+            <td>
+
+                {% if event.approval_status == 'APPROVED' %}
+
+                    <a
+                        href="{% url 'event_qr' event.pk %}"
+                        class="btn">
+
+                        📱 View QR
+
+                    </a>
+
+                {% else %}
+
+                    <span>
+                        —
+                    </span>
+
+                {% endif %}
+
+            </td>
+
+
+            <!-- ACTIONS -->
+
+            <td>
+
+                <div class="actions">
+
+                    <a
+                        href="{% url 'event_edit' event.pk %}"
+                        class="btn secondary">
+
+                        Edit
+
+                    </a>
+
+
+                    {% if user.is_staff and event.approval_status == 'PENDING' %}
+
+                    <a
+                        href="{% url 'review_event' event.pk %}"
+                        class="btn warning">
+
+                        Review
+
+                    </a>
+
+                    {% endif %}
+
+
+                    {% if not user.is_staff and event.approval_status != 'APPROVED' and event.approval_status != 'PENDING' %}
+
+                    <form
+                        method="post"
+                        action="{% url 'submit_event' event.pk %}"
+                        class="inline">
+
+                        {% csrf_token %}
+
+                        <button
+                            class="btn warning">
+
+                            Submit
+
+                        </button>
+
+                    </form>
+
+                    {% endif %}
+
+
+                    <form
+                        method="post"
+                        action="{% url 'event_delete' event.pk %}"
+                        class="inline">
+
+                        {% csrf_token %}
+
+                        <button
+                            class="btn danger"
+                            onclick="return confirm('Delete this event?')">
+
+                            Delete
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </td>
+
+        </tr>
+
+
+    {% empty %}
+
+        <tr>
+
+            <td
+                colspan="8"
+                style="text-align:center;padding:30px;">
+
+                📅 No Events Found
+
+            </td>
+
+        </tr>
+
+    {% endfor %}
+
+    </tbody>
+
+</table>
+
+</div>
+
+{% endblock %}

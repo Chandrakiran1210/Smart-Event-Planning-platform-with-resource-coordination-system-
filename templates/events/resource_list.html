@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Resource Management
+{% endblock %}
+
+{% block content %}
+
+<div class="actions">
+
+    <h1 style="margin-right:auto">
+
+        Resource Management
+
+    </h1>
+
+    <a href="{% url 'resource_create' %}" class="btn">
+
+        + Add Resource
+
+    </a>
+
+</div>
+
+<div class="card">
+
+    <table>
+
+        <thead>
+
+            <tr>
+
+                <th>Name</th>
+                <th>Type</th>
+                <th>Total Quantity</th>
+                <th>Available</th>
+                <th>Actions</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+        {% for resource in resources %}
+
+            <tr>
+
+                <td>{{ resource.name }}</td>
+
+                <td>{{ resource.get_resource_type_display }}</td>
+
+                <td>{{ resource.quantity }}</td>
+
+                <td>{{ resource.available_quantity }}</td>
+
+                <td>
+
+                    <a href="{% url 'resource_edit' resource.pk %}"
+                       class="btn secondary">
+
+                        Edit
+
+                    </a>
+
+                    <form method="post"
+                          action="{% url 'resource_delete' resource.pk %}"
+                          class="inline">
+
+                        {% csrf_token %}
+
+                        <button class="btn danger">
+
+                            Delete
+
+                        </button>
+
+                    </form>
+
+                </td>
+
+            </tr>
+
+        {% empty %}
+
+            <tr>
+
+                <td colspan="5">
+
+                    No resources available.
+
+                </td>
+
+            </tr>
+
+        {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+{% endblock %}

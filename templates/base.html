@@ -1,0 +1,2261 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.css"
+        rel="stylesheet"
+    >
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        {% block title %}Event System{% endblock %}
+    </title>
+
+
+    <style>
+
+        /* =========================================================
+           EVENTPRO - CLEAN COMPACT UI
+           CSS-only redesign. Existing Django URLs/templates unchanged.
+        ========================================================= */
+
+
+        :root {
+            --sidebar-width: 220px;
+            --topbar-height: 64px;
+
+            --primary: #4f24d6;
+            --primary-dark: #3d18b5;
+            --primary-light: #f1edff;
+
+            --sidebar-bg: #111827;
+            --sidebar-hover: #24283a;
+            --sidebar-active: #4f24d6;
+
+            --page-bg: #f7f8fc;
+            --card-bg: #ffffff;
+
+            --text: #182033;
+            --muted: #6b7280;
+            --border: #e7e9f0;
+
+            --success: #16a34a;
+            --danger: #dc2626;
+            --warning: #d97706;
+
+            --shadow: 0 4px 16px rgba(17,24,39,.06);
+            --shadow-hover: 0 8px 24px rgba(17,24,39,.09);
+
+            --radius: 10px;
+            --transition: .2s ease;
+
+            --font-size: 14px;
+        }
+
+
+        /* =========================================================
+           BASIC RESET
+        ========================================================= */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+
+        body {
+            font-family: Arial, "Segoe UI", sans-serif;
+            font-size: var(--font-size);
+            background: var(--page-bg);
+            color: var(--text);
+            overflow-x: hidden;
+            line-height: 1.5;
+        }
+
+
+        a {
+            color: inherit;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+
+        a:hover {
+            text-decoration: none;
+        }
+
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+
+        h1 {
+            font-size: 30px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--text);
+        }
+
+
+        h2 {
+            font-size: 22px;
+            margin-bottom: 14px;
+            color: var(--text);
+        }
+
+
+        h3 {
+            font-size: 18px;
+            color: var(--text);
+        }
+
+
+        h4 {
+            font-size: 16px;
+        }
+
+
+        p {
+            color: var(--muted);
+            line-height: 1.6;
+        }
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
+.sidebar{
+    position:fixed;
+    left:0;
+    top:0;
+    width:var(--sidebar-width);
+    height:100vh;
+    background:var(--sidebar-bg);
+    color:#fff;
+    overflow-y:auto;
+    overflow-x:hidden;
+    box-shadow:3px 0 12px rgba(0,0,0,.08);
+    z-index:1000;
+}
+
+.sidebar::-webkit-scrollbar{
+    width:5px;
+}
+
+.sidebar::-webkit-scrollbar-thumb{
+    background:rgba(255,255,255,.18);
+    border-radius:20px;
+}
+
+.sidebar-logo{
+    height:64px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:0 18px;
+    color:#fff;
+    font-size:18px;
+    font-weight:700;
+    border-bottom:1px solid rgba(255,255,255,.08);
+}
+
+.sidebar-logo:hover{
+    color:#fff;
+}
+
+.sidebar-logo-icon{
+    font-size:22px;
+}
+
+.sidebar-menu{
+    padding:14px 10px 24px;
+}
+
+.single-menu-link,
+.menu-dropdown summary{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    width:100%;
+    padding:10px 12px;
+    margin-bottom:4px;
+    border-radius:8px;
+    color:#d8dce7;
+    font-size:13px;
+    font-weight:500;
+    cursor:pointer;
+    user-select:none;
+}
+
+.single-menu-link:hover,
+.menu-dropdown summary:hover{
+    background:var(--sidebar-hover);
+    color:#fff;
+}
+
+.single-menu-link.active{
+    background:var(--sidebar-active);
+    color:#fff;
+}
+
+.menu-icon{
+    width:22px;
+    min-width:22px;
+    text-align:center;
+    font-size:16px;
+}
+
+.menu-title{
+    flex:1;
+    font-weight:500;
+}
+
+.menu-arrow{
+    font-size:9px;
+    transition:var(--transition);
+}
+
+.menu-dropdown[open] .menu-arrow{
+    transform:rotate(180deg);
+}
+
+.menu-dropdown summary{
+    list-style:none;
+}
+
+.menu-dropdown summary::-webkit-details-marker{
+    display:none;
+}
+
+.submenu{
+    margin:2px 0 6px 18px;
+    border-left:1px solid rgba(255,255,255,.12);
+    padding-left:8px;
+}
+
+.submenu-link{
+    display:block;
+    padding:7px 10px;
+    margin:2px 0;
+    border-radius:6px;
+    color:#b9c0ce;
+    font-size:12px;
+}
+
+.submenu-link:hover{
+    background:rgba(255,255,255,.07);
+    color:#fff;
+}
+
+.admin-section{
+    margin:16px 8px 8px;
+    padding-top:12px;
+    border-top:1px solid rgba(255,255,255,.08);
+    color:#788397;
+    font-size:10px;
+    font-weight:700;
+    letter-spacing:1.5px;
+    text-transform:uppercase;
+}
+
+/* =========================================================
+   MAIN + TOPBAR
+========================================================= */
+
+.main-wrapper{
+    margin-left:var(--sidebar-width);
+    min-height:100vh;
+    background:var(--page-bg);
+}
+
+.topbar{
+    position:sticky;
+    top:0;
+    min-height:var(--topbar-height);
+    background:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:10px 22px;
+    border-bottom:1px solid var(--border);
+    box-shadow:0 2px 10px rgba(17,24,39,.04);
+    z-index:900;
+}
+
+.top-header{
+    width:100%;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+}
+
+.top-header h3{
+    color:var(--text);
+    font-size:20px;
+    font-weight:700;
+    white-space:nowrap;
+}
+
+.top-header form{
+    width:100%;
+}
+
+.top-header input{
+    width:100%;
+    padding:9px 16px;
+    border:1px solid #dfe2ea;
+    border-radius:22px;
+    outline:none;
+    background:#fff;
+    font-size:13px;
+}
+
+.top-header input:focus{
+    border-color:var(--primary);
+    box-shadow:0 0 0 3px rgba(79,36,214,.08);
+}
+
+.topbar-actions{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    flex-shrink:0;
+}
+
+.top-action{
+    width:36px;
+    height:36px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:50%;
+    background:#f5f6fa;
+    color:#4b5563;
+    font-size:17px;
+    position:relative;
+}
+
+.top-action:hover{
+    background:var(--primary-light);
+    color:var(--primary);
+}
+
+.notification-count{
+    position:absolute;
+    top:-2px;
+    right:-2px;
+    min-width:16px;
+    height:16px;
+    padding:0 4px;
+    border-radius:50px;
+    background:#ef4444;
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:9px;
+    font-weight:700;
+}
+
+.profile-dropdown{
+    position:relative;
+}
+
+.profile-dropdown summary{
+    list-style:none;
+    display:flex;
+    align-items:center;
+    gap:7px;
+    cursor:pointer;
+    padding:4px 7px;
+    border-radius:8px;
+}
+
+.profile-dropdown summary:hover{
+    background:#f5f6fa;
+}
+
+.profile-dropdown summary::-webkit-details-marker{
+    display:none;
+}
+
+.profile-avatar{
+    width:34px;
+    height:34px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:var(--primary);
+    color:#fff;
+    font-weight:700;
+    font-size:13px;
+    overflow:hidden;
+}
+
+.profile-name{
+    color:var(--text);
+    font-weight:600;
+    font-size:13px;
+}
+
+.profile-arrow{
+    font-size:9px;
+    color:#374151;
+}
+
+.profile-menu{
+    position:absolute;
+    right:0;
+    top:48px;
+    width:210px;
+    background:#fff;
+    border-radius:10px;
+    box-shadow:0 12px 30px rgba(0,0,0,.12);
+    overflow:hidden;
+    border:1px solid var(--border);
+}
+
+.profile-menu-header{
+    padding:14px;
+    border-bottom:1px solid var(--border);
+}
+
+.profile-menu-header strong{
+    display:block;
+    font-size:14px;
+    color:var(--text);
+}
+
+.profile-menu-header span{
+    color:var(--muted);
+    font-size:11px;
+}
+
+.profile-menu a{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:10px 14px;
+    color:var(--text);
+    font-size:13px;
+}
+
+.profile-menu a:hover{
+    background:#f7f7fb;
+}
+
+.logout-link{
+    color:#dc2626 !important;
+    border-top:1px solid var(--border);
+}
+
+/* =========================================================
+   CONTENT
+========================================================= */
+
+.content{
+    padding:24px;
+    max-width:1500px;
+    margin:auto;
+}
+
+.actions{
+    display:flex;
+    align-items:center;
+    gap:9px;
+    flex-wrap:wrap;
+    margin-bottom:18px;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+    gap:16px;
+}
+
+/* =========================================================
+   CARDS
+========================================================= */
+
+.card{
+    background:#fff;
+    border-radius:var(--radius);
+    padding:18px;
+    margin-bottom:18px;
+    box-shadow:var(--shadow);
+    border:1px solid var(--border);
+    transition:var(--transition);
+}
+
+.card:hover{
+    transform:translateY(-2px);
+    box-shadow:var(--shadow-hover);
+}
+
+.card h2{
+    margin-bottom:14px;
+    font-size:19px;
+}
+
+/* =========================================================
+   DASHBOARD STAT CARDS
+========================================================= */
+
+.stat{
+    position:relative;
+    overflow:hidden;
+    background:#fff;
+    color:var(--text);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:18px;
+    min-height:118px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    box-shadow:var(--shadow);
+    transition:var(--transition);
+}
+
+.stat:hover{
+    transform:translateY(-2px);
+    box-shadow:var(--shadow-hover);
+}
+
+.stat::after{
+    content:"";
+    position:absolute;
+    width:80px;
+    height:80px;
+    background:var(--primary-light);
+    border-radius:50%;
+    top:-28px;
+    right:-28px;
+}
+
+.stat span{
+    font-size:12px;
+    color:var(--muted);
+    opacity:1;
+    position:relative;
+    z-index:1;
+}
+
+.stat b{
+    font-size:30px;
+    line-height:1.1;
+    color:var(--text);
+    margin-top:5px;
+    position:relative;
+    z-index:1;
+}
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+.btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:7px;
+    padding:9px 15px;
+    border:none;
+    border-radius:7px;
+    font-size:13px;
+    font-weight:600;
+    cursor:pointer;
+    transition:var(--transition);
+}
+
+.btn:hover{
+    transform:translateY(-1px);
+    opacity:.96;
+}
+
+.btn.primary{
+    background:var(--primary);
+    color:#fff;
+}
+
+.btn.primary:hover{
+    background:var(--primary-dark);
+}
+
+.btn.success{
+    background:#16a34a;
+    color:#fff;
+}
+
+.btn.warning{
+    background:#d97706;
+    color:#fff;
+}
+
+.btn.danger{
+    background:#dc2626;
+    color:#fff;
+}
+
+.btn.secondary{
+    background:#64748b;
+    color:#fff;
+}
+
+/* =========================================================
+   FORMS
+========================================================= */
+
+label{
+    display:block;
+    margin-bottom:5px;
+    font-size:13px;
+    font-weight:600;
+    color:#374151;
+}
+
+input,
+select,
+textarea{
+    width:100%;
+    padding:9px 12px;
+    border:1px solid #d9dde7;
+    border-radius:7px;
+    font-size:13px;
+    transition:var(--transition);
+    background:#fff;
+    margin-bottom:13px;
+    color:var(--text);
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+    outline:none;
+    border-color:var(--primary);
+    box-shadow:0 0 0 3px rgba(79,36,214,.08);
+}
+
+textarea{
+    resize:vertical;
+    min-height:100px;
+}
+
+/* =========================================================
+   TABLES
+========================================================= */
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    background:#fff;
+    border-radius:10px;
+    overflow:hidden;
+    box-shadow:var(--shadow);
+    border:1px solid var(--border);
+}
+
+th{
+    background:#fafafe;
+    color:#4b5563;
+    padding:11px 12px;
+    text-align:left;
+    font-size:11px;
+    font-weight:700;
+    border-bottom:1px solid var(--border);
+}
+
+td{
+    padding:11px 12px;
+    border-bottom:1px solid #f0f1f5;
+    font-size:12px;
+    color:#374151;
+}
+
+tr:hover{
+    background:#fafaff;
+}
+
+/* =========================================================
+   EVENT CARDS
+========================================================= */
+
+.event{
+    background:#fff;
+    border-left:3px solid var(--primary);
+    border-radius:9px;
+    padding:15px;
+    margin-bottom:14px;
+    box-shadow:var(--shadow);
+    border-top:1px solid var(--border);
+    border-right:1px solid var(--border);
+    border-bottom:1px solid var(--border);
+    transition:var(--transition);
+}
+
+.event:hover{
+    transform:translateY(-2px);
+    box-shadow:var(--shadow-hover);
+}
+
+/* =========================================================
+   BADGES + ALERTS
+========================================================= */
+
+.badge{
+    display:inline-block;
+    padding:4px 8px;
+    border-radius:20px;
+    font-size:10px;
+    font-weight:700;
+    background:#eeeaff;
+    color:#5331c7;
+}
+
+.alert{
+    padding:11px 14px;
+    border-radius:8px;
+    margin-bottom:15px;
+    font-size:13px;
+    font-weight:600;
+}
+
+.alert.success{
+    background:#ecfdf3;
+    color:#166534;
+}
+
+.alert.error{
+    background:#fef2f2;
+    color:#991b1b;
+}
+
+.alert.warning{
+    background:#fffbeb;
+    color:#92400e;
+}
+
+.alert.info{
+    background:#eff6ff;
+    color:#1d4ed8;
+}
+
+.muted{
+    color:var(--muted);
+}
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.footer{
+    margin-left:var(--sidebar-width);
+    background:#111827;
+    color:#fff;
+    padding:14px 24px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:12px;
+}
+
+.footer p{
+    color:#fff;
+    margin:0;
+    font-size:12px;
+}
+
+.footer a{
+    color:#fff;
+}
+
+.footer a:hover{
+    color:#c4b5fd;
+}
+
+/* =========================================================
+   PUBLIC / LOGIN / SIGNUP NAV
+========================================================= */
+
+.public-nav{
+    min-height:64px;
+    padding:10px 28px;
+    background:#fff;
+    border-bottom:1px solid var(--border);
+    display:flex;
+    align-items:center;
+    gap:24px;
+}
+
+.public-brand{
+    margin-right:auto;
+    color:var(--primary);
+    font-size:18px;
+    font-weight:700;
+}
+
+.public-nav > a:not(.public-brand){
+    font-size:13px;
+    color:#374151;
+    font-weight:600;
+}
+
+.public-nav > a:not(.public-brand):hover{
+    color:var(--primary);
+}
+
+.public-content{
+    min-height:calc(100vh - 64px);
+    padding:24px;
+    background:var(--page-bg);
+}
+
+/* =========================================================
+   SCROLLBAR
+========================================================= */
+
+::-webkit-scrollbar{
+    width:7px;
+    height:7px;
+}
+
+::-webkit-scrollbar-track{
+    background:#f1f2f6;
+}
+
+::-webkit-scrollbar-thumb{
+    background:#c5c9d3;
+    border-radius:20px;
+}
+
+::-webkit-scrollbar-thumb:hover{
+    background:#9da3b1;
+}
+
+/* =========================================================
+   ANIMATION
+========================================================= */
+
+@keyframes fadeUp{
+    from{
+        opacity:0;
+        transform:translateY(8px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+.card,
+.event,
+.stat{
+    animation:fadeUp .25s ease;
+}
+
+/* =========================================================
+   DARK MODE
+========================================================= */
+
+body.dark{
+    --page-bg:#111827;
+    --card-bg:#1f2937;
+    --text:#f3f4f6;
+    --border:#374151;
+}
+
+body.dark .card,
+body.dark .stat,
+body.dark table{
+    background:#1f2937;
+    color:#f3f4f6;
+}
+
+body.dark .stat b{
+    color:#f3f4f6;
+}
+
+body.dark input,
+body.dark select,
+body.dark textarea{
+    background:#111827;
+    color:#fff;
+    border-color:#374151;
+}
+
+/* =========================================================
+   REMOVE UNDERLINES
+========================================================= */
+
+a,
+a:hover,
+a:focus,
+.top-action,
+.top-action:hover,
+.profile-menu a,
+.profile-menu a:hover,
+.single-menu-link,
+.single-menu-link:hover,
+.submenu-link,
+.submenu-link:hover{
+    text-decoration:none !important;
+}
+
+/* =========================================================
+   FORM PAGE HEADING + BACK BUTTON
+   Used by pages such as category_form.html, event_form.html,
+   venue_form.html and resource_form.html.
+========================================================= */
+
+.card h1{
+    display:inline-block;
+    margin-right:12px;
+    margin-bottom:16px;
+}
+
+.card h1 + .btn,
+.card h1 + a{
+    display:inline-flex;
+    vertical-align:middle;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:992px){
+    :root{
+        --sidebar-width:72px;
+    }
+
+    .sidebar{
+        width:72px;
+    }
+
+    .main-wrapper{
+        margin-left:72px;
+    }
+
+    .sidebar strong,
+    .menu-title,
+    .menu-arrow{
+        display:none;
+    }
+
+    .submenu{
+        display:none;
+    }
+
+    .sidebar-logo{
+        justify-content:center;
+        padding:0;
+    }
+
+    .single-menu-link,
+    .menu-dropdown summary{
+        justify-content:center;
+    }
+
+    .admin-section{
+        display:none;
+    }
+
+    .profile-name,
+    .profile-arrow{
+        display:none;
+    }
+}
+
+@media(max-width:768px){
+    .topbar{
+        padding:10px 14px;
+    }
+
+    .top-header{
+        gap:10px;
+    }
+
+    .top-header h3{
+        font-size:17px;
+    }
+
+    .top-header > div{
+        display:none !important;
+    }
+
+    .content{
+        padding:16px;
+    }
+
+    .grid{
+        grid-template-columns:1fr;
+    }
+
+    table{
+        display:block;
+        overflow-x:auto;
+    }
+
+    .footer{
+        margin-left:0;
+        text-align:center;
+        justify-content:center;
+    }
+
+    .public-nav{
+        padding:10px 16px;
+        gap:12px;
+    }
+
+    .public-nav > a:not(.public-brand){
+        font-size:11px;
+    }
+}
+
+@media(max-width:576px){
+    h1{
+        font-size:24px;
+    }
+
+    h2{
+        font-size:19px;
+    }
+    .btn{
+        width:100%;
+    }
+
+    .actions{
+        flex-direction:column;
+        align-items:stretch;
+    }
+
+    .sidebar{
+        display:none;
+    }
+
+    .main-wrapper{
+        margin-left:0;
+    }
+}
+/* =========================================================
+   THEME PAGE
+========================================================= */
+
+.theme-page-grid{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:12px;
+    margin-bottom:20px;
+}
+
+.theme-page-grid label{
+    display:flex;
+    align-items:center;
+    gap:9px;
+    min-height:48px;
+    padding:10px 13px;
+    border:1px solid var(--border);
+    border-radius:9px;
+    background:var(--card-bg);
+    color:var(--text);
+    font-size:13px;
+    font-weight:600;
+    cursor:pointer;
+    transition:var(--transition);
+}
+
+.theme-page-grid label:hover{
+    border-color:var(--primary);
+    background:var(--primary-light);
+}
+
+.theme-page-grid input[type="radio"]{
+    accent-color:var(--primary);
+}
+
+.theme-page-grid label:has(input[type="radio"]:checked){
+    border-color:var(--primary);
+    background:var(--primary-light);
+}
+
+.theme-color-area{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    flex-wrap:wrap;
+    padding:14px;
+    border:1px solid var(--border);
+    border-radius:9px;
+    background:var(--page-bg);
+}
+
+.theme-color-area label{
+    color:var(--text);
+    font-weight:600;
+}
+
+.theme-color-area input[type="color"]{
+    width:54px;
+    height:38px;
+    padding:3px;
+    border:1px solid var(--border);
+    border-radius:7px;
+    background:var(--card-bg);
+    cursor:pointer;
+}
+
+#color_code{
+    padding:7px 10px;
+    border:1px solid var(--border);
+    border-radius:6px;
+    background:var(--card-bg);
+    color:var(--text);
+    font-family:monospace;
+    font-size:12px;
+}
+
+.theme-presets{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-top:12px;
+}
+
+.theme-presets button{
+    width:32px;
+    height:32px;
+    border:2px solid var(--card-bg);
+    outline:1px solid var(--border);
+    border-radius:50%;
+    cursor:pointer;
+}
+
+@media(max-width:900px){
+    .theme-page-grid{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+    }
+}
+
+@media(max-width:600px){
+    .theme-page-grid{
+        grid-template-columns:1fr;
+    }
+}
+
+</style>
+
+</head>
+
+
+<body
+{% if user.is_authenticated %}
+    style="
+        --primary: {{ user.settings.dashboard_color }};
+        --primary-dark: {{ user.settings.dashboard_color }};
+        --primary-light: {{ user.settings.dashboard_color }}22;
+        --sidebar-active: {{ user.settings.dashboard_color }};
+    "
+{% endif %}
+>
+
+
+{% if user.is_authenticated %}
+
+
+<!-- =========================================================
+     SIDEBAR
+========================================================= -->
+
+<aside class="sidebar">
+
+
+    <a href="{% url 'home' %}" class="sidebar-logo">
+
+        <span class="sidebar-logo-icon">🎯</span>
+
+        <strong>Event System</strong>
+
+    </a>
+
+
+    <div class="sidebar-menu">
+
+
+        <!-- =====================================================
+             ADMIN SIDEBAR
+        ====================================================== -->
+
+        {% if user.is_staff %}
+
+
+            <!-- DASHBOARD -->
+
+            <a href="{% url 'admin_dashboard' %}"
+               class="single-menu-link">
+
+                <span class="menu-icon">📊</span>
+
+                <span>Dashboard</span>
+
+            </a>
+
+
+
+            <!-- =================================================
+                 EVENT CATEGORIES
+            ================================================== -->
+
+            <details class="menu-dropdown">
+
+                <summary>
+
+                    <span class="menu-icon">📁</span>
+
+                    <span class="menu-title">
+                        Event Categories
+                    </span>
+
+                    <span class="menu-arrow">▼</span>
+
+                </summary>
+
+
+                <div class="submenu">
+
+                    <a href="{% url 'category_create' %}"
+                       class="submenu-link">
+
+                        Create Category
+
+                    </a>
+
+
+                    <a href="{% url 'category_list' %}"
+                       class="submenu-link">
+
+                        Category List
+
+                    </a>
+
+                </div>
+
+            </details>
+
+
+<!-- =================================================
+     VENUE MANAGEMENT
+================================================== -->
+
+<details class="menu-dropdown">
+
+    <summary>
+
+        <span class="menu-icon">🏢</span>
+
+        <span class="menu-title">
+            Venue Management
+        </span>
+
+        <span class="menu-arrow">▼</span>
+
+    </summary>
+
+    <div class="submenu">
+
+        <a href="{% url 'venue_create' %}"
+           class="submenu-link">
+
+            Add Venue
+
+        </a>
+
+        <a href="{% url 'venue_list' %}"
+           class="submenu-link">
+
+            Venue List
+
+        </a>
+
+    </div>
+
+</details>
+
+
+<!-- =================================================
+     RESOURCE MANAGEMENT
+================================================== -->
+
+<details class="menu-dropdown">
+
+    <summary>
+
+        <span class="menu-icon">🛠️</span>
+
+        <span class="menu-title">
+
+            Resource Management
+
+        </span>
+
+        <span class="menu-arrow">
+
+            ▼
+
+        </span>
+
+    </summary>
+
+    <div class="submenu">
+
+        <a href="{% url 'resource_create' %}"
+           class="submenu-link">
+
+            Add Resource
+
+        </a>
+
+        <a href="{% url 'resource_list' %}"
+           class="submenu-link">
+
+            Resource List
+
+        </a>
+
+    </div>
+
+</details>
+
+
+            <!-- =================================================
+                 EVENTS
+            ================================================== -->
+
+            <details class="menu-dropdown">
+
+                <summary>
+
+                    <span class="menu-icon">📅</span>
+
+                    <span class="menu-title">
+                        Events
+                    </span>
+
+                    <span class="menu-arrow">▼</span>
+
+                </summary>
+
+
+                <div class="submenu">
+
+                    <a href="{% url 'event_create' %}" class="submenu-link">
+    Create Event
+</a><!--
+                    Admin create-event permission will be enabled
+                    in the next backend step.
+                    -->
+
+                    <a href="{% url 'event_list' %}"
+                       class="submenu-link">
+
+                        Event List
+
+                    </a>
+
+
+                    <a href="{% url 'event_list' %}?status=Active"
+                       class="submenu-link">
+
+                        Active Events
+
+                    </a>
+
+
+                    <a href="{% url 'event_list' %}?status=Upcoming"
+                       class="submenu-link">
+
+                        Upcoming Events
+
+                    </a>
+
+
+                    <a href="{% url 'event_list' %}?status=Completed"
+                       class="submenu-link">
+
+                        Completed Events
+
+                    </a>
+
+                </div>
+
+            </details>
+
+
+
+            <!-- =================================================
+                 ORGANIZERS
+            ================================================== -->
+
+            <details class="menu-dropdown">
+
+                <summary>
+
+                    <span class="menu-icon">🏢</span>
+
+                    <span class="menu-title">
+                        Organizers
+                    </span>
+
+                    <span class="menu-arrow">▼</span>
+
+                </summary>
+
+
+                <div class="submenu">
+
+                    <!--
+                    These use the current manage-users page safely.
+                    Dedicated organizer filters are added in Step 2.
+                    -->
+
+                    <a href="{% url 'manage_users' %}?role=ORGANIZER&status=pending"
+                       class="submenu-link">
+
+                        Pending Organizers
+
+                    </a>
+
+
+                    <a href="{% url 'manage_users' %}?role=ORGANIZER&status=approved"
+                       class="submenu-link">
+
+                        Approved Organizers
+
+                    </a>
+
+
+                    <a href="{% url 'manage_users' %}?role=ORGANIZER"
+                       class="submenu-link">
+
+                        All Organizers
+
+                    </a>
+
+                </div>
+
+            </details>
+
+
+
+            <!-- =================================================
+                 EVENT APPROVALS
+            ================================================== -->
+
+            <details class="menu-dropdown">
+
+                <summary>
+
+                    <span class="menu-icon">📋</span>
+
+                    <span class="menu-title">
+                        Event Approvals
+                    </span>
+
+                    <span class="menu-arrow">▼</span>
+
+                </summary>
+
+
+                <div class="submenu">
+
+                    <a href="{% url 'event_list' %}?approval=PENDING"
+                       class="submenu-link">
+
+                        Pending Events
+
+                    </a>
+
+
+                    <a href="{% url 'event_list' %}?approval=APPROVED"
+                       class="submenu-link">
+
+                        Approved Events
+
+                    </a>
+
+
+                    <a href="{% url 'event_list' %}?approval=REJECTED"
+                       class="submenu-link">
+
+                        Rejected Events
+
+                    </a>
+
+                </div>
+
+            </details>
+
+
+
+            <!-- =================================================
+                 EVENT MEMBERS
+            ================================================== -->
+
+            <details class="menu-dropdown">
+
+                <summary>
+
+                    <span class="menu-icon">👥</span>
+
+                    <span class="menu-title">
+                        Event Members
+                    </span>
+
+                    <span class="menu-arrow">▼</span>
+
+                </summary>
+
+
+                <div class="submenu">
+
+                    <a href="{% url 'manage_users' %}"
+                       class="submenu-link">
+
+                        Registered Users
+
+                    </a>
+
+
+                    <a href="{% url 'event_list' %}"
+                       class="submenu-link">
+
+                        Event Participants
+
+                    </a>
+
+                </div>
+
+            </details>
+
+
+
+            <!-- =================================================
+                 USER WISH
+            ================================================== -->
+
+            <details class="menu-dropdown">
+
+                <summary>
+
+                    <span class="menu-icon">❤️</span>
+
+                    <span class="menu-title">
+                        User Wish
+                    </span>
+
+                    <span class="menu-arrow">▼</span>
+
+                </summary>
+
+
+                <div class="submenu">
+
+                    <a href="{% url 'wishlist' %}"
+                       class="submenu-link">
+
+                        Wishlist
+
+                    </a>
+
+                </div>
+
+            </details>
+
+
+
+            <!-- =================================================
+                 ATTENDANCE
+            ================================================== -->
+
+            <details class="menu-dropdown">
+
+                <summary>
+
+                    <span class="menu-icon">✓</span>
+
+                    <span class="menu-title">
+                        Attendance
+                    </span>
+
+                    <span class="menu-arrow">▼</span>
+
+                </summary>
+
+
+                <div class="submenu">
+
+                    <a href="{% url 'event_list' %}?attendance=present"
+                       class="submenu-link">
+
+                        Present
+
+                    </a>
+
+
+                    <a href="{% url 'event_list' %}?attendance=absent"
+                       class="submenu-link">
+
+                        Absent
+
+                    </a>
+
+                </div>
+
+            </details>
+
+
+
+            <!-- =================================================
+                 ADMIN SECTION AT BOTTOM
+            ================================================== -->
+
+            <div class="admin-section">
+                ADMIN
+            </div>
+
+
+            <details class="menu-dropdown">
+
+                <summary>
+
+                    <span class="menu-icon">🛡️</span>
+
+                    <span class="menu-title">
+                        Admin Dashboard
+                    </span>
+
+                    <span class="menu-arrow">▼</span>
+
+                </summary>
+
+
+                <div class="submenu">
+
+                    <a href="{% url 'admin_dashboard' %}"
+                       class="submenu-link">
+
+                        Overview
+
+                    </a>
+
+
+                    <a href="{% url 'manage_users' %}"
+                       class="submenu-link">
+
+                        Manage Users
+
+                    </a>
+
+
+                    <a href="{% url 'manage_users' %}?role=ORGANIZER"
+                       class="submenu-link">
+
+                        Manage Organizers
+
+                    </a>
+
+
+                    <a href="{% url 'event_list' %}"
+                       class="submenu-link">
+
+                        Manage Events
+
+                    </a>
+
+
+                    <a href="{% url 'reports' %}"
+                       class="submenu-link">
+
+                        Reports
+
+                    </a>
+
+
+                    <a href="{% url 'settings' %}"
+                       class="submenu-link">
+
+                        System Management
+
+                    </a>
+
+                </div>
+
+            </details>
+
+
+
+        <!-- =====================================================
+             ORGANIZER SIDEBAR
+        ====================================================== -->
+
+        {% elif user.profile.role == 'ORGANIZER' %}
+
+
+            <a href="{% url 'organizer_dashboard' %}"
+               class="single-menu-link">
+
+                <span class="menu-icon">📊</span>
+
+                <span>Dashboard</span>
+
+            </a>
+
+
+            <details class="menu-dropdown">
+
+                <summary>
+
+                    <span class="menu-icon">📅</span>
+
+                    <span class="menu-title">
+                        Events
+                    </span>
+
+                    <span class="menu-arrow">▼</span>
+
+                </summary>
+
+
+                <div class="submenu">
+
+                    <a href="{% url 'event_create' %}"
+                       class="submenu-link">
+
+                        Create Event
+
+                    </a>
+
+
+                    <a href="{% url 'event_list' %}"
+                       class="submenu-link">
+
+                        My Events
+
+                    </a>
+
+
+                    <a href="{% url 'event_list' %}?approval=DRAFT"
+                       class="submenu-link">
+
+                        Draft Events
+
+                    </a>
+
+
+                    <a href="{% url 'event_list' %}?approval=PENDING"
+                       class="submenu-link">
+
+                        Pending Approval
+
+                    </a>
+
+
+                    <a href="{% url 'event_list' %}?approval=APPROVED"
+                       class="submenu-link">
+
+                        Approved Events
+
+                    </a>
+
+
+                    <a href="{% url 'event_list' %}?approval=REJECTED"
+                       class="submenu-link">
+
+                        Rejected Events
+
+                    </a>
+
+                </div>
+
+            </details>
+
+
+            <details class="menu-dropdown">
+
+                <summary>
+
+                    <span class="menu-icon">👥</span>
+
+                    <span class="menu-title">
+                        Participants
+                    </span>
+
+                    <span class="menu-arrow">▼</span>
+
+                </summary>
+
+
+                <div class="submenu">
+
+                    <a href="{% url 'event_list' %}"
+                       class="submenu-link">
+
+                        Event Participants
+
+                    </a>
+
+
+                    <a href="{% url 'event_list' %}?attendance=present"
+                       class="submenu-link">
+
+                        Attendance
+
+                    </a>
+
+                </div>
+
+            </details>
+
+
+
+        <!-- =====================================================
+             USER SIDEBAR
+        ====================================================== -->
+
+        {% else %}
+
+
+            <a href="{% url 'user_dashboard' %}"
+               class="single-menu-link">
+
+                <span class="menu-icon">📊</span>
+
+                <span>Dashboard</span>
+
+            </a>
+
+
+            <details class="menu-dropdown">
+
+                <summary>
+
+                    <span class="menu-icon">📅</span>
+
+                    <span class="menu-title">
+                        Events
+                    </span>
+
+                    <span class="menu-arrow">▼</span>
+
+                </summary>
+
+
+                <div class="submenu">
+
+                    <a href="{% url 'available_events' %}"
+                       class="submenu-link">
+
+                        Available Events
+
+                    </a>
+
+
+                    <a href="{% url 'my_joined_events' %}"
+                       class="submenu-link">
+
+                        My Joined Events
+
+                    </a>
+
+                </div>
+
+            </details>
+
+
+            <details class="menu-dropdown">
+
+                <summary>
+
+                    <span class="menu-icon">❤️</span>
+
+                    <span class="menu-title">
+                        My Activity
+                    </span>
+
+                    <span class="menu-arrow">▼</span>
+
+                </summary>
+
+
+                <div class="submenu">
+
+                    <a href="{% url 'wishlist' %}"
+                       class="submenu-link">
+
+                        Wishlist
+
+                    </a>
+
+
+                    <a href="{% url 'calendar' %}"
+                       class="submenu-link">
+
+                        Calendar
+
+                    </a>
+
+                </div>
+
+            </details>
+
+
+        {% endif %}
+
+
+    </div>
+
+</aside>
+
+
+
+<!-- =========================================================
+     MAIN WRAPPER
+========================================================= -->
+
+<div class="main-wrapper">
+
+
+    <!-- =====================================================
+         TOPBAR
+    ====================================================== -->
+
+    <header class="topbar">
+
+
+        
+<div class="top-header" style="display:flex;align-items:center;justify-content:space-between;width:100%;">
+
+    <!-- Left -->
+    <h3 style="margin:0;min-width:220px;">
+        🎯 Event Management
+    </h3>
+
+    <!-- Center Search -->
+    <div style="flex:1;display:flex;justify-content:center;">
+
+        <form method="GET"
+              action="{% url 'event_list' %}"
+              style="width:60%;">
+
+            <input
+                type="text"
+                name="search"
+                placeholder="🔍 Search Events, Categories, Users..."
+                style="
+                    width:100%;
+                    padding:10px 18px;
+                    border-radius:25px;
+                    border:1px solid #d1d5db;
+                    outline:none;
+                    font-size:14px;
+                    background:white;
+                ">
+
+        </form>
+
+    </div>
+
+    
+
+</div>
+
+        <div class="topbar-actions">
+            <a
+    href="{% url 'theme_settings' %}"
+    class="top-action"
+    title="Theme"
+>
+    🎨
+</a>
+
+
+<a
+    href="{% url 'calendar' %}"
+    class="top-action"
+    title="Calendar">
+
+    📅
+
+</a>
+
+            <!-- NOTIFICATION -->
+
+            <a href="{% url 'notifications' %}"
+               class="top-action"
+               title="Notifications">
+
+                🔔
+
+                {% if unread_notifications_count %}
+
+                    <span class="notification-count">
+
+                        {{ unread_notifications_count }}
+
+                    </span>
+
+                {% endif %}
+
+            </a>
+
+
+
+            <!-- HELP -->
+
+<a href="{% url 'contact' %}"
+   class="top-action"
+   title="Help & Support">
+
+    ❓
+
+</a>
+
+
+            <!-- PROFILE DROPDOWN -->
+
+            <details class="profile-dropdown">
+
+
+                <summary>
+
+
+                    {% if user.profile.profile_picture %}
+
+<img
+    src="{{ user.profile.profile_picture.url }}"
+    class="profile-avatar"
+    style="object-fit:cover;">
+
+{% else %}
+
+<div class="profile-avatar">
+
+    {{ user.username|first }}
+
+</div>
+
+{% endif %}
+
+                    <span class="profile-name">
+
+                        {{ user.username }}
+
+                    </span>
+
+
+                    <span class="profile-arrow">
+
+                        ▼
+
+                    </span>
+
+
+                </summary>
+
+
+                <div class="profile-menu">
+
+
+                    <div class="profile-menu-header">
+
+
+                        <strong>
+
+                            {{ user.get_full_name|default:user.username }}
+
+                        </strong>
+
+
+                        <span>
+
+                            {% if user.is_staff %}
+
+                                Administrator
+
+                            {% elif user.profile.role == 'ORGANIZER' %}
+
+                                Organizer
+
+                            {% else %}
+
+                                User
+
+                            {% endif %}
+
+                        </span>
+
+
+                    </div>
+
+
+                    <a href="{% url 'profile' %}">
+
+                        👤 My Profile
+
+                    </a>
+
+
+                    <a href="{% url 'settings' %}">
+
+                        ⚙️ Settings
+
+                    </a>
+
+
+                    
+
+                    <a href="{% url 'logout' %}"
+                       class="logout-link">
+
+                        🚪 Logout
+
+                    </a>
+
+
+                </div>
+
+
+            </details>
+
+
+        </div>
+
+
+    </header>
+
+
+
+    <!-- =====================================================
+         PAGE CONTENT
+    ====================================================== -->
+
+    <main class="content">
+
+
+        {% for message in messages %}
+
+            <div class="alert {{ message.tags }}">
+
+                {{ message }}
+
+            </div>
+
+        {% endfor %}
+
+
+        {% block content %}
+
+        {% endblock %}
+
+
+    </main>
+
+
+</div>
+
+
+
+<!-- =========================================================
+     PUBLIC / NOT LOGGED IN
+========================================================= -->
+
+{% else %}
+
+
+<nav class="public-nav">
+
+
+    <a href="{% url 'home' %}"
+       class="public-brand">
+
+        🎯 Event System
+
+    </a>
+
+
+    <a href="{% url 'login' %}">
+
+        Login
+
+    </a>
+
+
+    <a href="{% url 'signup' %}">
+
+        User Signup
+
+    </a>
+
+
+    <a href="{% url 'organizer_signup' %}">
+
+        Organizer Signup
+
+    </a>
+
+
+</nav>
+
+
+<main class="public-content">
+
+
+    {% for message in messages %}
+
+        <div class="alert {{ message.tags }}">
+
+            {{ message }}
+
+        </div>
+
+    {% endfor %}
+
+
+    {% block public_content %}
+
+        {% block guest_content %}
+
+        {% endblock %}
+
+    {% endblock %}
+
+
+</main>
+
+
+{% endif %}
+
+...
+
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js"></script>
+
+</body>
+
+</html>

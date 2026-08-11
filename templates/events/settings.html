@@ -1,0 +1,342 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Settings
+{% endblock %}
+
+{% block content %}
+
+<div class="actions">
+
+    <h1>
+        ⚙️ Settings
+    </h1>
+
+    
+</div>
+
+
+<form method="post">
+
+    {% csrf_token %}
+
+
+    <!-- =========================================
+         ACCOUNT SETTINGS
+    ========================================== -->
+
+    <div class="card">
+
+        <h2>
+            👤 Account Settings
+        </h2>
+
+        <div class="grid">
+
+            <div class="form-group">
+
+                <label>
+                    Username
+                </label>
+
+                <input
+                    type="text"
+                    value="{{ user.username }}"
+                    readonly
+                    class="readonly-input">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Email
+                </label>
+
+                <input
+                    type="email"
+                    name="email"
+                    value="{{ user.email }}"
+                    required>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Full Name
+                </label>
+
+                <input
+                    type="text"
+                    name="full_name"
+                    value="{{ profile.full_name }}"
+                    placeholder="Enter Full Name">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Phone Number
+                </label>
+
+                <input
+                    type="text"
+                    name="phone_number"
+                    value="{{ profile.phone_number }}"
+                    placeholder="Enter Phone Number">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Organization
+                </label>
+
+                <input
+                    type="text"
+                    name="organization"
+                    value="{{ profile.organization }}"
+                    placeholder="Organization Name">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Role
+                </label>
+
+                <input
+                    type="text"
+                    value="{% if user.is_superuser %}Administrator{% elif profile.role == 'ORGANIZER' %}Organizer{% else %}User{% endif %}"
+                    readonly
+                    class="readonly-input">
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================
+         CHANGE PASSWORD
+    ========================================== -->
+
+    <div class="card">
+
+        <h2>
+            🔐 Change Password
+        </h2>
+
+        <div class="grid">
+
+            <div class="form-group">
+
+                <label>
+                    Current Password
+                </label>
+
+                <input
+                    type="password"
+                    name="current_password"
+                    placeholder="Enter current password">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    New Password
+                </label>
+
+                <input
+                    type="password"
+                    name="new_password"
+                    placeholder="Enter new password">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Confirm Password
+                </label>
+
+                <input
+                    type="password"
+                    name="confirm_password"
+                    placeholder="Confirm new password">
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================
+         APPEARANCE
+    ========================================== -->
+
+    <div class="card">
+
+        <h2>
+            🎨 Appearance
+        </h2>
+
+        <div class="grid">
+
+            <div class="form-group">
+
+                <label>
+                    Theme
+                </label>
+
+                <select name="theme">
+
+                    <option value="light">
+                        ☀️ Light
+                    </option>
+
+                    <option value="dark">
+                        🌙 Dark
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Accent Color
+                </label>
+
+                <input
+                    type="color"
+                    name="accent_color"
+                    value="#4f46e5">
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================
+         SECURITY
+    ========================================== -->
+
+    <div class="card">
+
+        <h2>
+            🛡️ Security
+        </h2>
+
+        <div class="grid">
+
+            <div class="form-group">
+
+                <label>
+                    Account Status
+                </label>
+
+                <input
+                    type="text"
+                    value="{% if user.is_active %}Active{% else %}Inactive{% endif %}"
+                    readonly
+                    class="readonly-input">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Login / Session
+                </label>
+
+                <select name="session_setting">
+
+                    <option value="standard">
+                        Standard Session
+                    </option>
+
+                    <option value="extended">
+                        Extended Session
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================
+         BUTTONS
+    ========================================== -->
+
+    <div class="actions">
+
+        {% if user.is_superuser %}
+
+            <a
+                href="{% url 'admin_dashboard' %}"
+                class="btn secondary">
+
+                ← Back
+
+            </a>
+
+        {% elif profile.role == "ORGANIZER" %}
+
+            <a
+                href="{% url 'organizer_dashboard' %}"
+                class="btn secondary">
+
+                ← Back
+
+            </a>
+
+        {% else %}
+
+            <a
+                href="{% url 'user_dashboard' %}"
+                class="btn secondary">
+
+                ← Back
+
+            </a>
+
+        {% endif %}
+
+
+        <button
+            type="submit"
+            class="btn primary">
+
+            💾 Save Settings
+
+        </button>
+
+    </div>
+
+</form>
+
+{% endblock %}

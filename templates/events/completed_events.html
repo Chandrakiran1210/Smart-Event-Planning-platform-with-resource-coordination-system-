@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}Completed Events{% endblock %}
+{% block content %}
+<div class="card">
+    <h2>Completed Events</h2>
+    <div class="sidebar-nav">
+        <a href="{% url 'admin_dashboard' %}">📊 Dashboard</a>
+    </div>
+    
+    {% if events %}
+    <table>
+        <thead>
+            <tr>
+                <th>Event Name</th>
+                <th>Category</th>
+                <th>Location</th>
+                <th>Completed Date</th>
+                <th>Total Participants</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for event in events %}
+            {% if event.status == 'Completed' %}
+            <tr>
+                <td><strong>{{ event.name }}</strong></td>
+                <td>{{ event.category.name }}</td>
+                <td>{{ event.location }}</td>
+                <td>{{ event.end_date }}</td>
+                <td>{{ event.registrations.count }}</td>
+                <td class="actions">
+                    <a href="{% url 'event_edit' event.pk %}" class="btn btn-secondary">Edit</a>
+                </td>
+            </tr>
+            {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="empty-state">No completed events yet.</div>
+    {% endif %}
+</div>
+{% endblock %}

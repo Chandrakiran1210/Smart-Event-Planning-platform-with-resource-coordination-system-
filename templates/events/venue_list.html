@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Venue Management
+{% endblock %}
+
+{% block content %}
+
+<div class="actions">
+
+    <h1 style="margin-right:auto">
+
+        Venue Management
+
+    </h1>
+
+    <a href="{% url 'venue_create' %}" class="btn">
+
+        + Add Venue
+
+    </a>
+
+</div>
+
+<div class="card">
+
+    <table>
+
+        <thead>
+
+            <tr>
+
+                <th>Name</th>
+                <th>Location</th>
+                <th>Capacity</th>
+                <th>Status</th>
+                <th>Actions</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+        {% for venue in venues %}
+
+            <tr>
+
+                <td>{{ venue.name }}</td>
+
+                <td>{{ venue.location }}</td>
+
+                <td>{{ venue.capacity }}</td>
+
+                <td>
+
+                    {% if venue.is_available %}
+
+                        <span class="badge success">
+
+                            Available
+
+                        </span>
+
+                    {% else %}
+
+                        <span class="badge danger">
+
+                            Occupied
+
+                        </span>
+
+                    {% endif %}
+
+                </td>
+
+                <td>
+
+                    <a
+                        href="{% url 'venue_edit' venue.pk %}"
+                        class="btn secondary">
+
+                        Edit
+
+                    </a>
+
+                    <form
+                        method="post"
+                        action="{% url 'venue_delete' venue.pk %}"
+                        class="inline">
+
+                        {% csrf_token %}
+
+                        <button class="btn danger">
+
+                            Delete
+
+                        </button>
+
+                    </form>
+
+                </td>
+
+            </tr>
+
+        {% empty %}
+
+            <tr>
+
+                <td colspan="5">
+
+                    No venues available.
+
+                </td>
+
+            </tr>
+
+        {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+{% endblock %}

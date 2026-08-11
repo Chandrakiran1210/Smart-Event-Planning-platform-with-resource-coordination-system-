@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}User Marks & Attendance{% endblock %}
+{% block content %}
+<div class="card">
+    <h2>User Marks & Attendance Records</h2>
+    <div class="sidebar-nav">
+        <a href="{% url 'admin_dashboard' %}">📊 Dashboard</a>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Event</th>
+                <th>User</th>
+                <th>Attendance Status</th>
+                <th>Performance</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td colspan="5" style="text-align: center; color: #999; padding: 30px;">No marks or attendance records yet. Add users and create events to track performance.</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{% endblock %}

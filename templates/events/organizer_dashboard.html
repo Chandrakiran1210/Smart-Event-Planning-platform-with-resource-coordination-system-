@@ -1,0 +1,337 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Organizer Dashboard
+{% endblock %}
+
+{% block content %}
+
+<!-- =========================
+     HEADER
+========================= -->
+
+<div class="card">
+
+    <div class="actions">
+
+        <div>
+
+            <h1>
+                👨‍💼 Organizer Dashboard
+            </h1>
+
+            <p class="muted">
+                Create, manage and monitor your events.
+            </p>
+
+        </div>
+
+        <a href="{% url 'event_create' %}"
+           class="btn success">
+
+            ➕ Create Event
+
+        </a>
+
+    </div>
+
+</div>
+
+<!-- =========================
+     STATISTICS
+========================= -->
+
+<div class="grid">
+
+    <div class="stat">
+
+        <span>Total Events</span>
+
+        <b>{{ total_events }}</b>
+
+    </div>
+
+    <div class="stat">
+
+        <span>Pending Review</span>
+
+        <b>{{ pending_count }}</b>
+
+    </div>
+
+    <div class="stat">
+
+        <span>Approved</span>
+
+        <b>{{ approved_count }}</b>
+
+    </div>
+
+    <div class="stat">
+
+        <span>Registrations</span>
+
+        <b>{{ registration_count }}</b>
+
+    </div>
+
+</div>
+
+<!-- =========================
+     QUICK ACTIONS
+========================= -->
+
+<div class="card">
+
+    <h2>
+
+        ⚡ Quick Actions
+
+    </h2>
+
+    <div class="grid">
+
+        <a href="{% url 'event_create' %}"
+           class="btn success"
+           style="padding:18px;text-align:center;">
+
+            ➕<br><br>
+
+            Create Event
+
+        </a>
+
+        <a href="{% url 'event_list' %}"
+           class="btn secondary"
+           style="padding:18px;text-align:center;">
+
+            📋<br><br>
+
+            My Events
+
+        </a>
+
+        <a href="{% url 'calendar' %}"
+           class="btn"
+           style="padding:18px;text-align:center;">
+
+            📅<br><br>
+
+            Calendar
+
+        </a>
+
+        <a href="{% url 'profile' %}"
+           class="btn warning"
+           style="padding:18px;text-align:center;">
+
+            👤<br><br>
+
+            Profile
+
+        </a>
+
+    </div>
+
+</div>
+
+<!-- =========================
+     MY EVENTS
+========================= -->
+
+<div class="card">
+
+    <div class="actions">
+
+        <h2 style="margin-right:auto;">
+
+            📅 My Events
+
+        </h2>
+
+        <a href="{% url 'event_list' %}"
+           class="btn">
+
+            View All
+
+        </a>
+
+    </div>
+
+    {% if events %}
+
+    <table>
+
+        <thead>
+
+        <tr>
+
+            <th>Event</th>
+
+            <th>Category</th>
+
+            <th>Status</th>
+
+            <th>Participants</th>
+
+            <th>Actions</th>
+
+        </tr>
+
+        </thead>
+
+        <tbody>
+
+        {% for event in events %}
+
+        <tr>
+
+            <td>
+
+                <strong>{{ event.name }}</strong>
+
+                <br>
+
+                <small>
+
+                    {{ event.start_date }}
+
+                </small>
+
+            </td>
+
+            <td>
+
+                {{ event.category }}
+
+            </td>
+
+            <td>
+
+                <span class="badge">
+
+                    {{ event.get_approval_status_display }}
+
+                </span>
+
+            </td>
+
+            <td>
+
+                {{ event.participant_count }}
+
+            </td>
+
+            <td>
+
+                <div class="actions">
+
+                    <a href="{% url 'event_edit' event.pk %}"
+                       class="btn secondary">
+
+                        Edit
+
+                    </a>
+
+                    {% if event.approval_status != 'APPROVED' and event.approval_status != 'PENDING' %}
+
+                    <form method="post"
+                          action="{% url 'submit_event' event.pk %}"
+                          class="inline">
+
+                        {% csrf_token %}
+
+                        <button
+                            class="btn warning">
+
+                            Submit
+
+                        </button>
+
+                    </form>
+
+                    {% endif %}
+
+                    {% if event.approval_status == 'APPROVED' %}
+
+                    <a href="{% url 'event_participants' event.pk %}"
+                       class="btn success">
+
+                        Participants
+
+                    </a>
+
+                    {% endif %}
+
+                </div>
+
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+        </tbody>
+
+    </table>
+
+    {% else %}
+
+    <div class="alert">
+
+        No events created yet.
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+<!-- =========================
+     NOTIFICATIONS
+========================= -->
+
+<div class="card">
+
+    <div class="actions">
+
+        <h2 style="margin-right:auto;">
+
+            🔔 Notifications
+
+        </h2>
+
+        <a href="{% url 'notifications' %}"
+           class="btn">
+
+            View All
+
+        </a>
+
+    </div>
+
+    {% if notifications %}
+
+        {% for note in notifications %}
+
+        <div class="event">
+
+            {{ note.message }}
+
+        </div>
+
+        {% endfor %}
+
+    {% else %}
+
+        <p class="muted">
+
+            No notifications.
+
+        </p>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

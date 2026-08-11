@@ -1,0 +1,549 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Admin Dashboard
+{% endblock %}
+
+{% block content %}
+
+<h1 style="margin-right:auto;">
+    Admin Dashboard
+</h1>
+
+
+<!-- ==================== STAT CARDS ==================== -->
+
+<div class="grid">
+
+    <!-- Events -->
+    <a href="{% url 'event_list' %}"
+       style="text-decoration:none;color:inherit;">
+
+        <div class="stat">
+
+            <div style="font-size:35px;">📅</div>
+
+            <h3 style="margin:10px 0 5px;">
+                Events
+            </h3>
+
+            <h1>
+                {{ total_events }}
+            </h1>
+
+            <small>
+                Total Events
+            </small>
+
+        </div>
+
+    </a>
+
+
+    <!-- Pending -->
+    <div class="stat">
+
+        <div style="font-size:35px;">
+            ⏳
+        </div>
+
+        <h3 style="margin:10px 0 5px;">
+            Pending
+        </h3>
+
+        <h1>
+            {{ pending_count }}
+        </h1>
+
+        <small>
+            Awaiting Approval
+        </small>
+
+    </div>
+
+
+    <!-- Users -->
+    <a href="{% url 'manage_users' %}"
+       style="text-decoration:none;color:inherit;">
+
+        <div class="stat">
+
+            <div style="font-size:35px;">
+                👥
+            </div>
+
+            <h3 style="margin:10px 0 5px;">
+                Users
+            </h3>
+
+            <h1>
+                {{ total_users }}
+            </h1>
+
+            <small>
+                Registered Users
+            </small>
+
+        </div>
+
+    </a>
+
+
+    <!-- Organizers -->
+    <div class="stat">
+
+        <div style="font-size:35px;">
+            🏢
+        </div>
+
+        <h3 style="margin:10px 0 5px;">
+            Organizers
+        </h3>
+
+        <h1>
+            {{ total_organizers }}
+        </h1>
+
+        <small>
+            Approved Organizers
+        </small>
+
+    </div>
+
+
+    <!-- Registrations -->
+    <div class="stat">
+
+        <div style="font-size:35px;">
+            📝
+        </div>
+
+        <h3 style="margin:10px 0 5px;">
+            Registrations
+        </h3>
+
+        <h1>
+            {{ total_registrations }}
+        </h1>
+
+        <small>
+            Total Registrations
+        </small>
+
+    </div>
+
+</div>
+
+<!-- ==================== APPROVAL QUEUE ==================== -->
+
+<div class="actions">
+
+    <h2 style="margin-right:auto;">
+        ⏳ Approval Queue
+    </h2>
+
+    <span class="badge">
+        {{ pending_count }} Pending
+    </span>
+
+</div>
+
+
+{% if pending_events %}
+
+<table>
+
+    <thead>
+
+        <tr>
+
+            <th>Event</th>
+            <th>Category</th>
+            <th>Organizer</th>
+            <th>Status</th>
+            <th>Action</th>
+
+        </tr>
+
+    </thead>
+
+
+    <tbody>
+
+    {% for event in pending_events %}
+
+        <tr>
+
+            <td>
+                {{ event.name }}
+            </td>
+
+
+            <td>
+                {{ event.category }}
+            </td>
+
+
+            <td>
+                {{ event.organizer }}
+            </td>
+
+
+            <td>
+
+                <span class="badge">
+                    {{ event.get_approval_status_display }}
+                </span>
+
+            </td>
+
+
+            <td>
+
+                <a href="{% url 'review_event' event.pk %}"
+                   class="btn warning">
+
+                    Review
+
+                </a>
+
+
+                <a href="{% url 'event_edit' event.pk %}"
+                   class="btn secondary">
+
+                    Edit
+
+                </a>
+
+            </td>
+
+        </tr>
+
+    {% endfor %}
+
+    </tbody>
+
+</table>
+
+
+{% else %}
+
+<div style="padding:30px;text-align:center;">
+
+    <h3>
+        No Pending Events
+    </h3>
+
+    <p class="muted">
+        All submitted events have been reviewed.
+    </p>
+
+</div>
+
+{% endif %}
+
+
+
+<!-- ==================== RECENT EVENTS ==================== -->
+
+<div class="actions">
+
+    <h2 style="margin-right:auto;">
+        📅 Recent Events
+    </h2>
+
+
+    <a href="{% url 'event_list' %}"
+       class="btn">
+
+        View All
+
+    </a>
+
+</div>
+
+
+{% if events %}
+
+<table>
+
+    <thead>
+
+        <tr>
+
+            <th>Event</th>
+
+            <th>Category</th>
+
+            <th>Organizer</th>
+
+            <th>Status</th>
+
+            <th>Created</th>
+
+            <th>QR Code</th>
+
+            <th>Actions</th>
+
+        </tr>
+
+    </thead>
+
+
+    <tbody>
+
+    {% for event in events %}
+
+        <tr>
+
+            <!-- Event -->
+
+            <td>
+
+                <strong>
+                    {{ event.name }}
+                </strong>
+
+            </td>
+
+
+            <!-- Category -->
+
+            <td>
+
+                {{ event.category }}
+
+            </td>
+
+
+            <!-- Organizer -->
+
+            <td>
+
+                {{ event.organizer }}
+
+            </td>
+
+
+            <!-- Status -->
+
+            <td>
+
+                <span class="badge">
+
+                    {{ event.get_approval_status_display }}
+
+                </span>
+
+            </td>
+
+
+            <!-- Created -->
+
+            <td>
+
+                {{ event.created_at|date:"d M Y" }}
+
+            </td>
+
+
+            <!-- QR CODE -->
+
+            <td>
+
+    <a href="{% url 'event_qr' event.pk %}"
+       class="btn">
+
+        ▦ View QR
+
+    </a>
+
+            </td>
+
+            <!-- ACTIONS -->
+
+            <td>
+
+                <a href="{% url 'event_edit' event.pk %}"
+                   class="btn secondary">
+
+                    Edit
+
+                </a>
+
+            </td>
+
+        </tr>
+
+    {% endfor %}
+
+    </tbody>
+
+</table>
+
+
+{% else %}
+
+<div style="padding:30px;text-align:center;">
+
+    <h3>
+        No Events Found
+    </h3>
+
+    <p class="muted">
+        No events have been created yet.
+    </p>
+
+
+    <a href="{% url 'event_create' %}"
+       class="btn">
+
+        Create First Event
+
+    </a>
+
+</div>
+
+{% endif %}
+
+
+
+<!-- ==================== QUICK ACTIONS ==================== -->
+
+<div class="actions">
+
+    <h2 style="margin-right:auto;">
+        Quick Actions
+    </h2>
+
+</div>
+
+
+<div class="grid">
+
+
+    <a href="{% url 'category_create' %}"
+       class="btn success"
+       style="padding:18px;text-align:center;text-decoration:none;">
+
+        📁
+
+        <br>
+        <br>
+
+        Create Category
+
+    </a>
+
+
+    <a href="{% url 'event_create' %}"
+       class="btn"
+       style="padding:18px;text-align:center;text-decoration:none;">
+
+        📅
+
+        <br>
+        <br>
+
+        Create Event
+
+    </a>
+
+
+    <a href="{% url 'manage_users' %}"
+       class="btn secondary"
+       style="padding:18px;text-align:center;text-decoration:none;">
+
+        👥
+
+        <br>
+        <br>
+
+        Manage Users
+
+    </a>
+
+
+    <a href="{% url 'reports' %}"
+       class="btn warning"
+       style="padding:18px;text-align:center;text-decoration:none;">
+
+        📊
+
+        <br>
+        <br>
+
+        Reports
+
+    </a>
+
+</div>
+
+
+
+<!-- ==================== RECENT ACTIVITIES ==================== -->
+
+<div class="actions">
+
+    <h2 style="margin-right:auto;">
+        Recent Activities
+    </h2>
+
+</div>
+
+
+<table>
+
+    <thead>
+
+        <tr>
+
+            <th>#</th>
+
+            <th>Activity</th>
+
+        </tr>
+
+    </thead>
+
+
+    <tbody>
+
+
+        {% for activity in recent_activities %}
+
+        <tr>
+
+            <td>
+                {{ forloop.counter }}
+            </td>
+
+
+            <td>
+                ✅ {{ activity }}
+            </td>
+
+        </tr>
+
+
+        {% empty %}
+
+        <tr>
+
+            <td colspan="2">
+
+                No recent activities available.
+
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+
+    </tbody>
+
+</table>
+
+
+{% endblock %}

@@ -1,0 +1,444 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Account | Event System
+{% endblock %}
+
+
+{% block public_content %}
+
+<style>
+
+.auth-wrapper {
+    min-height: calc(100vh - 100px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px 15px;
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 460px;
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 32px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.auth-icon {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 12px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--brand), #818cf8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 27px;
+}
+
+.auth-header h1 {
+    margin: 0 0 7px;
+    font-size: 25px;
+    color: #1e293b;
+}
+
+.auth-header p {
+    margin: 0;
+    color: #64748b;
+    font-size: 13px;
+}
+
+.auth-field {
+    margin-bottom: 17px;
+}
+
+.auth-field label {
+    display: block;
+    margin-bottom: 7px;
+    font-weight: 600;
+    color: #334155;
+}
+
+.auth-field input {
+    width: 100%;
+    padding: 11px 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 7px;
+    margin: 0;
+}
+
+.auth-field input:focus {
+    outline: none;
+    border-color: var(--brand);
+}
+
+.auth-submit {
+    width: 100%;
+    margin-top: 8px;
+    padding: 11px;
+}
+
+.auth-footer {
+    text-align: center;
+    margin-top: 20px;
+    color: #64748b;
+    font-size: 13px;
+}
+
+.auth-footer a {
+    color: var(--brand);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.auth-footer a:hover {
+    text-decoration: underline;
+}
+
+.form-error {
+    color: #dc2626;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+</style>
+
+
+<div class="auth-wrapper">
+
+    <div class="auth-card">
+
+
+        <!-- HEADER -->
+
+        <div class="auth-header">
+
+            <div class="auth-icon">
+
+                {% if mode == 'login' %}
+                    🔐
+                {% elif mode == 'organizer_signup' %}
+                    🏢
+                {% else %}
+                    👤
+                {% endif %}
+
+            </div>
+
+
+            {% if mode == 'login' %}
+
+                <h1>Welcome Back</h1>
+
+                <p>
+                    Login to continue to Event System
+                </p>
+
+
+            {% elif mode == 'organizer_signup' %}
+
+                <h1>Organizer Registration</h1>
+
+                <p>
+                    Create your organizer account
+                </p>
+
+
+            {% else %}
+
+                <h1>Create Account</h1>
+
+                <p>
+                    Register as a user to discover and join events
+                </p>
+
+            {% endif %}
+
+        </div>
+
+
+
+        <!-- FORM -->
+
+        <form method="post">
+
+            {% csrf_token %}
+
+
+            {% if mode == 'login' %}
+
+
+                <!-- USERNAME -->
+
+                <div class="auth-field">
+
+                    <label for="username">
+                        Username
+                    </label>
+
+                    <input
+                        type="text"
+                        id="username"
+                        name="username"
+                        placeholder="Enter your username"
+                        autocomplete="username"
+                        required
+                    >
+
+                </div>
+
+
+
+                <!-- PASSWORD -->
+
+                <div class="auth-field">
+
+                    <label for="password">
+                        Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Enter your password"
+                        autocomplete="current-password"
+                        required
+                    >
+
+                </div>
+
+
+            {% else %}
+
+
+                <!-- FORM ERRORS -->
+
+                {% if form.non_field_errors %}
+
+                    <div class="alert error">
+                        {{ form.non_field_errors }}
+                    </div>
+
+                {% endif %}
+
+
+
+                <!-- FULL NAME -->
+
+                <div class="auth-field">
+
+                    <label>
+                        Full Name
+                    </label>
+
+                    {{ form.full_name }}
+
+                    {% for error in form.full_name.errors %}
+                        <div class="form-error">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+
+                </div>
+
+
+
+                <!-- USERNAME -->
+
+                <div class="auth-field">
+
+                    <label>
+                        Username
+                    </label>
+
+                    {{ form.username }}
+
+                    {% for error in form.username.errors %}
+                        <div class="form-error">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+
+                </div>
+
+
+
+                <!-- EMAIL -->
+
+                <div class="auth-field">
+
+                    <label>
+                        Email Address
+                    </label>
+
+                    {{ form.email }}
+
+                    {% for error in form.email.errors %}
+                        <div class="form-error">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+
+                </div>
+
+
+
+                <!-- PHONE -->
+
+                <div class="auth-field">
+
+                    <label>
+                        Phone Number
+                    </label>
+
+                    {{ form.phone_number }}
+
+                    {% for error in form.phone_number.errors %}
+                        <div class="form-error">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+
+                </div>
+
+
+
+                <!-- ORGANIZATION -->
+
+                {% if mode == 'organizer_signup' %}
+
+                    <div class="auth-field">
+
+                        <label>
+                            Organization / Company
+                        </label>
+
+                        {{ form.organization }}
+
+                        {% for error in form.organization.errors %}
+                            <div class="form-error">
+                                {{ error }}
+                            </div>
+                        {% endfor %}
+
+                    </div>
+
+                {% endif %}
+
+
+
+                <!-- PASSWORD -->
+
+                <div class="auth-field">
+
+                    <label>
+                        Password
+                    </label>
+
+                    {{ form.password1 }}
+
+                    {% for error in form.password1.errors %}
+                        <div class="form-error">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+
+                </div>
+
+
+
+                <!-- CONFIRM PASSWORD -->
+
+                <div class="auth-field">
+
+                    <label>
+                        Confirm Password
+                    </label>
+
+                    {{ form.password2 }}
+
+                    {% for error in form.password2.errors %}
+                        <div class="form-error">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+
+                </div>
+
+
+            {% endif %}
+
+
+
+            <!-- SUBMIT -->
+
+            <button
+                type="submit"
+                class="btn auth-submit"
+            >
+
+                {% if mode == 'login' %}
+                    🔐 Login
+                {% elif mode == 'organizer_signup' %}
+                    🏢 Create Organizer Account
+                {% else %}
+                    👤 Create User Account
+                {% endif %}
+
+            </button>
+
+        </form>
+
+
+
+        <!-- FOOTER -->
+
+        <div class="auth-footer">
+
+
+            {% if mode == 'login' %}
+
+                <p>
+                    Don't have an account?
+                    <a href="{% url 'signup' %}">
+                        User Sign Up
+                    </a>
+                </p>
+
+                <p>
+                    Want to create events?
+                    <a href="{% url 'organizer_signup' %}">
+                        Organizer Sign Up
+                    </a>
+                </p>
+
+
+            {% else %}
+
+                <p>
+                    Already have an account?
+
+                    <a href="{% url 'login' %}">
+                        Login
+                    </a>
+                </p>
+
+            {% endif %}
+
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

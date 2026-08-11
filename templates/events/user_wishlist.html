@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}User Wishlist Management{% endblock %}
+{% block content %}
+<div class="card">
+    <h2>User Wishlists</h2>
+    <div class="sidebar-nav">
+        <a href="{% url 'admin_dashboard' %}">📊 Dashboard</a>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>User</th>
+                <th>Event</th>
+                <th>Category</th>
+                <th>Added Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td colspan="5" style="text-align: center; color: #999; padding: 30px;">No wishlist entries yet.</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{% endblock %}

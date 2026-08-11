@@ -1,0 +1,407 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {% if user.is_superuser %}
+        Admin Profile
+    {% elif profile.role == "ORGANIZER" %}
+        Organizer Profile
+    {% else %}
+        User Details
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+
+<div class="profile-card">
+
+    <!-- =============================================
+         PROFILE HEADER
+    ============================================= -->
+
+    <div class="profile-header">
+
+        <div class="profile-image-wrapper">
+
+            {% if profile.profile_picture %}
+
+                <img
+                    src="{{ profile.profile_picture.url }}"
+                    class="profile-image"
+                    id="profilePreview"
+                    alt="Profile Picture">
+
+            {% else %}
+
+                <img
+                    src="https://ui-avatars.com/api/?name={{ user.username }}&background=4f46e5&color=fff&size=200"
+                    class="profile-image"
+                    id="profilePreview"
+                    alt="Profile Picture">
+
+            {% endif %}
+
+        </div>
+
+
+        <div class="profile-header-info">
+
+            <h1>
+
+                {% if user.is_superuser %}
+
+                    Admin Profile
+
+                {% elif profile.role == "ORGANIZER" %}
+
+                    Organizer Profile
+
+                {% else %}
+
+                    User Details
+
+                {% endif %}
+
+            </h1>
+
+
+            <p>
+                {{ profile.full_name|default:user.username }}
+            </p>
+
+
+            <p>
+                @{{ user.username }}
+            </p>
+
+
+            {% if user.is_superuser %}
+
+                <span class="role-badge">
+                    👑 Administrator
+                </span>
+
+            {% elif profile.role == "ORGANIZER" %}
+
+                <span class="role-badge">
+                    🏢 Organizer
+                </span>
+
+            {% else %}
+
+                <span class="role-badge">
+                    👤 User
+                </span>
+
+            {% endif %}
+
+
+            <br><br>
+
+
+            <span class="badge success">
+
+                {% if user.is_active %}
+
+                    ✅ Active Account
+
+                {% else %}
+
+                    ❌ Inactive
+
+                {% endif %}
+
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- =============================================
+         PERSONAL INFORMATION
+    ============================================= -->
+
+    <form
+        method="post"
+        enctype="multipart/form-data">
+
+        {% csrf_token %}
+
+
+        <h2 class="profile-section-title">
+            Personal Information
+        </h2>
+
+
+        <div class="profile-grid">
+
+
+            <!-- Full Name -->
+
+            <div class="profile-field">
+
+                <label>
+                    Full Name
+                </label>
+
+                <input
+                    type="text"
+                    name="full_name"
+                    value="{{ profile.full_name }}"
+                    placeholder="Enter Full Name"
+                    required>
+
+            </div>
+
+
+            <!-- Username -->
+
+            <div class="profile-field">
+
+                <label>
+                    Username
+                </label>
+
+                <input
+                    type="text"
+                    value="{{ user.username }}"
+                    class="readonly-input"
+                    readonly>
+
+            </div>
+
+
+            <!-- Email -->
+
+            <div class="profile-field">
+
+                <label>
+                    Email
+                </label>
+
+                <input
+                    type="email"
+                    name="email"
+                    value="{{ user.email }}"
+                    required>
+
+            </div>
+
+
+            <!-- Phone -->
+
+            <div class="profile-field">
+
+                <label>
+                    Phone Number
+                </label>
+
+                <input
+                    type="text"
+                    name="phone_number"
+                    value="{{ profile.phone_number }}"
+                    placeholder="Enter Phone Number">
+
+            </div>
+
+
+            <!-- Organization -->
+
+            <div class="profile-field">
+
+                <label>
+                    Organization
+                </label>
+
+                <input
+                    type="text"
+                    name="organization"
+                    value="{{ profile.organization }}"
+                    placeholder="Organization Name">
+
+            </div>
+
+
+            <!-- Role -->
+
+            <div class="profile-field">
+
+                <label>
+                    Role
+                </label>
+
+                <input
+                    type="text"
+                    value="{% if user.is_superuser %}Administrator{% elif profile.role == 'ORGANIZER' %}Organizer{% else %}User{% endif %}"
+                    class="readonly-input"
+                    readonly>
+
+            </div>
+
+
+            <!-- Account Status -->
+
+            <div class="profile-field">
+
+                <label>
+                    Account Status
+                </label>
+
+                <input
+                    type="text"
+                    value="{% if user.is_active %}Active{% else %}Inactive{% endif %}"
+                    class="readonly-input"
+                    readonly>
+
+            </div>
+
+
+            <!-- Joined Date -->
+
+            <div class="profile-field">
+
+                <label>
+                    Joined Date
+                </label>
+
+                <input
+                    type="text"
+                    value="{{ user.date_joined|date:'d M Y' }}"
+                    class="readonly-input"
+                    readonly>
+
+            </div>
+
+
+            <!-- Profile Photo -->
+
+            <div class="profile-field">
+
+                <label>
+                    Profile Photo
+                </label>
+
+                <input
+                    type="file"
+                    id="profile_picture"
+                    name="profile_picture"
+                    accept="image/*">
+
+            </div>
+
+
+            <!-- BIO -->
+
+            <div class="profile-field">
+
+                <label for="bio">
+                    Bio
+                </label>
+
+                <textarea
+                    id="bio"
+                    name="bio"
+                    rows="5"
+                    placeholder="Write something about yourself..."
+                >{{ profile.bio }}</textarea>
+
+            </div>
+
+
+        </div>
+
+
+        <!-- =============================================
+             BUTTONS
+        ============================================= -->
+
+        <div class="profile-actions">
+
+            {% if user.is_superuser %}
+
+                <a
+                    href="/admin-dashboard/go"
+                    class="btn secondary">
+
+                    ⬅ Back
+
+                </a>
+
+            {% elif profile.role == "ORGANIZER" %}
+
+                <a
+                    href="{% url 'organizer_dashboard' %}"
+                    class="btn secondary">
+
+                    ⬅ Back
+
+                </a>
+
+            {% else %}
+            <div class="profile-actions">
+
+    {% if user.is_superuser %}
+
+        <a
+            href="{% url 'admin_dashboard' %}"
+            class="btn secondary">
+
+            ⬅ Back
+
+        </a>
+
+    {% elif profile.role == "ORGANIZER" %}
+
+        <a
+            href="{% url 'organizer_dashboard' %}"
+            class="btn secondary">
+
+            ⬅ Back
+
+        </a>
+
+    {% else %}
+
+        <a
+            href="{% url 'user_dashboard' %}"
+            class="btn secondary">
+
+            ⬅ Back
+
+        </a>
+
+    {% endif %}
+
+
+    <button
+        type="submit"
+        class="btn success">
+
+        💾 Save Profile
+
+    </button>
+
+</div>
+
+
+            {% endif %}
+
+
+            <button
+                type="submit"
+                class="btn success">
+
+                💾 Save Profile
+
+            </button>
+
+        </div>
+
+    </form>
+
+
+    
+
+</div>
+
+{% endblock %}

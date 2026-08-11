@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="actions">
+    <h1 style="margin-right:auto">Notifications</h1>
+
+    <form method="post" action="{% url 'mark_all_notifications_read' %}">
+        {% csrf_token %}
+        <button class="btn secondary">
+            Mark all read
+        </button>
+    </form>
+</div>
+
+
+{% for notification in notifications %}
+
+<div class="event">
+
+    <div style="display:flex; align-items:center; gap:10px;">
+
+        <span style="font-size:24px;">
+            {{ notification.icon|default:"🔔" }}
+        </span>
+
+        <div>
+            <b>
+                {{ notification.title }}
+            </b>
+
+            <p style="margin:5px 0;">
+                {{ notification.message }}
+            </p>
+        </div>
+
+    </div>
+
+
+    <p class="muted">
+
+        {{ notification.created_at|date:'d M Y, H:i' }}
+
+        {% if notification.event %}
+            · {{ notification.event.name }}
+        {% endif %}
+
+    </p>
+
+
+    <div class="actions">
+
+        {% if not notification.is_read %}
+
+        <form
+            method="post"
+            action="{% url 'mark_notification_read' notification.pk %}">
+            
+            {% csrf_token %}
+
+            <button class="btn secondary">
+                Mark read
+            </button>
+
+        </form>
+
+        {% endif %}
+
+
+        {% if notification.action_url %}
+
+        <a
+            href="{{ notification.action_url }}"
+            class="btn secondary">
+
+            View
+
+        </a>
+
+        {% endif %}
+
+
+        <form
+            method="post"
+            action="{% url 'delete_notification' notification.pk %}">
+
+            {% csrf_token %}
+
+            <button class="btn danger">
+                Delete
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% empty %}
+
+<div class="card">
+    No notifications yet.
+</div>
+
+{% endfor %}
+
+{% endblock %}

@@ -1,0 +1,199 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Event Calendar
+{% endblock %}
+
+{% block content %}
+
+<!-- =========================================================
+     EVENT CALENDAR HEADER
+========================================================= -->
+
+<div class="actions">
+
+    <div style="margin-right:auto;">
+
+        <h1>
+            📅 Event Calendar
+        </h1>
+
+        <p class="muted">
+            View all approved events in calendar format.
+        </p>
+
+    </div>
+
+
+    <!-- BACK BUTTON -->
+
+    {% if user.is_superuser or user.is_staff %}
+
+        <a
+            href="{% url 'admin_dashboard' %}"
+            class="btn secondary">
+
+            ← Back
+
+        </a>
+
+    {% elif user.profile.role == "ORGANIZER" %}
+
+        <a
+            href="{% url 'organizer_dashboard' %}"
+            class="btn secondary">
+
+            ← Back
+
+        </a>
+
+    {% else %}
+
+        <a
+            href="{% url 'user_dashboard' %}"
+            class="btn secondary">
+
+            ← Back
+
+        </a>
+
+    {% endif %}
+
+
+    <!-- BROWSE EVENTS -->
+
+    <a
+        href="{% url 'available_events' %}"
+        class="btn success">
+
+        Browse Events
+
+    </a>
+
+</div>
+
+
+<!-- =========================================================
+     CALENDAR
+========================================================= -->
+
+<div class="card">
+
+    <div id="calendar"></div>
+
+</div>
+
+
+<!-- =========================================================
+     FULLCALENDAR
+========================================================= -->
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        const calendarElement =
+            document.getElementById("calendar");
+
+
+        const calendar =
+            new FullCalendar.Calendar(
+                calendarElement,
+                {
+
+                    initialView:
+                        "dayGridMonth",
+
+
+                    height:
+                        "auto",
+
+
+                    expandRows:
+                        true,
+
+
+                    navLinks:
+                        true,
+
+
+                    editable:
+                        false,
+
+
+                    selectable:
+                        false,
+
+
+                    dayMaxEvents:
+                        true,
+
+
+                    headerToolbar: {
+
+                        left:
+                            "prev,next today",
+
+                        center:
+                            "title",
+
+                        right:
+                            "dayGridMonth,timeGridWeek,listWeek"
+
+                    },
+
+
+                    buttonText: {
+
+                        today:
+                            "Today",
+
+                        month:
+                            "Month",
+
+                        week:
+                            "Week",
+
+                        list:
+                            "List"
+
+                    },
+
+
+                    events:
+                        "{% url 'calendar_events' %}",
+
+
+                    eventClick:
+                        function (info) {
+
+                            if (
+                                info.event.url
+                            ) {
+
+                                info.jsEvent
+                                    .preventDefault();
+
+                                window.location.href =
+                                    info.event.url;
+
+                            }
+
+                        }
+
+                }
+            );
+
+
+        calendar.render();
+
+    }
+
+);
+
+</script>
+
+
+{% endblock %}

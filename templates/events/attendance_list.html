@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}Attendance List{% endblock %}
+{% block content %}
+<div class="card">
+    <h2>Attendance List</h2>
+    <div class="sidebar-nav">
+        <a href="{% url 'admin_dashboard' %}">📊 Dashboard</a>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Event</th>
+                <th>Total Registrations</th>
+                <th>Present</th>
+                <th>Absent</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td colspan="5" style="text-align: center; color: #999; padding: 30px;">No attendance records yet. Create events and register users to start tracking attendance.</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{% endblock %}

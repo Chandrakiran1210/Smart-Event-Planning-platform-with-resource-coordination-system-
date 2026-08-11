@@ -1,0 +1,337 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block content %}
+
+<div class="card">
+
+    <div class="actions">
+
+        <h1>{{ title }}</h1>
+
+        <a href="{% url 'event_list' %}" class="btn secondary">
+            ← Back
+        </a>
+
+    </div>
+
+    <form method="post" enctype="multipart/form-data">
+
+        {% csrf_token %}
+
+        {{ form.non_field_errors }}
+
+        <div class="grid">
+
+            <div class="form-group">
+
+                <label>
+                    Event Name <span class="required">*</span>
+                </label>
+
+                {{ form.name }}
+
+                {{ form.name.errors }}
+
+            </div>
+
+            <div class="form-group">
+
+                <label>
+                    Category <span class="required">*</span>
+                </label>
+
+                {{ form.category }}
+
+                {{ form.category.errors }}
+
+            </div>
+
+            <div class="form-group">
+
+                <label>
+                    Event Image
+                </label>
+
+                <div class="image-upload">
+
+                    {{ form.event_image }}
+
+                    <img
+                        id="eventPreview"
+                        class="image-preview"
+                        src="{% if form.instance.event_image %}{{ form.instance.event_image.url }}{% endif %}">
+
+                </div>
+
+                {{ form.event_image.errors }}
+
+            </div>
+
+            <div class="form-group">
+
+                <label>
+                    Banner Image
+                </label>
+
+                <div class="image-upload">
+
+                    {{ form.banner_image }}
+
+                    <img
+                        id="bannerPreview"
+                        class="image-preview"
+                        src="{% if form.instance.banner_image %}{{ form.instance.banner_image.url }}{% endif %}">
+
+                </div>
+
+                {{ form.banner_image.errors }}
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Event Mode</label>
+
+                {{ form.event_mode }}
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Venue</label>
+
+                {{ form.venue }}
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Location</label>
+
+                {{ form.location }}
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Google Map</label>
+
+                {{ form.google_map }}
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Website</label>
+
+                {{ form.website }}
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Registration Link</label>
+
+                {{ form.registration_link }}
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Start Date</label>
+
+                {{ form.start_date }}
+
+            </div>
+
+            <div class="form-group">
+
+                <label>End Date</label>
+
+                {{ form.end_date }}
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Registration Deadline</label>
+
+                {{ form.registration_deadline }}
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Event Fee</label>
+
+                {{ form.event_fee }}
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Maximum Participants</label>
+
+                {{ form.max_participants }}
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Eligibility</label>
+
+                {{ form.eligibility }}
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Organizer</label>
+
+                {{ form.organizer }}
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Contact Person</label>
+
+                {{ form.contact_person }}
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Contact Email</label>
+
+                {{ form.contact_email }}
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Contact Phone</label>
+
+                {{ form.contact_phone }}
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Tags</label>
+
+                {{ form.tags }}
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Status</label>
+
+                {{ form.status }}
+
+            </div>
+
+            <div class="form-group" style="grid-column:1 / -1;">
+
+                <label>Requirements</label>
+
+                {{ form.requirements }}
+
+            </div>
+
+            <div class="form-group" style="grid-column:1 / -1;">
+
+                <label>Description</label>
+
+                {{ form.description }}
+
+            </div>
+
+        </div>
+
+        <div class="actions">
+
+            <button
+                type="submit"
+                class="btn success">
+
+                💾 Save Event
+
+            </button>
+
+            <a
+                href="{% url 'event_list' %}"
+                class="btn secondary">
+
+                Cancel
+
+            </a>
+
+        </div>
+
+    </form>
+
+</div>
+
+<script>
+
+const eventImage = document.getElementById("id_event_image");
+
+const bannerImage = document.getElementById("id_banner_image");
+
+const eventPreview = document.getElementById("eventPreview");
+
+const bannerPreview = document.getElementById("bannerPreview");
+
+if(eventImage){
+
+    eventImage.addEventListener("change",function(){
+
+        if(this.files.length){
+
+            eventPreview.src = URL.createObjectURL(this.files[0]);
+
+            eventPreview.style.display = "block";
+
+        }
+
+    });
+
+}
+
+if(bannerImage){
+
+    bannerImage.addEventListener("change",function(){
+
+        if(this.files.length){
+
+            bannerPreview.src = URL.createObjectURL(this.files[0]);
+
+            bannerPreview.style.display = "block";
+
+        }
+
+    });
+
+}
+
+if(eventPreview.src){
+
+    eventPreview.style.display = "block";
+
+}
+
+if(bannerPreview.src){
+
+    bannerPreview.style.display = "block";
+
+}
+
+</script>
+
+{% endblock %}

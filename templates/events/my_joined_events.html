@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>My Joined Events</h1>
+
+{% for registration in registrations %}
+
+<div class="event">
+
+    <h2>{{ registration.event.name }}</h2>
+
+    <p>
+        {{ registration.event.category }}
+        ·
+        {{ registration.event.start_date }}
+        to
+        {{ registration.event.end_date }}
+    </p>
+
+    <p>
+        {{ registration.event.location }}
+        ·
+        Registered {{ registration.joined_at|date:'d M Y' }}
+    </p>
+
+    {% if registration.qr_code %}
+        <h4>Your QR Code</h4>
+
+        <img
+            src="{{ registration.qr_code.url }}"
+            alt="QR Code"
+            width="180"
+        >
+
+        <br><br>
+
+        <a
+            href="{{ registration.qr_code.url }}"
+            download
+            class="btn"
+        >
+            Download QR Code
+        </a>
+
+        <br><br>
+    {% endif %}
+
+    <a
+        class="btn secondary"
+        href="{% url 'event_detail' registration.event.pk %}"
+    >
+        View Event
+    </a>
+
+</div>
+
+{% empty %}
+
+<div class="card">
+
+    You have not joined an event yet.
+
+    <a href="{% url 'available_events' %}">
+        Browse approved events
+    </a>.
+
+</div>
+
+{% endfor %}
+
+{% endblock %}

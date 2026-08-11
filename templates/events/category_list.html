@@ -1,0 +1,336 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="actions">
+
+    <h1 style="margin-right:auto;">
+        📁 Event Categories
+    </h1>
+
+    <form method="GET"
+          action="{% url 'category_list' %}"
+          style="display:flex;gap:10px;">
+
+        <input
+            type="text"
+            name="search"
+            value="{{ request.GET.search }}"
+            placeholder="Search Category..."
+            style="width:250px;margin:0;">
+
+        <button type="submit" class="btn primary">
+            🔍 Search
+        </button>
+
+    </form>
+
+    <a href="{% url 'category_create' %}"
+       class="btn success">
+        ➕ Create Category
+    </a>
+
+</div>
+
+
+<!-- CATEGORY STATISTICS -->
+
+<div class="grid">
+
+    <div class="stat">
+
+        <div style="font-size:28px;">
+            📁
+        </div>
+
+        <span>Total Categories</span>
+
+        <b>
+            {{ categories|length }}
+        </b>
+
+    </div>
+
+
+    <div class="stat">
+
+        <div style="font-size:28px;">
+            🔴
+        </div>
+
+        <span>High Priority</span>
+
+        <b>
+
+            {% for category in categories %}
+
+                {% if category.priority == 'High' %}
+                    1
+                {% endif %}
+
+            {% empty %}
+                0
+            {% endfor %}
+
+        </b>
+
+    </div>
+
+
+    <div class="stat">
+
+        <div style="font-size:28px;">
+            🟠
+        </div>
+
+        <span>Medium Priority</span>
+
+        <b>
+
+            {% for category in categories %}
+
+                {% if category.priority == 'Medium' %}
+                    1
+                {% endif %}
+
+            {% empty %}
+                0
+            {% endfor %}
+
+        </b>
+
+    </div>
+
+
+    <div class="stat">
+
+        <div style="font-size:28px;">
+            🟢
+        </div>
+
+        <span>Low Priority</span>
+
+        <b>
+
+            {% for category in categories %}
+
+                {% if category.priority == 'Low' %}
+                    1
+                {% endif %}
+
+            {% empty %}
+                0
+            {% endfor %}
+
+        </b>
+
+    </div>
+
+</div>
+
+
+<!-- CATEGORY TABLE -->
+
+<div class="card">
+
+    <h2>
+        Category List
+    </h2>
+
+    <table>
+
+        <thead>
+
+            <tr>
+
+                <th>ID</th>
+                <th>Image</th>
+                <th>Category</th>
+                <th>Code</th>
+                <th>Priority</th>
+                <th>Events</th>
+                <th>Actions</th>
+
+            </tr>
+
+        </thead>
+
+
+        <tbody>
+
+        {% for category in categories %}
+
+            <tr>
+
+                <td>
+                    {{ forloop.counter }}
+                </td>
+
+
+                <td>
+
+                    {% if category.category_image %}
+
+                        <img
+                            src="{{ category.category_image.url }}"
+                            width="50"
+                            height="50"
+                            alt="{{ category.name }}"
+                            style="
+                                object-fit:cover;
+                                border-radius:8px;
+                                border:1px solid #e5e7eb;
+                            ">
+
+                    {% else %}
+
+                        <div style="
+                            width:50px;
+                            height:50px;
+                            background:#f3f4f6;
+                            border-radius:8px;
+                            display:flex;
+                            align-items:center;
+                            justify-content:center;
+                            font-size:22px;
+                        ">
+                            📁
+                        </div>
+
+                    {% endif %}
+
+                </td>
+
+
+                <td>
+
+                    <strong>
+                        {{ category.name }}
+                    </strong>
+
+                </td>
+
+
+                <td>
+
+                    {{ category.category_code|default:"-" }}
+
+                </td>
+
+
+                <td>
+
+                    {% if category.priority == "High" %}
+
+                        <span
+                            class="badge"
+                            style="
+                                background:#fee2e2;
+                                color:#b91c1c;
+                            ">
+
+                            {{ category.priority }}
+
+                        </span>
+
+                    {% elif category.priority == "Medium" %}
+
+                        <span
+                            class="badge"
+                            style="
+                                background:#fef3c7;
+                                color:#b45309;
+                            ">
+
+                            {{ category.priority }}
+
+                        </span>
+
+                    {% else %}
+
+                        <span
+                            class="badge"
+                            style="
+                                background:#dcfce7;
+                                color:#15803d;
+                            ">
+
+                            {{ category.priority }}
+
+                        </span>
+
+                    {% endif %}
+
+                </td>
+
+
+                <td>
+
+                    {{ category.event_count }}
+
+                </td>
+
+
+                <td>
+
+                    <div class="actions">
+
+                        <a
+                            href="{% url 'category_edit' category.pk %}"
+                            class="btn secondary">
+
+                            ✏️ Edit
+
+                        </a>
+
+
+                        <form
+                            method="post"
+                            action="{% url 'category_delete' category.pk %}"
+                            class="inline">
+
+                            {% csrf_token %}
+
+                            <button
+                                type="submit"
+                                class="btn danger">
+
+                                🗑️ Delete
+
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </td>
+
+            </tr>
+
+
+        {% empty %}
+
+            <tr>
+
+                <td
+                    colspan="7"
+                    style="
+                        text-align:center;
+                        padding:30px;
+                    ">
+
+                    📁 No Categories Found
+
+                </td>
+
+            </tr>
+
+        {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+{% endblock %}
