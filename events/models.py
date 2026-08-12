@@ -501,6 +501,16 @@ class UserSettings(models.Model):
         default='#2563eb'
     )
 
+    sidebar_color = models.CharField(
+        max_length=20,
+        default='#111827'
+    )
+
+    topbar_color = models.CharField(
+        max_length=20,
+        default='#ffffff'
+    )
+
     # ==========================================
     # GLOBAL THEME SETTINGS
     # ==========================================

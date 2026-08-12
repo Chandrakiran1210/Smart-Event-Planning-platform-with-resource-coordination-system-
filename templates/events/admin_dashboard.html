@@ -10,7 +10,6 @@ Admin Dashboard
     Admin Dashboard
 </h1>
 
-
 <!-- ==================== STAT CARDS ==================== -->
 
 <div class="grid">
@@ -39,7 +38,6 @@ Admin Dashboard
 
     </a>
 
-
     <!-- Pending -->
     <div class="stat">
 
@@ -60,7 +58,6 @@ Admin Dashboard
         </small>
 
     </div>
-
 
     <!-- Users -->
     <a href="{% url 'manage_users' %}"
@@ -88,7 +85,6 @@ Admin Dashboard
 
     </a>
 
-
     <!-- Organizers -->
     <div class="stat">
 
@@ -109,7 +105,6 @@ Admin Dashboard
         </small>
 
     </div>
-
 
     <!-- Registrations -->
     <div class="stat">
@@ -134,115 +129,6 @@ Admin Dashboard
 
 </div>
 
-<!-- ==================== APPROVAL QUEUE ==================== -->
-
-<div class="actions">
-
-    <h2 style="margin-right:auto;">
-        ⏳ Approval Queue
-    </h2>
-
-    <span class="badge">
-        {{ pending_count }} Pending
-    </span>
-
-</div>
-
-
-{% if pending_events %}
-
-<table>
-
-    <thead>
-
-        <tr>
-
-            <th>Event</th>
-            <th>Category</th>
-            <th>Organizer</th>
-            <th>Status</th>
-            <th>Action</th>
-
-        </tr>
-
-    </thead>
-
-
-    <tbody>
-
-    {% for event in pending_events %}
-
-        <tr>
-
-            <td>
-                {{ event.name }}
-            </td>
-
-
-            <td>
-                {{ event.category }}
-            </td>
-
-
-            <td>
-                {{ event.organizer }}
-            </td>
-
-
-            <td>
-
-                <span class="badge">
-                    {{ event.get_approval_status_display }}
-                </span>
-
-            </td>
-
-
-            <td>
-
-                <a href="{% url 'review_event' event.pk %}"
-                   class="btn warning">
-
-                    Review
-
-                </a>
-
-
-                <a href="{% url 'event_edit' event.pk %}"
-                   class="btn secondary">
-
-                    Edit
-
-                </a>
-
-            </td>
-
-        </tr>
-
-    {% endfor %}
-
-    </tbody>
-
-</table>
-
-
-{% else %}
-
-<div style="padding:30px;text-align:center;">
-
-    <h3>
-        No Pending Events
-    </h3>
-
-    <p class="muted">
-        All submitted events have been reviewed.
-    </p>
-
-</div>
-
-{% endif %}
-
-
 
 <!-- ==================== RECENT EVENTS ==================== -->
 
@@ -251,7 +137,6 @@ Admin Dashboard
     <h2 style="margin-right:auto;">
         📅 Recent Events
     </h2>
-
 
     <a href="{% url 'event_list' %}"
        class="btn">
@@ -272,23 +157,16 @@ Admin Dashboard
         <tr>
 
             <th>Event</th>
-
             <th>Category</th>
-
             <th>Organizer</th>
-
             <th>Status</th>
-
             <th>Created</th>
-
             <th>QR Code</th>
-
             <th>Actions</th>
 
         </tr>
 
     </thead>
-
 
     <tbody>
 
@@ -351,14 +229,15 @@ Admin Dashboard
 
             <td>
 
-    <a href="{% url 'event_qr' event.pk %}"
-       class="btn">
+                <a href="{% url 'event_qr' event.pk %}"
+                   class="btn">
 
-        ▦ View QR
+                    ▦ View QR
 
-    </a>
+                </a>
 
             </td>
+
 
             <!-- ACTIONS -->
 
@@ -394,7 +273,6 @@ Admin Dashboard
         No events have been created yet.
     </p>
 
-
     <a href="{% url 'event_create' %}"
        class="btn">
 
@@ -405,145 +283,5 @@ Admin Dashboard
 </div>
 
 {% endif %}
-
-
-
-<!-- ==================== QUICK ACTIONS ==================== -->
-
-<div class="actions">
-
-    <h2 style="margin-right:auto;">
-        Quick Actions
-    </h2>
-
-</div>
-
-
-<div class="grid">
-
-
-    <a href="{% url 'category_create' %}"
-       class="btn success"
-       style="padding:18px;text-align:center;text-decoration:none;">
-
-        📁
-
-        <br>
-        <br>
-
-        Create Category
-
-    </a>
-
-
-    <a href="{% url 'event_create' %}"
-       class="btn"
-       style="padding:18px;text-align:center;text-decoration:none;">
-
-        📅
-
-        <br>
-        <br>
-
-        Create Event
-
-    </a>
-
-
-    <a href="{% url 'manage_users' %}"
-       class="btn secondary"
-       style="padding:18px;text-align:center;text-decoration:none;">
-
-        👥
-
-        <br>
-        <br>
-
-        Manage Users
-
-    </a>
-
-
-    <a href="{% url 'reports' %}"
-       class="btn warning"
-       style="padding:18px;text-align:center;text-decoration:none;">
-
-        📊
-
-        <br>
-        <br>
-
-        Reports
-
-    </a>
-
-</div>
-
-
-
-<!-- ==================== RECENT ACTIVITIES ==================== -->
-
-<div class="actions">
-
-    <h2 style="margin-right:auto;">
-        Recent Activities
-    </h2>
-
-</div>
-
-
-<table>
-
-    <thead>
-
-        <tr>
-
-            <th>#</th>
-
-            <th>Activity</th>
-
-        </tr>
-
-    </thead>
-
-
-    <tbody>
-
-
-        {% for activity in recent_activities %}
-
-        <tr>
-
-            <td>
-                {{ forloop.counter }}
-            </td>
-
-
-            <td>
-                ✅ {{ activity }}
-            </td>
-
-        </tr>
-
-
-        {% empty %}
-
-        <tr>
-
-            <td colspan="2">
-
-                No recent activities available.
-
-            </td>
-
-        </tr>
-
-        {% endfor %}
-
-
-    </tbody>
-
-</table>
-
 
 {% endblock %}

@@ -29,37 +29,36 @@
 
 
         :root {
-            --sidebar-width: 220px;
-            --topbar-height: 64px;
+    --sidebar-width: 220px;
+    --topbar-height: 64px;
 
-            --primary: #4f24d6;
-            --primary-dark: #3d18b5;
-            --primary-light: #f1edff;
+    --primary: #2563eb;
+    --primary-dark: #1d4ed8;
+    --primary-light: #eff6ff;
 
-            --sidebar-bg: #111827;
-            --sidebar-hover: #24283a;
-            --sidebar-active: #4f24d6;
+    --sidebar-bg: #0f2747;
+    --sidebar-hover: #183b63;
+    --sidebar-active: #2563eb;
 
-            --page-bg: #f7f8fc;
-            --card-bg: #ffffff;
+    --page-bg: #f7f8fc;
+    --card-bg: #ffffff;
 
-            --text: #182033;
-            --muted: #6b7280;
-            --border: #e7e9f0;
+    --text: #182033;
+    --muted: #6b7280;
+    --border: #e7e9f0;
 
-            --success: #16a34a;
-            --danger: #dc2626;
-            --warning: #d97706;
+    --success: #16a34a;
+    --danger: #dc2626;
+    --warning: #d97706;
 
-            --shadow: 0 4px 16px rgba(17,24,39,.06);
-            --shadow-hover: 0 8px 24px rgba(17,24,39,.09);
+    --shadow: 0 4px 16px rgba(17,24,39,.06);
+    --shadow-hover: 0 8px 24px rgba(17,24,39,.09);
 
-            --radius: 10px;
-            --transition: .2s ease;
+    --radius: 10px;
+    --transition: .2s ease;
 
-            --font-size: 14px;
-        }
-
+    --font-size: 14px;
+}
 
         /* =========================================================
            BASIC RESET
@@ -287,7 +286,7 @@
     position:sticky;
     top:0;
     min-height:var(--topbar-height);
-    background:#fff;
+    background:var(--topbar-bg);
     display:flex;
     align-items:center;
     justify-content:space-between;
@@ -1172,10 +1171,11 @@ a:focus,
         --primary-dark: {{ user.settings.dashboard_color }};
         --primary-light: {{ user.settings.dashboard_color }}22;
         --sidebar-active: {{ user.settings.dashboard_color }};
+        --sidebar-bg: {{ user.settings.sidebar_color }};
+        --topbar-bg: {{ user.settings.topbar_color }};
     "
 {% endif %}
 >
-
 
 {% if user.is_authenticated %}
 

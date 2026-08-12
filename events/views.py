@@ -2356,6 +2356,16 @@ def theme_settings(request):
             "#2563eb"
         )
 
+        sidebar_color = request.POST.get(
+            "sidebar_color",
+            "#111827"
+        )
+
+        topbar_color = request.POST.get(
+            "topbar_color",
+            "#ffffff"
+        )
+
         page_colors = {
             "dashboard": "dashboard_color",
             "events": "dashboard_color",
@@ -2379,6 +2389,10 @@ def theme_settings(request):
                 field_name,
                 accent_color
             )
+
+        # Save sidebar and topbar colors
+        settings.sidebar_color = sidebar_color
+        settings.topbar_color = topbar_color
 
         settings.save()
 
@@ -2409,6 +2423,8 @@ def theme_settings(request):
             "calendar_color": settings.calendar_color,
             "profile_color": settings.profile_color,
             "settings_color": settings.settings_color,
+            "sidebar_color": settings.sidebar_color,
+            "topbar_color": settings.topbar_color,
         }
     )
 
