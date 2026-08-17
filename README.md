@@ -1,4 +1,4 @@
-# Event Registration & Management System
+# Smart-Event-Planning-platform-with-resource-coordination-system
 
 This Django project provides a database-driven event registration and management experience with:
 
