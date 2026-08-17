@@ -6,17 +6,17 @@
 
 {% block content %}
 
-<div class="card">
+<div class="actions" style="display:flex; align-items:center; justify-content:space-between;">
 
-    <div class="actions">
+    <h1 style="margin:0;">
+        {{ title }}
+    </h1>
 
-        <h1>{{ title }}</h1>
+    <a href="{% url 'event_list' %}" class="btn secondary">
+        ← Back
+    </a>
 
-        <a href="{% url 'event_list' %}" class="btn secondary">
-            ← Back
-        </a>
-
-    </div>
+</div>
 
     <form method="post" enctype="multipart/form-data">
 

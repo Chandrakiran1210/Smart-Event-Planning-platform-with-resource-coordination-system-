@@ -16,7 +16,7 @@
     >
 
     <title>
-        {% block title %}Event System{% endblock %}
+        {% block title %}Smart Event Planning Platform{% endblock %}
     </title>
 
 
@@ -821,6 +821,90 @@ tr:hover{
     color:var(--primary);
 }
 
+/* =========================================================
+   SMART EVENT PUBLIC NAVIGATION
+========================================================= */
+
+.public-nav{
+    min-height:70px;
+    padding:10px 30px;
+    background:#071026;
+    border-bottom:1px solid rgba(148,163,184,.16);
+    display:flex;
+    align-items:center;
+    gap:24px;
+    box-shadow:0 4px 18px rgba(2,6,23,.12);
+}
+
+.public-brand{
+    margin-right:auto;
+    display:flex;
+    align-items:center;
+    gap:11px;
+    color:#fff !important;
+    font-size:16px;
+    font-weight:800;
+    line-height:1.15;
+}
+
+.public-brand-icon{
+    width:40px;
+    height:40px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:11px;
+    background:linear-gradient(135deg,#2563eb,#7c3aed,#ec4899);
+    box-shadow:0 0 22px rgba(99,102,241,.28);
+    font-size:20px;
+}
+
+.public-brand span:last-child{
+    display:flex;
+    flex-direction:column;
+}
+
+.public-brand small{
+    margin-top:3px;
+    color:#94a3b8;
+    font-size:8px;
+    font-weight:600;
+    letter-spacing:1px;
+    text-transform:uppercase;
+}
+
+.public-nav-links{
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+.public-nav-links a{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding:9px 13px;
+    border-radius:8px;
+    color:#cbd5e1 !important;
+    font-size:12px;
+    font-weight:700;
+}
+
+.public-nav-links a:hover{
+    background:rgba(96,165,250,.10);
+    color:#fff !important;
+}
+
+.public-nav-login{
+    background:linear-gradient(135deg,#2563eb,#7c3aed);
+    color:#fff !important;
+    box-shadow:0 5px 16px rgba(37,99,235,.20);
+}
+
+.public-nav-login:hover{
+    background:linear-gradient(135deg,#1d4ed8,#6d28d9) !important;
+}
+
 .public-content{
     min-height:calc(100vh - 64px);
     padding:24px;
@@ -1024,12 +1108,52 @@ a:focus,
         gap:12px;
     }
 
-    .public-nav > a:not(.public-brand){
+    .public-nav-links a{
         font-size:11px;
+        padding:8px 9px;
+    }
+
+    .public-brand{
+        font-size:14px;
+    }
+
+    .public-brand small{
+        font-size:7px;
     }
 }
 
 @media(max-width:576px){
+
+    .public-nav{
+        padding:10px 12px;
+        gap:8px;
+    }
+
+    .public-nav-links{
+        gap:3px;
+    }
+
+    .public-nav-links a{
+        padding:7px 6px;
+        font-size:10px;
+    }
+
+    .public-brand-icon{
+        width:34px;
+        height:34px;
+        font-size:17px;
+    }
+
+    .public-brand{
+        font-size:12px;
+        gap:7px;
+    }
+
+    .public-brand small{
+        display:none;
+    }
+
+
     h1{
         font-size:24px;
     }
@@ -1189,9 +1313,9 @@ a:focus,
 
     <a href="{% url 'home' %}" class="sidebar-logo">
 
-        <span class="sidebar-logo-icon">🎯</span>
+        <span class="sidebar-logo-icon">📅</span>
 
-        <strong>Event System</strong>
+        <strong>Smart Event</strong>
 
     </a>
 
@@ -2191,35 +2315,32 @@ a:focus,
 
 <nav class="public-nav">
 
+    <a href="{% url 'home' %}" class="public-brand">
 
-    <a href="{% url 'home' %}"
-       class="public-brand">
+        <span class="public-brand-icon">📅</span>
 
-        🎯 Event System
-
-    </a>
-
-
-    <a href="{% url 'login' %}">
-
-        Login
+        <span>
+            Smart Event Planning Platform
+            <small>Resource Coordination System</small>
+        </span>
 
     </a>
 
+    <div class="public-nav-links">
 
-    <a href="{% url 'signup' %}">
+        <a href="{% url 'login' %}" class="public-nav-login">
+            🔐 Login
+        </a>
 
-        User Signup
+        <a href="{% url 'signup' %}">
+            👤 User
+        </a>
 
-    </a>
+        <a href="{% url 'organizer_signup' %}">
+            🏢 Organizer
+        </a>
 
-
-    <a href="{% url 'organizer_signup' %}">
-
-        Organizer Signup
-
-    </a>
-
+    </div>
 
 </nav>
 

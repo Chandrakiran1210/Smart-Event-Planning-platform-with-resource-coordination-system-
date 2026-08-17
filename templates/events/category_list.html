@@ -2,33 +2,42 @@
 
 {% block content %}
 
-<div class="actions">
+<div class="actions" style="display:flex; align-items:center; justify-content:space-between;">
 
-    <h1 style="margin-right:auto;">
+    <h1 style="margin:0;">
         📁 Event Categories
     </h1>
 
-    <form method="GET"
-          action="{% url 'category_list' %}"
-          style="display:flex;gap:10px;">
+    <div style="display:flex; align-items:center; gap:10px;">
 
-        <input
-            type="text"
-            name="search"
-            value="{{ request.GET.search }}"
-            placeholder="Search Category..."
-            style="width:250px;margin:0;">
+        <form method="GET"
+              action="{% url 'category_list' %}"
+              style="display:flex; gap:10px; margin:0;">
 
-        <button type="submit" class="btn primary">
-            🔍 Search
-        </button>
+            <input
+                type="text"
+                name="search"
+                value="{{ request.GET.search }}"
+                placeholder="Search Category..."
+                style="width:250px; margin:0;">
 
-    </form>
+            <button type="submit" class="btn primary">
+                🔍 Search
+            </button>
 
-    <a href="{% url 'category_create' %}"
-       class="btn success">
-        ➕ Create Category
-    </a>
+        </form>
+
+        <a href="{% url 'category_create' %}"
+           class="btn success">
+            ➕ Create Category
+        </a>
+
+        <a href="{% url 'admin_dashboard' %}"
+           class="btn secondary">
+            ← Back
+        </a>
+
+    </div>
 
 </div>
 
