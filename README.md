@@ -1,4 +1,4 @@
-# Smart-Event-Planning-platform-with-resource-coordination-system
+# Smart Event Planning Platform with Resource Coordination System
 
 This Django project provides a database-driven event registration and management experience with:
 
