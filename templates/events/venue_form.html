@@ -1,92 +1,193 @@
 {% extends 'base.html' %}
 
-{% block title %}
-{{ title }}
-{% endblock %}
+{% block title %}{{ title }} - Smart Event{% endblock %}
 
 {% block content %}
 
-<div class="card">
+<div class="venue-form-page">
 
-    <div class="actions">
+    <div class="venue-form-card">
 
-        <h1 style="margin-right:auto">
+        <!-- HEADER -->
 
-            {{ title }}
+        <div class="venue-form-header">
 
-        </h1>
+            <h1>
+                {{ title }}
+            </h1>
 
-        <a
-            href="{% url 'venue_list' %}"
-            class="btn secondary">
+            <a href="{% url 'admin_dashboard' %}"
+               class="venue-back">
 
-            ⬅ Back
-
-        </a>
-
-    </div>
-
-    <form method="post">
-
-        {% csrf_token %}
-
-        {{ form.non_field_errors }}
-
-        <div class="grid">
-
-            {% for field in form %}
-
-                <div>
-
-                    <label>
-
-                        {{ field.label }}
-
-                    </label>
-
-                    {{ field }}
-
-                    {{ field.errors }}
-
-                    {% if field.help_text %}
-
-                        <small>
-
-                            {{ field.help_text }}
-
-                        </small>
-
-                    {% endif %}
-
-                </div>
-
-            {% endfor %}
-
-        </div>
-
-        <div
-            class="actions"
-            style="margin-top:25px;">
-
-            <button
-                type="submit"
-                class="btn success">
-
-                💾 Save Venue
-
-            </button>
-
-            <a
-                href="{% url 'venue_list' %}"
-                class="btn secondary">
-
-                Cancel
+                ← Back
 
             </a>
 
         </div>
 
-    </form>
+
+        <!-- FORM -->
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+
+            {% if form.non_field_errors %}
+
+                <div class="venue-error">
+                    {{ form.non_field_errors }}
+                </div>
+
+            {% endif %}
+
+
+            <!-- FIRST ROW -->
+
+            <div class="venue-fields-row">
+
+
+                <!-- NAME -->
+
+                <div class="venue-field">
+
+                    <label for="{{ form.name.id_for_label }}">
+                        Name
+                    </label>
+
+                    {{ form.name }}
+
+                    {% for error in form.name.errors %}
+
+                        <small class="venue-error">
+                            {{ error }}
+                        </small>
+
+                    {% endfor %}
+
+                </div>
+
+
+                <!-- LOCATION -->
+
+                <div class="venue-field">
+
+                    <label for="{{ form.location.id_for_label }}">
+                        Location
+                    </label>
+
+                    {{ form.location }}
+
+                    {% for error in form.location.errors %}
+
+                        <small class="venue-error">
+                            {{ error }}
+                        </small>
+
+                    {% endfor %}
+
+                </div>
+
+
+                <!-- CAPACITY -->
+
+                <div class="venue-field">
+
+                    <label for="{{ form.capacity.id_for_label }}">
+                        Capacity
+                    </label>
+
+                    {{ form.capacity }}
+
+                    {% for error in form.capacity.errors %}
+
+                        <small class="venue-error">
+                            {{ error }}
+                        </small>
+
+                    {% endfor %}
+
+                </div>
+
+
+                <!-- IS AVAILABLE -->
+
+                <div class="venue-field">
+
+                    <label>
+                        Is Available
+                    </label>
+
+                    <div class="venue-availability">
+
+                        {{ form.is_available }}
+
+                        <span>
+                            Venue is available
+                        </span>
+
+                    </div>
+
+                    {% for error in form.is_available.errors %}
+
+                        <small class="venue-error">
+                            {{ error }}
+                        </small>
+
+                    {% endfor %}
+
+                </div>
+
+
+            </div>
+
+
+            <!-- DESCRIPTION -->
+
+            <div class="venue-description">
+
+                <label for="{{ form.description.id_for_label }}">
+                    Description
+                </label>
+
+                {{ form.description }}
+
+                {% for error in form.description.errors %}
+
+                    <small class="venue-error">
+                        {{ error }}
+                    </small>
+
+                {% endfor %}
+
+            </div>
+
+
+            <!-- BUTTONS -->
+
+            <div class="venue-actions">
+
+                <button type="submit"
+                        class="venue-save">
+
+                    💾 Save Venue
+
+                </button>
+
+
+                <a href="{% url 'venue_list' %}"
+                   class="venue-cancel">
+
+                    Cancel
+
+                </a>
+
+            </div>
+
+
+        </form>
+
+    </div>
 
 </div>
 

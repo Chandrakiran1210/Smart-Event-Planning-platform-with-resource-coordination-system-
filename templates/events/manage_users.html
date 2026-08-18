@@ -6,9 +6,89 @@ User Management
 
 {% block content %}
 
-<!-- =========================
+
+<!-- =====================================================
      PAGE HEADER
-========================= -->
+===================================================== -->
+
+<div class="card">
+
+    <h1>
+        👥 User Management
+    </h1>
+
+    <p class="muted">
+        Manage all users and organizers.
+    </p>
+
+</div>
+
+
+<!-- =====================================================
+     STATISTICS
+===================================================== -->
+
+<div class="grid">
+
+    <div class="stat">
+
+        <span>
+            Total Accounts
+        </span>
+
+        <b>
+            {{ total_accounts }}
+        </b>
+
+    </div>
+
+
+    <div class="stat">
+
+        <span>
+            Users
+        </span>
+
+        <b>
+            {{ total_users }}
+        </b>
+
+    </div>
+
+
+    <div class="stat">
+
+        <span>
+            Organizers
+        </span>
+
+        <b>
+            {{ total_organizers }}
+        </b>
+
+    </div>
+
+
+    <div class="stat">
+
+        <span>
+            Admins
+        </span>
+
+        <b>
+            {{ total_admins }}
+        </b>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     USER DETAILS
+===================================================== -->
+
+{% if selected_profile %}
 
 <div class="card">
 
@@ -16,69 +96,188 @@ User Management
 
         <div>
 
-            <h1>
-                👥 User Management
-            </h1>
+            <h2>
+                👤 User Details
+            </h2>
 
             <p class="muted">
-                Manage all users and organizers.
+                Viewing selected account information.
             </p>
 
         </div>
 
+
+        <a
+            href="{% url 'manage_users' %}"
+            class="btn secondary">
+
+            ← Back
+
+        </a>
+
     </div>
+
+
+    <!-- USER DETAILS TABLE -->
+
+    <table>
+
+        <tbody>
+
+
+            <!-- FULL NAME -->
+
+            <tr>
+
+                <th>
+                    Full Name
+                </th>
+
+                <td>
+                    {{ selected_profile.full_name|default:"-" }}
+                </td>
+
+                <th>
+                    Username
+                </th>
+
+                <td>
+                    {{ selected_profile.user.username }}
+                </td>
+
+            </tr>
+
+
+            <!-- EMAIL -->
+
+            <tr>
+
+                <th>
+                    Email
+                </th>
+
+                <td>
+                    {{ selected_profile.user.email|default:"-" }}
+                </td>
+
+                <th>
+                    Phone Number
+                </th>
+
+                <td>
+                    {{ selected_profile.phone_number|default:"-" }}
+                </td>
+
+            </tr>
+
+
+            <!-- ROLE -->
+
+            <tr>
+
+                <th>
+                    Role
+                </th>
+
+                <td>
+
+                    {% if selected_profile.role == "ADMIN" %}
+
+                        Admin
+
+                    {% elif selected_profile.role == "ORGANIZER" %}
+
+                        Organizer
+
+                    {% else %}
+
+                        User
+
+                    {% endif %}
+
+                </td>
+
+
+                <th>
+                    Organization
+                </th>
+
+                <td>
+                    {{ selected_profile.organization|default:"-" }}
+                </td>
+
+            </tr>
+
+
+            <!-- STATUS -->
+
+            <tr>
+
+                <th>
+                    Status
+                </th>
+
+                <td>
+
+                    {% if selected_profile.user.is_active %}
+
+                        <span
+                            style="
+                            color:green;
+                            font-weight:bold;
+                            ">
+
+                            ● Active
+
+                        </span>
+
+                    {% else %}
+
+                        <span
+                            style="
+                            color:red;
+                            font-weight:bold;
+                            ">
+
+                            ● Inactive
+
+                        </span>
+
+                    {% endif %}
+
+                </td>
+
+
+                <th>
+                    Date Joined
+                </th>
+
+                <td>
+                    {{ selected_profile.user.date_joined|date:"d M Y, h:i A" }}
+                </td>
+
+            </tr>
+
+
+        </tbody>
+
+    </table>
 
 </div>
 
-<!-- =========================
-     STATISTICS
-========================= -->
+{% endif %}
 
-<div class="grid">
 
-    <div class="stat">
-
-        <span>Total Accounts</span>
-
-        <b>{{ profiles|length }}</b>
-
-    </div>
-
-    <div class="stat">
-
-        <span>Users</span>
-
-        <b>{{ total_users }}</b>
-
-    </div>
-
-    <div class="stat">
-
-        <span>Organizers</span>
-
-        <b>{{ total_organizers }}</b>
-
-    </div>
-
-    <div class="stat">
-
-        <span>Admins</span>
-
-        <b>{{ total_admins }}</b>
-
-    </div>
-
-</div>
-
-<!-- =========================
+<!-- =====================================================
      SEARCH & FILTER
-========================= -->
+===================================================== -->
 
 <div class="card">
 
     <form method="GET">
 
         <div class="actions">
+
 
             <input
                 type="text"
@@ -87,35 +286,59 @@ User Management
                 placeholder="Search by name, username or email"
                 style="width:300px;">
 
+
             <select
                 name="role"
                 style="width:180px;">
 
-                <option value="">All Roles</option>
+                <option value="">
+                    All Roles
+                </option>
 
-                <option value="USER"
-                    {% if selected_role == "USER" %}selected{% endif %}>
+
+                <option
+                    value="USER"
+                    {% if selected_role == "USER" %}
+                        selected
+                    {% endif %}>
+
                     User
+
                 </option>
 
-                <option value="ORGANIZER"
-                    {% if selected_role == "ORGANIZER" %}selected{% endif %}>
+
+                <option
+                    value="ORGANIZER"
+                    {% if selected_role == "ORGANIZER" %}
+                        selected
+                    {% endif %}>
+
                     Organizer
+
                 </option>
 
-                <option value="ADMIN"
-                    {% if selected_role == "ADMIN" %}selected{% endif %}>
+
+                <option
+                    value="ADMIN"
+                    {% if selected_role == "ADMIN" %}
+                        selected
+                    {% endif %}>
+
                     Admin
+
                 </option>
 
             </select>
 
+
             <button
+                type="submit"
                 class="btn success">
 
-                Search
+                🔍 Search
 
             </button>
+
 
             <a
                 href="{% url 'manage_users' %}"
@@ -131,268 +354,283 @@ User Management
 
 </div>
 
-<!-- =========================
+
+<!-- =====================================================
      USERS TABLE
-========================= -->
+===================================================== -->
 
 <div class="card">
 
-<table>
+    <table>
 
-    <thead>
+        <thead>
 
-        <tr>
+            <tr>
 
-            <th>#</th>
+                <th>
+                    #
+                </th>
 
-            <th>Name</th>
+                <th>
+                    Name
+                </th>
 
-            <th>Username</th>
+                <th>
+                    Username
+                </th>
 
-            <th>Role</th>
+                <th>
+                    Role
+                </th>
 
-            <th>Organization</th>
+                <th>
+                    Organization
+                </th>
 
-            <th>Email</th>
+                <th>
+                    Email
+                </th>
 
-            <th>Status</th>
+                <th>
+                    Status
+                </th>
 
-            <th>Actions</th>
+                <th>
+                    Actions
+                </th>
 
-        </tr>
+            </tr>
 
-    </thead>
+        </thead>
 
-    <tbody>
 
-    {% for profile in profiles %}
+        <tbody>
 
-        <tr>
 
-            <td>
+        {% for profile in profiles %}
 
-                {{ forloop.counter }}
+            <tr>
 
-            </td>
 
-            <td>
+                <!-- NUMBER -->
 
-                {{ profile.full_name }}
+                <td>
+                    {{ forloop.counter }}
+                </td>
 
-            </td>
 
-            <td>
+                <!-- NAME -->
 
-                {{ profile.user.username }}
+                <td>
+                    {{ profile.full_name|default:"-" }}
+                </td>
 
-            </td>
 
-            <td>
+                <!-- USERNAME -->
 
-                {% if profile.role == "ADMIN" %}
+                <td>
+                    {{ profile.user.username }}
+                </td>
 
-                    <span class="badge">
 
-                        Admin
+                <!-- ROLE -->
 
-                    </span>
+                <td>
 
-                {% elif profile.role == "ORGANIZER" %}
+                    {% if profile.role == "ADMIN" %}
 
-                    <span class="badge">
+                        <span class="badge">
+                            Admin
+                        </span>
 
-                        Organizer
+                    {% elif profile.role == "ORGANIZER" %}
 
-                    </span>
-
-                {% else %}
-
-                    <span class="badge">
-
-                        User
-
-                    </span>
-
-                {% endif %}
-
-            </td>
-
-            <td>
-
-                {{ profile.organization|default:"-" }}
-
-            </td>
-
-            <td>
-
-                {{ profile.user.email }}
-
-            </td>
-
-            <td>
-
-                {% if profile.user.is_active %}
-
-                    <span
-                        style="
-                        color:green;
-                        font-weight:bold;
-                        ">
-
-                        Active
-
-                    </span>
-
-                {% else %}
-
-                    <span
-                        style="
-                        color:red;
-                        font-weight:bold;
-                        ">
-
-                        Inactive
-
-                    </span>
-
-                {% endif %}
-
-            </td>
-
-            <td>
-
-                <div class="actions">
-
-                    <button
-                        class="btn secondary"
-                        disabled>
-
-                        View
-
-                    </button>
-
-                    {% if profile.user.is_active %}
-
-                        <button
-                            class="btn warning"
-                            disabled>
-
-                            Active
-
-                        </button>
+                        <span class="badge">
+                            Organizer
+                        </span>
 
                     {% else %}
 
-                        <button
-                            class="btn success"
-                            disabled>
-
-                            Inactive
-
-                        </button>
+                        <span class="badge">
+                            User
+                        </span>
 
                     {% endif %}
 
-                    <button
-                        class="btn danger"
-                        onclick="return confirm('Delete this user?')"
-                        disabled>
+                </td>
 
-                        Delete
 
-                    </button>
+                <!-- ORGANIZATION -->
 
-                </div>
+                <td>
+                    {{ profile.organization|default:"-" }}
+                </td>
 
-            </td>
 
-        </tr>
+                <!-- EMAIL -->
 
-    {% empty %}
+                <td>
+                    {{ profile.user.email|default:"-" }}
+                </td>
 
-        <tr>
 
-            <td
-                colspan="8"
-                style="
-                text-align:center;
-                padding:25px;
-                ">
+                <!-- STATUS -->
 
-                No Users Found
+                <td>
 
-            </td>
+                    {% if profile.user.is_active %}
 
-        </tr>
+                        <span
+                            style="
+                            color:green;
+                            font-weight:bold;
+                            ">
 
-    {% endfor %}
+                            ● Active
 
-    </tbody>
+                        </span>
 
-</table>
+                    {% else %}
+
+                        <span
+                            style="
+                            color:red;
+                            font-weight:bold;
+                            ">
+
+                            ● Inactive
+
+                        </span>
+
+                    {% endif %}
+
+                </td>
+
+
+                <!-- ACTIONS -->
+
+                <td>
+
+                    <div class="actions">
+
+
+                        <!-- VIEW -->
+
+                        <a
+                            href="{% url 'manage_users' %}?view={{ profile.user.id }}"
+                            class="btn secondary">
+
+                            👁 View
+
+                        </a>
+
+
+                        <!-- ACTIVE / INACTIVE -->
+
+                        <form
+                            method="POST"
+                            style="display:inline;">
+
+                            {% csrf_token %}
+
+                            <input
+                                type="hidden"
+                                name="action"
+                                value="toggle">
+
+                            <input
+                                type="hidden"
+                                name="user_id"
+                                value="{{ profile.user.id }}">
+
+
+                            {% if profile.user.is_active %}
+
+                                <button
+                                    type="submit"
+                                    class="btn warning">
+
+                                    🟢 Active
+
+                                </button>
+
+                            {% else %}
+
+                                <button
+                                    type="submit"
+                                    class="btn success">
+
+                                    🔴 Inactive
+
+                                </button>
+
+                            {% endif %}
+
+                        </form>
+
+
+                        <!-- DELETE -->
+
+                        <form
+                            method="POST"
+                            style="display:inline;"
+                            onsubmit="return confirm('Are you sure you want to delete this user?');">
+
+                            {% csrf_token %}
+
+                            <input
+                                type="hidden"
+                                name="action"
+                                value="delete">
+
+                            <input
+                                type="hidden"
+                                name="user_id"
+                                value="{{ profile.user.id }}">
+
+
+                            <button
+                                type="submit"
+                                class="btn danger">
+
+                                🗑 Delete
+
+                            </button>
+
+                        </form>
+
+
+                    </div>
+
+                </td>
+
+
+            </tr>
+
+
+        {% empty %}
+
+            <tr>
+
+                <td
+                    colspan="8"
+                    style="text-align:center;padding:25px;">
+
+                    No Users Found
+
+                </td>
+
+            </tr>
+
+        {% endfor %}
+
+
+        </tbody>
+
+    </table>
 
 </div>
 
-<!-- =========================
-     QUICK ACTIONS
-========================= -->
 
-<div class="card">
-
-    <h2>
-
-        ⚡ Quick Actions
-
-    </h2>
-
-    <div class="grid">
-
-        <a
-            href="{% url 'admin_dashboard' %}"
-            class="btn success"
-            style="padding:18px;text-align:center;">
-
-            🏠<br><br>
-
-            Dashboard
-
-        </a>
-
-        <a
-            href="{% url 'reports' %}"
-            class="btn warning"
-            style="padding:18px;text-align:center;">
-
-            📊<br><br>
-
-            Reports
-
-        </a>
-
-        <a
-            href="{% url 'notifications' %}"
-            class="btn secondary"
-            style="padding:18px;text-align:center;">
-
-            🔔<br><br>
-
-            Notifications
-
-        </a>
-
-        <a
-            href="{% url 'profile' %}"
-            class="btn"
-            style="padding:18px;text-align:center;">
-
-            👤<br><br>
-
-            Profile
-
-        </a>
-
-    </div>
-
-</div>
 
 {% endblock %}

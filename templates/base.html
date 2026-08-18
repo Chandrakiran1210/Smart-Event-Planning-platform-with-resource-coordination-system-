@@ -1283,6 +1283,276 @@ a:focus,
     }
 }
 
+
+
+/* =========================================================
+   SMART EVENT AI ASSISTANT
+========================================================= */
+.smart-ai-assistant{position:fixed;right:25px;bottom:25px;z-index:9999;font-family:Arial,"Segoe UI",sans-serif}
+.smart-ai-assistant summary{list-style:none}
+.smart-ai-assistant summary::-webkit-details-marker{display:none}
+.smart-ai-button{width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,#5146e5,#7467ee);color:#fff;display:flex;align-items:center;justify-content:center;font-size:28px;cursor:pointer;user-select:none;box-shadow:0 8px 25px rgba(81,70,229,.35);transition:.2s ease}
+.smart-ai-button:hover{transform:translateY(-2px) scale(1.03)}
+.smart-ai-window{position:absolute;right:0;bottom:75px;width:390px;height:600px;background:#fff;border:1px solid #e5e7eb;border-radius:18px;overflow:hidden;box-shadow:0 12px 45px rgba(0,0,0,.20);display:flex;flex-direction:column}
+.smart-ai-header{min-height:65px;background:linear-gradient(135deg,#5146e5,#7467ee);color:#fff;display:flex;align-items:center;gap:10px;padding:10px 15px}
+.smart-ai-avatar{width:40px;height:40px;min-width:40px;background:#fff;color:#5146e5;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px}
+.smart-ai-header-text{display:flex;flex-direction:column}.smart-ai-header-text strong{font-size:15px}.smart-ai-header-text small{margin-top:3px;font-size:10px;opacity:.85}
+.smart-ai-intro{padding:12px;background:#f8f9fc}.smart-ai-message{background:#fff;padding:12px;border-radius:10px;font-size:12px;line-height:1.45;box-shadow:0 2px 6px rgba(0,0,0,.05)}
+.smart-ai-questions{flex:1;overflow-y:auto;padding:12px;background:#fff}.smart-ai-category{color:#5146e5;font-size:12px;font-weight:700;margin:4px 0 7px}.smart-ai-pills{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px}.smart-ai-pills span{display:inline-block;padding:6px 8px;border:1px solid #ddd6fe;border-radius:14px;background:#faf9ff;color:#374151;font-size:10px;line-height:1.2;cursor:pointer}.smart-ai-pills span:hover{background:#f1efff;border-color:#7467ee}
+.smart-ai-input-area{display:flex;gap:8px;padding:10px;border-top:1px solid #eee;background:#fff}.smart-ai-input-area input{flex:1;width:auto;height:40px;margin:0;padding:0 10px;border:1px solid #d9dce5;border-radius:9px;outline:none;font-size:11px;background:#fff}.smart-ai-input-area input:focus{border-color:#5146e5;box-shadow:0 0 0 3px rgba(81,70,229,.08)}.smart-ai-input-area button{width:43px;height:40px;border:none;border-radius:9px;background:#5b50e6;color:#fff;font-size:17px;cursor:pointer}.smart-ai-input-area button:hover{background:#493ed0}
+.smart-ai-user-message{background:#5146e5;color:#fff;padding:9px 11px;border-radius:12px 12px 3px 12px;margin:8px 0 8px auto;max-width:85%;width:fit-content;font-size:11px;line-height:1.4}.smart-ai-bot-message{background:#f3f4f6;color:#374151;padding:9px 11px;border-radius:12px 12px 12px 3px;margin:8px 0;max-width:90%;width:fit-content;font-size:11px;line-height:1.4}
+@media(max-width:600px){.smart-ai-assistant{right:15px;bottom:15px}.smart-ai-window{right:0;bottom:70px;width:calc(100vw - 30px);max-width:390px;height:calc(100vh - 100px);max-height:600px}.smart-ai-button{width:56px;height:56px;font-size:25px}}
+
+/* =========================================================
+   CREATE VENUE FORM
+   ========================================================= */
+
+.venue-form-page {
+    width: 100%;
+}
+
+.venue-form-card {
+    background: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 22px;
+    box-shadow: var(--shadow);
+    margin-bottom: 18px;
+}
+
+/* HEADER */
+
+.venue-form-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 30px;
+}
+
+.venue-form-header h1 {
+    margin: 0;
+    color: var(--text);
+    font-size: 25px;
+    font-weight: 700;
+}
+
+.venue-back {
+    color: var(--text) !important;
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none !important;
+}
+
+.venue-back:hover {
+    color: var(--primary) !important;
+}
+
+
+/* =========================================================
+   FIRST ROW
+   ========================================================= */
+
+.venue-fields-row {
+    display: grid;
+    grid-template-columns: 1.15fr 1.15fr 1.15fr 0.95fr;
+    gap: 14px;
+    align-items: start;
+}
+
+.venue-field {
+    min-width: 0;
+}
+
+.venue-field label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #374151;
+}
+
+
+/* NAME / LOCATION / CAPACITY */
+
+.venue-field input[type="text"],
+.venue-field input[type="number"] {
+    width: 100%;
+    height: 28px;
+    margin-bottom: 0;
+    padding: 6px 10px;
+    border: 1px solid #d9dde7;
+    border-radius: 6px;
+    background: #ffffff;
+    font-size: 12px;
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   AVAILABILITY
+   ========================================================= */
+
+.venue-availability {
+    width: 100%;
+    min-height: 28px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 9px;
+    border: 1px solid #d9dde7;
+    border-radius: 6px;
+    background: #ffffff;
+    box-sizing: border-box;
+}
+
+
+/* IMPORTANT:
+   Override the global input width:100%
+*/
+
+.venue-availability input[type="checkbox"] {
+    width: 14px !important;
+    min-width: 14px;
+    height: 14px;
+    margin: 0 !important;
+    padding: 0;
+    cursor: pointer;
+    accent-color: var(--primary);
+}
+
+.venue-availability span {
+    color: #374151;
+    font-size: 11px;
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   DESCRIPTION
+   ========================================================= */
+
+.venue-description {
+    width: 100%;
+    margin-top: 24px;
+}
+
+.venue-description label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #374151;
+}
+
+.venue-description textarea {
+    width: 100%;
+    height: 125px;
+    margin-bottom: 0;
+    padding: 9px 10px;
+    border: 1px solid #d9dde7;
+    border-radius: 6px;
+    background: #ffffff;
+    font-family: Arial, "Segoe UI", sans-serif;
+    font-size: 12px;
+    box-sizing: border-box;
+    resize: vertical;
+}
+
+
+/* =========================================================
+   ERRORS
+   ========================================================= */
+
+.venue-error {
+    display: block;
+    margin-top: 4px;
+    color: #dc2626;
+    font-size: 10px;
+}
+
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+.venue-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 25px;
+}
+
+.venue-save {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 9px 15px;
+    border: none;
+    border-radius: 7px;
+    background: #16a34a;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.venue-save:hover {
+    background: #15803d;
+}
+
+.venue-cancel {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 9px 15px;
+    border-radius: 7px;
+    background: #64748b;
+    color: #ffffff !important;
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none !important;
+}
+
+.venue-cancel:hover {
+    background: #475569;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+    .venue-fields-row {
+        grid-template-columns: 1fr 1fr;
+    }
+
+}
+
+@media (max-width: 600px) {
+
+    .venue-fields-row {
+        grid-template-columns: 1fr;
+    }
+
+    .venue-form-header {
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .venue-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .venue-save,
+    .venue-cancel {
+        width: 100%;
+    }
+
+}
+
 </style>
 
 </head>
@@ -1310,18 +1580,14 @@ a:focus,
 
 <aside class="sidebar">
 
-
+    <!-- LOGO -->
     <a href="{% url 'home' %}" class="sidebar-logo">
-
         <span class="sidebar-logo-icon">📅</span>
-
         <strong>Smart Event</strong>
-
     </a>
 
 
     <div class="sidebar-menu">
-
 
         <!-- =====================================================
              ADMIN SIDEBAR
@@ -1336,18 +1602,19 @@ a:focus,
                class="single-menu-link">
 
                 <span class="menu-icon">📊</span>
-
                 <span>Dashboard</span>
 
             </a>
-
 
 
             <!-- =================================================
                  EVENT CATEGORIES
             ================================================== -->
 
-            <details class="menu-dropdown">
+            <details class="menu-dropdown"
+                {% if request.resolver_match.url_name == 'category_create' or request.resolver_match.url_name == 'category_list' %}
+                    open
+                {% endif %}>
 
                 <summary>
 
@@ -1384,95 +1651,102 @@ a:focus,
             </details>
 
 
-<!-- =================================================
-     VENUE MANAGEMENT
-================================================== -->
+            <!-- =================================================
+                 VENUE MANAGEMENT
+            ================================================== -->
 
-<details class="menu-dropdown">
+            <details class="menu-dropdown"
+                {% if request.resolver_match.url_name == 'venue_create' or request.resolver_match.url_name == 'venue_list' %}
+                    open
+                {% endif %}>
 
-    <summary>
+                <summary>
 
-        <span class="menu-icon">🏢</span>
+                    <span class="menu-icon">🏢</span>
 
-        <span class="menu-title">
-            Venue Management
-        </span>
+                    <span class="menu-title">
+                        Venue Management
+                    </span>
 
-        <span class="menu-arrow">▼</span>
+                    <span class="menu-arrow">▼</span>
 
-    </summary>
-
-    <div class="submenu">
-
-        <a href="{% url 'venue_create' %}"
-           class="submenu-link">
-
-            Add Venue
-
-        </a>
-
-        <a href="{% url 'venue_list' %}"
-           class="submenu-link">
-
-            Venue List
-
-        </a>
-
-    </div>
-
-</details>
+                </summary>
 
 
-<!-- =================================================
-     RESOURCE MANAGEMENT
-================================================== -->
+                <div class="submenu">
 
-<details class="menu-dropdown">
+                    <a href="{% url 'venue_create' %}"
+                       class="submenu-link">
 
-    <summary>
+                        Add Venue
 
-        <span class="menu-icon">🛠️</span>
+                    </a>
 
-        <span class="menu-title">
 
-            Resource Management
+                    <a href="{% url 'venue_list' %}"
+                       class="submenu-link">
 
-        </span>
+                        Venue List
 
-        <span class="menu-arrow">
+                    </a>
 
-            ▼
+                </div>
 
-        </span>
+            </details>
 
-    </summary>
 
-    <div class="submenu">
+            <!-- =================================================
+                 RESOURCE MANAGEMENT
+            ================================================== -->
 
-        <a href="{% url 'resource_create' %}"
-           class="submenu-link">
+            <details class="menu-dropdown"
+                {% if request.resolver_match.url_name == 'resource_create' or request.resolver_match.url_name == 'resource_list' %}
+                    open
+                {% endif %}>
 
-            Add Resource
+                <summary>
 
-        </a>
+                    <span class="menu-icon">🛠️</span>
 
-        <a href="{% url 'resource_list' %}"
-           class="submenu-link">
+                    <span class="menu-title">
+                        Resource Management
+                    </span>
 
-            Resource List
+                    <span class="menu-arrow">▼</span>
 
-        </a>
+                </summary>
 
-    </div>
 
-</details>
+                <div class="submenu">
+
+                    <a href="{% url 'resource_create' %}"
+                       class="submenu-link">
+
+                        Add Resource
+
+                    </a>
+
+
+                    <a href="{% url 'resource_list' %}"
+                       class="submenu-link">
+
+                        Resource List
+
+                    </a>
+
+                </div>
+
+            </details>
 
 
             <!-- =================================================
                  EVENTS
             ================================================== -->
 
-            <details class="menu-dropdown">
+            <details class="menu-dropdown"
+                {% if request.GET.menu == 'events' %}
+                    open
+                {% endif %}>
 
                 <summary>
 
@@ -1489,14 +1763,15 @@ a:focus,
 
                 <div class="submenu">
 
-                    <a href="{% url 'event_create' %}" class="submenu-link">
-    Create Event
-</a><!--
-                    Admin create-event permission will be enabled
-                    in the next backend step.
-                    -->
+                    <a href="{% url 'event_create' %}?menu=events"
+                       class="submenu-link">
 
-                    <a href="{% url 'event_list' %}"
+                        Create Event
+
+                    </a>
+
+
+                    <a href="{% url 'event_list' %}?menu=events"
                        class="submenu-link">
 
                         Event List
@@ -1504,7 +1779,7 @@ a:focus,
                     </a>
 
 
-                    <a href="{% url 'event_list' %}?status=Active"
+                    <a href="{% url 'event_list' %}?status=Active&menu=events"
                        class="submenu-link">
 
                         Active Events
@@ -1512,7 +1787,7 @@ a:focus,
                     </a>
 
 
-                    <a href="{% url 'event_list' %}?status=Upcoming"
+                    <a href="{% url 'event_list' %}?status=Upcoming&menu=events"
                        class="submenu-link">
 
                         Upcoming Events
@@ -1520,7 +1795,7 @@ a:focus,
                     </a>
 
 
-                    <a href="{% url 'event_list' %}?status=Completed"
+                    <a href="{% url 'event_list' %}?status=Completed&menu=events"
                        class="submenu-link">
 
                         Completed Events
@@ -1532,12 +1807,14 @@ a:focus,
             </details>
 
 
-
             <!-- =================================================
                  ORGANIZERS
             ================================================== -->
 
-            <details class="menu-dropdown">
+            <details class="menu-dropdown"
+                {% if request.GET.menu == 'organizers' %}
+                    open
+                {% endif %}>
 
                 <summary>
 
@@ -1554,12 +1831,7 @@ a:focus,
 
                 <div class="submenu">
 
-                    <!--
-                    These use the current manage-users page safely.
-                    Dedicated organizer filters are added in Step 2.
-                    -->
-
-                    <a href="{% url 'manage_users' %}?role=ORGANIZER&status=pending"
+                    <a href="{% url 'manage_users' %}?role=ORGANIZER&status=pending&menu=organizers"
                        class="submenu-link">
 
                         Pending Organizers
@@ -1567,7 +1839,7 @@ a:focus,
                     </a>
 
 
-                    <a href="{% url 'manage_users' %}?role=ORGANIZER&status=approved"
+                    <a href="{% url 'manage_users' %}?role=ORGANIZER&status=approved&menu=organizers"
                        class="submenu-link">
 
                         Approved Organizers
@@ -1575,7 +1847,7 @@ a:focus,
                     </a>
 
 
-                    <a href="{% url 'manage_users' %}?role=ORGANIZER"
+                    <a href="{% url 'manage_users' %}?role=ORGANIZER&menu=organizers"
                        class="submenu-link">
 
                         All Organizers
@@ -1587,12 +1859,14 @@ a:focus,
             </details>
 
 
-
             <!-- =================================================
                  EVENT APPROVALS
             ================================================== -->
 
-            <details class="menu-dropdown">
+            <details class="menu-dropdown"
+                {% if request.GET.menu == 'approvals' %}
+                    open
+                {% endif %}>
 
                 <summary>
 
@@ -1609,7 +1883,7 @@ a:focus,
 
                 <div class="submenu">
 
-                    <a href="{% url 'event_list' %}?approval=PENDING"
+                    <a href="{% url 'event_list' %}?approval=PENDING&menu=approvals"
                        class="submenu-link">
 
                         Pending Events
@@ -1617,7 +1891,7 @@ a:focus,
                     </a>
 
 
-                    <a href="{% url 'event_list' %}?approval=APPROVED"
+                    <a href="{% url 'event_list' %}?approval=APPROVED&menu=approvals"
                        class="submenu-link">
 
                         Approved Events
@@ -1625,7 +1899,7 @@ a:focus,
                     </a>
 
 
-                    <a href="{% url 'event_list' %}?approval=REJECTED"
+                    <a href="{% url 'event_list' %}?approval=REJECTED&menu=approvals"
                        class="submenu-link">
 
                         Rejected Events
@@ -1637,12 +1911,14 @@ a:focus,
             </details>
 
 
-
             <!-- =================================================
                  EVENT MEMBERS
             ================================================== -->
 
-            <details class="menu-dropdown">
+            <details class="menu-dropdown"
+                {% if request.GET.menu == 'members' %}
+                    open
+                {% endif %}>
 
                 <summary>
 
@@ -1659,7 +1935,7 @@ a:focus,
 
                 <div class="submenu">
 
-                    <a href="{% url 'manage_users' %}"
+                    <a href="{% url 'manage_users' %}?menu=members"
                        class="submenu-link">
 
                         Registered Users
@@ -1667,7 +1943,7 @@ a:focus,
                     </a>
 
 
-                    <a href="{% url 'event_list' %}"
+                    <a href="{% url 'event_list' %}?menu=members"
                        class="submenu-link">
 
                         Event Participants
@@ -1679,12 +1955,14 @@ a:focus,
             </details>
 
 
-
             <!-- =================================================
                  USER WISH
             ================================================== -->
 
-            <details class="menu-dropdown">
+            <details class="menu-dropdown"
+                {% if request.resolver_match.url_name == 'wishlist' %}
+                    open
+                {% endif %}>
 
                 <summary>
 
@@ -1713,12 +1991,14 @@ a:focus,
             </details>
 
 
-
             <!-- =================================================
                  ATTENDANCE
             ================================================== -->
 
-            <details class="menu-dropdown">
+            <details class="menu-dropdown"
+                {% if request.GET.menu == 'attendance' %}
+                    open
+                {% endif %}>
 
                 <summary>
 
@@ -1735,7 +2015,7 @@ a:focus,
 
                 <div class="submenu">
 
-                    <a href="{% url 'event_list' %}?attendance=present"
+                    <a href="{% url 'event_list' %}?attendance=present&menu=attendance"
                        class="submenu-link">
 
                         Present
@@ -1743,7 +2023,7 @@ a:focus,
                     </a>
 
 
-                    <a href="{% url 'event_list' %}?attendance=absent"
+                    <a href="{% url 'event_list' %}?attendance=absent&menu=attendance"
                        class="submenu-link">
 
                         Absent
@@ -1755,9 +2035,8 @@ a:focus,
             </details>
 
 
-
             <!-- =================================================
-                 ADMIN SECTION AT BOTTOM
+                 ADMIN SECTION
             ================================================== -->
 
             <div class="admin-section">
@@ -1765,7 +2044,14 @@ a:focus,
             </div>
 
 
-            <details class="menu-dropdown">
+            <!-- =================================================
+                 ADMIN DASHBOARD
+            ================================================== -->
+
+            <details class="menu-dropdown"
+                {% if request.GET.menu == 'admin' %}
+                    open
+                {% endif %}>
 
                 <summary>
 
@@ -1782,7 +2068,7 @@ a:focus,
 
                 <div class="submenu">
 
-                    <a href="{% url 'admin_dashboard' %}"
+                    <a href="{% url 'admin_dashboard' %}?menu=admin"
                        class="submenu-link">
 
                         Overview
@@ -1790,7 +2076,7 @@ a:focus,
                     </a>
 
 
-                    <a href="{% url 'manage_users' %}"
+                    <a href="{% url 'manage_users' %}?menu=admin"
                        class="submenu-link">
 
                         Manage Users
@@ -1798,7 +2084,7 @@ a:focus,
                     </a>
 
 
-                    <a href="{% url 'manage_users' %}?role=ORGANIZER"
+                    <a href="{% url 'manage_users' %}?role=ORGANIZER&menu=admin"
                        class="submenu-link">
 
                         Manage Organizers
@@ -1806,7 +2092,7 @@ a:focus,
                     </a>
 
 
-                    <a href="{% url 'event_list' %}"
+                    <a href="{% url 'event_list' %}?menu=admin"
                        class="submenu-link">
 
                         Manage Events
@@ -1814,7 +2100,7 @@ a:focus,
                     </a>
 
 
-                    <a href="{% url 'reports' %}"
+                    <a href="{% url 'reports' %}?menu=admin"
                        class="submenu-link">
 
                         Reports
@@ -1822,7 +2108,7 @@ a:focus,
                     </a>
 
 
-                    <a href="{% url 'settings' %}"
+                    <a href="{% url 'settings' %}?menu=admin"
                        class="submenu-link">
 
                         System Management
@@ -1834,13 +2120,14 @@ a:focus,
             </details>
 
 
-
         <!-- =====================================================
              ORGANIZER SIDEBAR
         ====================================================== -->
 
         {% elif user.profile.role == 'ORGANIZER' %}
 
+
+            <!-- DASHBOARD -->
 
             <a href="{% url 'organizer_dashboard' %}"
                class="single-menu-link">
@@ -1852,7 +2139,14 @@ a:focus,
             </a>
 
 
-            <details class="menu-dropdown">
+            <!-- =================================================
+                 EVENTS
+            ================================================== -->
+
+            <details class="menu-dropdown"
+                {% if request.GET.menu == 'events' %}
+                    open
+                {% endif %}>
 
                 <summary>
 
@@ -1869,7 +2163,7 @@ a:focus,
 
                 <div class="submenu">
 
-                    <a href="{% url 'event_create' %}"
+                    <a href="{% url 'event_create' %}?menu=events"
                        class="submenu-link">
 
                         Create Event
@@ -1877,7 +2171,7 @@ a:focus,
                     </a>
 
 
-                    <a href="{% url 'event_list' %}"
+                    <a href="{% url 'event_list' %}?menu=events"
                        class="submenu-link">
 
                         My Events
@@ -1885,7 +2179,7 @@ a:focus,
                     </a>
 
 
-                    <a href="{% url 'event_list' %}?approval=DRAFT"
+                    <a href="{% url 'event_list' %}?approval=DRAFT&menu=events"
                        class="submenu-link">
 
                         Draft Events
@@ -1893,7 +2187,7 @@ a:focus,
                     </a>
 
 
-                    <a href="{% url 'event_list' %}?approval=PENDING"
+                    <a href="{% url 'event_list' %}?approval=PENDING&menu=events"
                        class="submenu-link">
 
                         Pending Approval
@@ -1901,7 +2195,7 @@ a:focus,
                     </a>
 
 
-                    <a href="{% url 'event_list' %}?approval=APPROVED"
+                    <a href="{% url 'event_list' %}?approval=APPROVED&menu=events"
                        class="submenu-link">
 
                         Approved Events
@@ -1909,7 +2203,7 @@ a:focus,
                     </a>
 
 
-                    <a href="{% url 'event_list' %}?approval=REJECTED"
+                    <a href="{% url 'event_list' %}?approval=REJECTED&menu=events"
                        class="submenu-link">
 
                         Rejected Events
@@ -1921,7 +2215,14 @@ a:focus,
             </details>
 
 
-            <details class="menu-dropdown">
+            <!-- =================================================
+                 PARTICIPANTS
+            ================================================== -->
+
+            <details class="menu-dropdown"
+                {% if request.GET.menu == 'participants' %}
+                    open
+                {% endif %}>
 
                 <summary>
 
@@ -1938,7 +2239,7 @@ a:focus,
 
                 <div class="submenu">
 
-                    <a href="{% url 'event_list' %}"
+                    <a href="{% url 'event_list' %}?menu=participants"
                        class="submenu-link">
 
                         Event Participants
@@ -1946,7 +2247,7 @@ a:focus,
                     </a>
 
 
-                    <a href="{% url 'event_list' %}?attendance=present"
+                    <a href="{% url 'event_list' %}?attendance=present&menu=participants"
                        class="submenu-link">
 
                         Attendance
@@ -1958,13 +2259,14 @@ a:focus,
             </details>
 
 
-
         <!-- =====================================================
              USER SIDEBAR
         ====================================================== -->
 
         {% else %}
 
+
+            <!-- DASHBOARD -->
 
             <a href="{% url 'user_dashboard' %}"
                class="single-menu-link">
@@ -1976,7 +2278,14 @@ a:focus,
             </a>
 
 
-            <details class="menu-dropdown">
+            <!-- =================================================
+                 EVENTS
+            ================================================== -->
+
+            <details class="menu-dropdown"
+                {% if request.GET.menu == 'events' %}
+                    open
+                {% endif %}>
 
                 <summary>
 
@@ -1993,7 +2302,7 @@ a:focus,
 
                 <div class="submenu">
 
-                    <a href="{% url 'available_events' %}"
+                    <a href="{% url 'available_events' %}?menu=events"
                        class="submenu-link">
 
                         Available Events
@@ -2001,7 +2310,7 @@ a:focus,
                     </a>
 
 
-                    <a href="{% url 'my_joined_events' %}"
+                    <a href="{% url 'my_joined_events' %}?menu=events"
                        class="submenu-link">
 
                         My Joined Events
@@ -2013,7 +2322,14 @@ a:focus,
             </details>
 
 
-            <details class="menu-dropdown">
+            <!-- =================================================
+                 MY ACTIVITY
+            ================================================== -->
+
+            <details class="menu-dropdown"
+                {% if request.GET.menu == 'activity' %}
+                    open
+                {% endif %}>
 
                 <summary>
 
@@ -2030,7 +2346,7 @@ a:focus,
 
                 <div class="submenu">
 
-                    <a href="{% url 'wishlist' %}"
+                    <a href="{% url 'wishlist' %}?menu=activity"
                        class="submenu-link">
 
                         Wishlist
@@ -2038,7 +2354,7 @@ a:focus,
                     </a>
 
 
-                    <a href="{% url 'calendar' %}"
+                    <a href="{% url 'calendar' %}?menu=activity"
                        class="submenu-link">
 
                         Calendar
@@ -2052,11 +2368,9 @@ a:focus,
 
         {% endif %}
 
-
     </div>
 
 </aside>
-
 
 
 <!-- =========================================================
@@ -2375,6 +2689,114 @@ a:focus,
 
 ...
 
+
+<!-- =========================================================
+     SMART EVENT AI ASSISTANT - GLOBAL
+========================================================= -->
+<details class="smart-ai-assistant">
+    <summary class="smart-ai-button" title="Smart Event AI Assistant">🤖</summary>
+    <div class="smart-ai-window">
+        <div class="smart-ai-header">
+            <div class="smart-ai-avatar">🤖</div>
+            <div class="smart-ai-header-text">
+                <strong>Smart Event AI Assistant</strong>
+                <small>Your Event Management Assistant</small>
+            </div>
+        </div>
+        <div class="smart-ai-intro">
+            <div class="smart-ai-message">
+                <strong>Hello! 👋</strong><br><br>
+                I'm your <strong>Smart Event AI Assistant.</strong><br><br>
+                Ask me about events, users, organizers, registrations, approvals and analytics.
+            </div>
+        </div>
+        <div class="smart-ai-questions" id="smart-ai-messages">
+            <div class="smart-ai-category">📅 Events</div>
+            <div class="smart-ai-pills">
+                <span data-question="How many events are there?">How many events are there?</span>
+                <span data-question="Show all events">Show all events</span>
+                <span data-question="Show upcoming events">Show upcoming events</span>
+                <span data-question="Show pending events">Show pending events</span>
+                <span data-question="Show approved events">Show approved events</span>
+                <span data-question="Show rejected events">Show rejected events</span>
+                <span data-question="Events by category">Events by category</span>
+                <span data-question="Events by organizer">Events by organizer</span>
+            </div>
+            <div class="smart-ai-category">📝 Registrations</div>
+            <div class="smart-ai-pills">
+                <span data-question="How many registrations?">How many registrations?</span>
+                <span data-question="Today's registrations">Today's registrations</span>
+                <span data-question="Recent registrations">Recent registrations</span>
+                <span data-question="Most registered event">Most registered event</span>
+            </div>
+            <div class="smart-ai-category">👥 Users</div>
+            <div class="smart-ai-pills">
+                <span data-question="How many users?">How many users?</span>
+                <span data-question="Show all users">Show all users</span>
+                <span data-question="Recent users">Recent users</span>
+            </div>
+            <div class="smart-ai-category">🏢 Organizers</div>
+            <div class="smart-ai-pills">
+                <span data-question="How many organizers?">How many organizers?</span>
+                <span data-question="Show all organizers">Show all organizers</span>
+                <span data-question="Approved organizers">Approved organizers</span>
+                <span data-question="Pending organizers">Pending organizers</span>
+            </div>
+            <div class="smart-ai-category">⏳ Approvals</div>
+            <div class="smart-ai-pills">
+                <span data-question="Pending approvals">Pending approvals</span>
+                <span data-question="Approved events">Approved events</span>
+                <span data-question="Rejected events">Rejected events</span>
+            </div>
+            <div class="smart-ai-category">📊 Analytics</div>
+            <div class="smart-ai-pills">
+                <span data-question="Dashboard summary">Dashboard summary</span>
+                <span data-question="Event statistics">Event statistics</span>
+                <span data-question="Registration statistics">Registration statistics</span>
+                <span data-question="Most popular event">Most popular event</span>
+            </div>
+            <div class="smart-ai-category">❓ General Help</div>
+            <div class="smart-ai-pills">
+                <span data-question="What can you do?">What can you do?</span>
+                <span data-question="How do I create an event?">How do I create an event?</span>
+                <span data-question="How does approval work?">How does approval work?</span>
+            </div>
+        </div>
+        <div class="smart-ai-input-area">
+            <input type="text" id="smart-ai-input" placeholder="Ask anything about events..." autocomplete="off">
+            <button type="button" id="smart-ai-send" title="Send">➤</button>
+        </div>
+    </div>
+</details>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const dropdowns = document.querySelectorAll(".sidebar .menu-dropdown");
+
+    dropdowns.forEach(function (dropdown) {
+
+        const summary = dropdown.querySelector("summary");
+
+        if (!summary) return;
+
+        summary.addEventListener("click", function () {
+
+            // Close all other sidebar menus
+            dropdowns.forEach(function (otherDropdown) {
+
+                if (otherDropdown !== dropdown) {
+                    otherDropdown.removeAttribute("open");
+                }
+
+            });
+
+        });
+
+    });
+
+});
+</script>
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js"></script>
 
 </body>

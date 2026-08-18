@@ -2585,15 +2585,129 @@ def toggle_attendance(
 @user_passes_test(is_admin)
 def manage_users(request):
 
+    # =====================================================
+    # POST ACTIONS
+    # =====================================================
+
+    if request.method == "POST":
+
+        action = request.POST.get("action")
+        user_id = request.POST.get("user_id")
+
+        if not user_id:
+            messages.error(
+                request,
+                "User ID is missing."
+            )
+            return redirect("manage_users")
+
+
+        # =================================================
+        # DELETE USER
+        # =================================================
+
+        if action == "delete":
+
+            user = get_object_or_404(
+                User,
+                id=user_id
+            )
+
+            # Prevent deleting yourself
+            if user.id == request.user.id:
+
+                messages.error(
+                    request,
+                    "You cannot delete your own account."
+                )
+
+                return redirect("manage_users")
+
+
+            username = user.username
+
+            user.delete()
+
+            messages.success(
+                request,
+                f"User '{username}' deleted successfully."
+            )
+
+            return redirect("manage_users")
+
+
+        # =================================================
+        # ACTIVATE / DEACTIVATE USER
+        # =================================================
+
+        if action == "toggle":
+
+            user = get_object_or_404(
+                User,
+                id=user_id
+            )
+
+            # Prevent deactivating yourself
+            if user.id == request.user.id:
+
+                messages.error(
+                    request,
+                    "You cannot deactivate your own account."
+                )
+
+                return redirect("manage_users")
+
+
+            user.is_active = not user.is_active
+
+            user.save(
+                update_fields=[
+                    "is_active"
+                ]
+            )
+
+
+            if user.is_active:
+
+                messages.success(
+                    request,
+                    f"{user.username} is now Active."
+                )
+
+            else:
+
+                messages.success(
+                    request,
+                    f"{user.username} is now Inactive."
+                )
+
+
+            return redirect("manage_users")
+
+
+    # =====================================================
+    # SEARCH
+    # =====================================================
+
     search = request.GET.get(
         "search",
         ""
-    )
+    ).strip()
+
+
+    # =====================================================
+    # ROLE FILTER
+    # =====================================================
 
     role = request.GET.get(
         "role",
         ""
-    )
+    ).strip()
+
+
+    # =====================================================
+    # ALL PROFILES
+    # =====================================================
 
     profiles = (
         UserProfile.objects
@@ -2602,17 +2716,33 @@ def manage_users(request):
         .order_by("full_name")
     )
 
+
+    # =====================================================
+    # SEARCH FILTER
+    # =====================================================
+
     if search:
 
         profiles = profiles.filter(
 
-            Q(full_name__icontains=search) |
-
-            Q(user__username__icontains=search) |
-
-            Q(user__email__icontains=search)
+            Q(
+                full_name__icontains=search
+            )
+            |
+            Q(
+                user__username__icontains=search
+            )
+            |
+            Q(
+                user__email__icontains=search
+            )
 
         )
+
+
+    # =====================================================
+    # ROLE FILTER
+    # =====================================================
 
     if role:
 
@@ -2620,39 +2750,85 @@ def manage_users(request):
             role=role
         )
 
+
+    # =====================================================
+    # VIEW SELECTED USER
+    # =====================================================
+
+    selected_profile = None
+
+    view_id = request.GET.get(
+        "view"
+    )
+
+    if view_id:
+
+        selected_profile = get_object_or_404(
+            UserProfile.objects.select_related("user"),
+            user_id=view_id
+        )
+
+
+    # =====================================================
+    # STATISTICS
+    # =====================================================
+
+    total_accounts = UserProfile.objects.count()
+
+    total_users = UserProfile.objects.filter(
+        role="USER"
+    ).count()
+
+    total_organizers = UserProfile.objects.filter(
+        role="ORGANIZER"
+    ).count()
+
+    total_admins = UserProfile.objects.filter(
+        role="ADMIN"
+    ).count()
+
+
+    # =====================================================
+    # CONTEXT
+    # =====================================================
+
     context = {
 
-        "profiles": profiles,
+        "profiles":
+            profiles,
 
-        "search": search,
+        "search":
+            search,
 
-        "selected_role": role,
+        "selected_role":
+            role,
+
+        "selected_profile":
+            selected_profile,
+
+        "total_accounts":
+            total_accounts,
 
         "total_users":
-            UserProfile.objects.filter(
-                role="USER"
-            ).count(),
+            total_users,
 
         "total_organizers":
-            UserProfile.objects.filter(
-                role="ORGANIZER"
-            ).count(),
+            total_organizers,
 
         "total_admins":
-            UserProfile.objects.filter(
-                role="ADMIN"
-            ).count(),
+            total_admins,
 
     }
 
+
+    # =====================================================
+    # RENDER
+    # =====================================================
+
     return render(
-
         request,
-
         "events/manage_users.html",
-
         context
-
     )
 
 
