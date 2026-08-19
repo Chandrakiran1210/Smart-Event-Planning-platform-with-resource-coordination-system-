@@ -1316,38 +1316,40 @@ def available_events(request):
 # EVENT DETAIL
 # =========================================================
 
-@login_required
-@user_passes_test(user_or_organizer)
 def event_detail(request, pk):
 
     event = get_object_or_404(
-
         Event.objects.select_related(
             'category',
             'owner'
         ),
-
         pk=pk,
-
         approval_status='APPROVED'
     )
 
+    # Default values for visitors who are not logged in
+    is_joined = False
+    is_wishlisted = False
+
+    # Only check user-specific information when logged in
+    if request.user.is_authenticated:
+
+        is_joined = EventRegistration.objects.filter(
+            user=request.user,
+            event=event
+        ).exists()
+
+        is_wishlisted = EventWishlist.objects.filter(
+            user=request.user,
+            event=event
+        ).exists()
+
     context = {
+        'event': event,
 
-        'event':
-            event,
+        'is_joined': is_joined,
 
-        'is_joined':
-            EventRegistration.objects.filter(
-                user=request.user,
-                event=event
-            ).exists(),
-
-        'is_wishlisted':
-            EventWishlist.objects.filter(
-                user=request.user,
-                event=event
-            ).exists(),
+        'is_wishlisted': is_wishlisted,
 
         'participant_count':
             event.registrations.count(),
@@ -1358,7 +1360,6 @@ def event_detail(request, pk):
         'events/event_detail.html',
         context
     )
-
 # =========================================================
 # EVENT QR CODE
 # =========================================================
@@ -1387,9 +1388,8 @@ def event_qr(request, pk):
 
     # URL that the QR code will open
 
-    event_url = (
-    f"http://10.138.53.159:8000"
-    f"{reverse('event_detail', args=[event.pk])}"
+    event_url = request.build_absolute_uri(
+    reverse('event_detail', args=[event.pk])
 )
     # Generate QR Code
 

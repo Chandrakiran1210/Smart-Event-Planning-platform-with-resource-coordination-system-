@@ -6,428 +6,366 @@
 
 {% block content %}
 
-<!-- =========================
-     EVENT BANNER
-========================== -->
+<div class="event-detail-container">
 
-<div class="card">
+    <!-- =========================
+         BANNER
+    ========================== -->
 
-    {% if event.banner_image %}
+    <div class="card">
 
-        <img
-            src="{{ event.banner_image.url }}"
-            style="
-                width:100%;
-                height:350px;
-                object-fit:cover;
-                border-radius:12px;
-                margin-bottom:20px;
-            ">
+        {% if event.banner_image %}
+            <img
+                src="{{ event.banner_image.url }}"
+                alt="{{ event.name }}"
+                style="width:100%; height:320px; object-fit:cover; border-radius:10px;">
+        {% endif %}
 
-    {% endif %}
+        <div class="actions">
 
-    <div class="actions">
+            <a href="{% url 'available_events' %}"
+               class="btn secondary">
+                ← Back
+            </a>
 
-        <a href="{% url 'available_events' %}"
-           class="btn secondary">
+            <div style="margin-left:auto; display:flex; gap:10px;">
 
-            ← Back
+                {% if not is_wishlisted %}
 
-        </a>
+                    <form method="post"
+                          action="{% url 'add_to_wishlist' event.pk %}">
 
-        <div style="margin-left:auto;display:flex;gap:10px;">
+                        {% csrf_token %}
 
-            {% if not is_wishlisted %}
+                        <input type="hidden"
+                               name="next"
+                               value="{% url 'event_detail' event.pk %}">
 
-            <form method="post"
-                  action="{% url 'add_to_wishlist' event.pk %}">
+                        <button type="submit"
+                                class="btn warning">
+                            ❤️ Wishlist
+                        </button>
 
-                {% csrf_token %}
+                    </form>
 
-                <input
-                    type="hidden"
-                    name="next"
-                    value="{% url 'event_detail' event.pk %}">
+                {% endif %}
 
                 <button
-                    class="btn warning">
+                    type="button"
+                    class="btn secondary"
+                    onclick="navigator.share ? navigator.share({title:'{{ event.name }}',url:window.location.href}) : alert('Copy this URL to share.')">
 
-                    ❤️ Wishlist
+                    📤 Share
 
                 </button>
 
-            </form>
-
-            {% endif %}
-
-            <button
-                class="btn secondary"
-                onclick="navigator.share ?
-                navigator.share({
-                    title:'{{ event.name }}',
-                    url:window.location.href
-                }) :
-                alert('Copy this URL to share.')">
-
-                📤 Share
-
-            </button>
+            </div>
 
         </div>
 
     </div>
 
-</div>
 
-<!-- =========================
-     EVENT INFORMATION
-========================== -->
+    <!-- =========================
+         MAIN EVENT INFORMATION
+    ========================== -->
 
-<div class="grid">
+    <div class="grid">
 
-    <div class="card">
+        <!-- LEFT SIDE -->
 
-        {% if event.event_image %}
+        <div class="card">
 
-        <img
-            src="{{ event.event_image.url }}"
-            style="
-                width:100%;
-                height:250px;
-                object-fit:cover;
-                border-radius:10px;
-                margin-bottom:15px;
-            ">
+            {% if event.event_image %}
 
-        {% endif %}
+                <img
+                    src="{{ event.event_image.url }}"
+                    alt="{{ event.name }}"
+                    style="width:100%; height:250px; object-fit:cover; border-radius:10px;">
 
-        <h1>
+            {% endif %}
 
-            {{ event.name }}
+            <h1>
+                {{ event.name }}
+            </h1>
 
-        </h1>
+            <p>
+                <span class="badge">
+                    {{ event.category }}
+                </span>
+            </p>
 
-        <p>
+            <table style="width:100%;">
 
-            <span class="badge">
+                <tr>
+                    <th>Organizer</th>
+                    <td>{{ event.organizer|default:"-" }}</td>
+                </tr>
 
-                {{ event.category }}
+                <tr>
+                    <th>Mode</th>
+                    <td>{{ event.get_event_mode_display|default:"-" }}</td>
+                </tr>
 
-            </span>
+                <tr>
+                    <th>Status</th>
+                    <td>{{ event.status|default:"-" }}</td>
+                </tr>
 
-        </p>
+                <tr>
+                    <th>Fee</th>
+                    <td>₹ {{ event.event_fee|default:"0.00" }}</td>
+                </tr>
 
-        <br>
+                <tr>
+                    <th>Participants</th>
+                    <td>
+                        {{ participant_count }}
 
-        <table>
+                        {% if event.max_participants %}
+                            / {{ event.max_participants }}
+                        {% endif %}
+                    </td>
+                </tr>
 
-            <tr>
+            </table>
 
-                <th>Organizer</th>
+        </div>
 
-                <td>{{ event.organizer }}</td>
 
-            </tr>
+        <!-- RIGHT SIDE -->
 
-            <tr>
+        <div class="card">
 
-                <th>Mode</th>
+            <h2>
+                Event Details
+            </h2>
 
-                <td>{{ event.get_event_mode_display }}</td>
+            <table style="width:100%;">
 
-            </tr>
+                <tr>
+                    <th>Start Date</th>
+                    <td>
+                        {{ event.start_date|date:"M d, Y"|default:"-" }}
+                    </td>
+                </tr>
 
-            <tr>
+                <tr>
+                    <th>End Date</th>
+                    <td>
+                        {{ event.end_date|date:"M d, Y"|default:"-" }}
+                    </td>
+                </tr>
 
-                <th>Status</th>
+                <tr>
+                    <th>Registration Deadline</th>
+                    <td>
+                        {{ event.registration_deadline|date:"M d, Y"|default:"-" }}
+                    </td>
+                </tr>
 
-                <td>{{ event.status }}</td>
+                <tr>
+                    <th>Venue</th>
+                    <td>
+                        {{ event.venue|default:"-" }}
+                    </td>
+                </tr>
 
-            </tr>
+                <tr>
+                    <th>Location</th>
+                    <td>
+                        {{ event.location|default:"-" }}
+                    </td>
+                </tr>
 
-            <tr>
+                <tr>
+                    <th>Eligibility</th>
+                    <td>
+                        {{ event.eligibility|default:"-" }}
+                    </td>
+                </tr>
 
-                <th>Fee</th>
+                <tr>
+                    <th>Tags</th>
+                    <td>
+                        {{ event.tags|default:"-" }}
+                    </td>
+                </tr>
 
-                <td>
+            </table>
 
-                    ₹ {{ event.event_fee }}
+            {% if event.google_map %}
 
-                </td>
+                <br>
 
-            </tr>
+                <a href="{{ event.google_map }}"
+                   target="_blank"
+                   class="btn secondary">
 
-            <tr>
+                    📍 Open Google Map
 
-                <th>Participants</th>
+                </a>
 
-                <td>
+            {% endif %}
 
-                    {{ participant_count }}
-
-                    {% if event.max_participants %}
-
-                    / {{ event.max_participants }}
-
-                    {% endif %}
-
-                </td>
-
-            </tr>
-
-        </table>
+        </div>
 
     </div>
+
+
+    <!-- =========================
+         DESCRIPTION
+    ========================== -->
 
     <div class="card">
 
         <h2>
-
-            Event Details
-
+            Description
         </h2>
 
-        <table>
+        <div>
+            {{ event.description|linebreaks }}
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         REQUIREMENTS
+    ========================== -->
+
+    <div class="card">
+
+        <h2>
+            Requirements
+        </h2>
+
+        <div>
+            {{ event.requirements|linebreaks }}
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         CONTACT INFORMATION
+    ========================== -->
+
+    <div class="card">
+
+        <h2>
+            Contact Information
+        </h2>
+
+        <table style="width:100%;">
 
             <tr>
-
-                <th>Start Date</th>
-
-                <td>{{ event.start_date }}</td>
-
+                <th>Person</th>
+                <td>
+                    {{ event.contact_person|default:"-" }}
+                </td>
             </tr>
 
             <tr>
-
-                <th>End Date</th>
-
-                <td>{{ event.end_date }}</td>
-
+                <th>Email</th>
+                <td>
+                    {{ event.contact_email|default:"-" }}
+                </td>
             </tr>
 
             <tr>
-
-                <th>Registration Deadline</th>
-
-                <td>{{ event.registration_deadline }}</td>
-
+                <th>Phone</th>
+                <td>
+                    {{ event.contact_phone|default:"-" }}
+                </td>
             </tr>
 
             <tr>
+                <th>Website</th>
+                <td>
 
-                <th>Venue</th>
+                    {% if event.website %}
 
-                <td>{{ event.venue }}</td>
+                        <a href="{{ event.website }}"
+                           target="_blank">
 
-            </tr>
+                            {{ event.website }}
 
-            <tr>
+                        </a>
 
-                <th>Location</th>
+                    {% else %}
 
-                <td>{{ event.location }}</td>
+                        -
 
-            </tr>
+                    {% endif %}
 
-            <tr>
-
-                <th>Eligibility</th>
-
-                <td>{{ event.eligibility }}</td>
-
-            </tr>
-
-            <tr>
-
-                <th>Tags</th>
-
-                <td>{{ event.tags }}</td>
-
+                </td>
             </tr>
 
         </table>
 
-        <br>
-
-        {% if event.google_map %}
-
-        <a
-            href="{{ event.google_map }}"
-            target="_blank"
-            class="btn secondary">
-
-            📍 Open Google Map
-
-        </a>
-
-        {% endif %}
-
     </div>
 
-</div>
 
-<!-- =========================
-     DESCRIPTION
-========================== -->
+    <!-- =========================
+         ACTION BUTTONS
+    ========================== -->
 
-<div class="card">
+    <div class="card">
 
-    <h2>
+        <div class="actions">
 
-        Description
-
-    </h2>
-
-    <p>
-
-        {{ event.description|linebreaks }}
-
-    </p>
-
-</div>
-
-<!-- =========================
-     REQUIREMENTS
-========================== -->
-
-<div class="card">
-
-    <h2>
-
-        Requirements
-
-    </h2>
-
-    <p>
-
-        {{ event.requirements|linebreaks }}
-
-    </p>
-
-</div>
-
-<!-- =========================
-     CONTACT
-========================== -->
-
-<div class="card">
-
-    <h2>
-
-        Contact Information
-
-    </h2>
-
-    <table>
-
-        <tr>
-
-            <th>Person</th>
-
-            <td>{{ event.contact_person }}</td>
-
-        </tr>
-
-        <tr>
-
-            <th>Email</th>
-
-            <td>{{ event.contact_email }}</td>
-
-        </tr>
-
-        <tr>
-
-            <th>Phone</th>
-
-            <td>{{ event.contact_phone }}</td>
-
-        </tr>
-
-        <tr>
-
-            <th>Website</th>
-
-            <td>
-
-                {% if event.website %}
+            {% if event.registration_link %}
 
                 <a
-                    href="{{ event.website }}"
-                    target="_blank">
+                    href="{{ event.registration_link }}"
+                    target="_blank"
+                    class="btn">
 
-                    {{ event.website }}
+                    🌐 Official Registration
 
                 </a>
 
-                {% else %}
+            {% endif %}
 
-                -
 
-                {% endif %}
+            {% if not is_joined %}
 
-            </td>
+                <form
+                    method="post"
+                    action="{% url 'join_event' event.pk %}">
 
-        </tr>
+                    {% csrf_token %}
 
-    </table>
+                    <input
+                        type="hidden"
+                        name="next"
+                        value="{% url 'event_detail' event.pk %}">
 
-</div>
+                    <button
+                        type="submit"
+                        class="btn success">
 
-<!-- =========================
-     ACTION BUTTONS
-========================== -->
+                        🎟 Join Event
 
-<div class="card">
+                    </button>
 
-    <div class="actions">
+                </form>
 
-        {% if event.registration_link %}
+            {% else %}
 
-        <a
-            href="{{ event.registration_link }}"
-            target="_blank"
-            class="btn">
+                <button
+                    type="button"
+                    class="btn secondary"
+                    disabled>
 
-            🌐 Official Registration
+                    ✓ Already Joined
 
-        </a>
+                </button>
 
-        {% endif %}
+            {% endif %}
 
-        {% if not is_joined %}
-
-        <form
-            method="post"
-            action="{% url 'join_event' event.pk %}">
-
-            {% csrf_token %}
-
-            <input
-                type="hidden"
-                name="next"
-                value="{% url 'event_detail' event.pk %}">
-
-            <button
-                class="btn success">
-
-                🎟 Join Event
-
-            </button>
-
-        </form>
-
-        {% else %}
-
-        <button
-            class="btn secondary"
-            disabled>
-
-            ✓ Already Joined
-
-        </button>
-
-        {% endif %}
+        </div>
 
     </div>
 
