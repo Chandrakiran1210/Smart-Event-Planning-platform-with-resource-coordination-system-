@@ -42,7 +42,6 @@
 
         </div>
 
-
         <div class="profile-header-info">
 
             <h1>
@@ -63,16 +62,13 @@
 
             </h1>
 
-
             <p>
                 {{ profile.full_name|default:user.username }}
             </p>
 
-
             <p>
                 @{{ user.username }}
             </p>
-
 
             {% if user.is_superuser %}
 
@@ -94,9 +90,7 @@
 
             {% endif %}
 
-
             <br><br>
-
 
             <span class="badge success">
 
@@ -127,14 +121,11 @@
 
         {% csrf_token %}
 
-
         <h2 class="profile-section-title">
             Personal Information
         </h2>
 
-
         <div class="profile-grid">
-
 
             <!-- Full Name -->
 
@@ -307,7 +298,6 @@
 
             </div>
 
-
         </div>
 
 
@@ -320,7 +310,7 @@
             {% if user.is_superuser %}
 
                 <a
-                    href="/admin-dashboard/go"
+                    href="{% url 'admin_dashboard' %}"
                     class="btn secondary">
 
                     ⬅ Back
@@ -338,51 +328,14 @@
                 </a>
 
             {% else %}
-            <div class="profile-actions">
 
-    {% if user.is_superuser %}
+                <a
+                    href="{% url 'user_dashboard' %}"
+                    class="btn secondary">
 
-        <a
-            href="{% url 'admin_dashboard' %}"
-            class="btn secondary">
+                    ⬅ Back
 
-            ⬅ Back
-
-        </a>
-
-    {% elif profile.role == "ORGANIZER" %}
-
-        <a
-            href="{% url 'organizer_dashboard' %}"
-            class="btn secondary">
-
-            ⬅ Back
-
-        </a>
-
-    {% else %}
-
-        <a
-            href="{% url 'user_dashboard' %}"
-            class="btn secondary">
-
-            ⬅ Back
-
-        </a>
-
-    {% endif %}
-
-
-    <button
-        type="submit"
-        class="btn success">
-
-        💾 Save Profile
-
-    </button>
-
-</div>
-
+                </a>
 
             {% endif %}
 
@@ -398,9 +351,6 @@
         </div>
 
     </form>
-
-
-    
 
 </div>
 

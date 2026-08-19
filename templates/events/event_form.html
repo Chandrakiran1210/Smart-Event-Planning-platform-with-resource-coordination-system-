@@ -6,25 +6,50 @@
 
 {% block content %}
 
-<div class="actions" style="display:flex; align-items:center; justify-content:space-between;">
+<div class="event-form-page">
 
-    <h1 style="margin:0;">
-        {{ title }}
-    </h1>
 
-    <a href="{% url 'event_list' %}" class="btn secondary">
-        ← Back
-    </a>
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
 
-</div>
+    <div class="actions"
+         style="display:flex; align-items:center; justify-content:space-between;">
 
-    <form method="post" enctype="multipart/form-data">
+        <h1 style="margin:0;">
+            {{ title }}
+        </h1>
+
+        <a
+            href="{% url 'event_list' %}"
+            class="btn secondary">
+
+            ← Back
+
+        </a>
+
+    </div>
+
+
+    <!-- =====================================================
+         EVENT FORM
+    ====================================================== -->
+
+    <form
+        method="post"
+        enctype="multipart/form-data">
 
         {% csrf_token %}
 
         {{ form.non_field_errors }}
 
+
         <div class="grid">
+
+
+            <!-- =================================================
+                 EVENT NAME
+            ================================================== -->
 
             <div class="form-group">
 
@@ -38,6 +63,11 @@
 
             </div>
 
+
+            <!-- =================================================
+                 CATEGORY
+            ================================================== -->
+
             <div class="form-group">
 
                 <label>
@@ -50,26 +80,47 @@
 
             </div>
 
+
+            <!-- =================================================
+                 EVENT IMAGE
+            ================================================== -->
+
             <div class="form-group">
 
                 <label>
                     Event Image
                 </label>
 
-                <div class="image-upload">
+                {% if form.instance.event_image %}
 
-                    {{ form.event_image }}
+                    <small style="
+                        display:block;
+                        margin-bottom:6px;
+                        color:var(--muted);
+                        white-space:nowrap;
+                        overflow:hidden;
+                        text-overflow:ellipsis;
+                    ">
+                        Current:
+                        {{ form.instance.event_image.name }}
+                    </small>
 
-                    <img
-                        id="eventPreview"
-                        class="image-preview"
-                        src="{% if form.instance.event_image %}{{ form.instance.event_image.url }}{% endif %}">
+                {% endif %}
 
-                </div>
+                <input
+                    type="file"
+                    name="event_image"
+                    id="id_event_image"
+                    accept="image/*">
 
                 {{ form.event_image.errors }}
 
             </div>
+
+
+            <!-- =================================================
+                 BANNER IMAGE
+            ================================================== -->
 
             <div class="form-group">
 
@@ -77,182 +128,343 @@
                     Banner Image
                 </label>
 
-                <div class="image-upload">
+                {% if form.instance.banner_image %}
 
-                    {{ form.banner_image }}
+                    <small style="
+                        display:block;
+                        margin-bottom:6px;
+                        color:var(--muted);
+                        white-space:nowrap;
+                        overflow:hidden;
+                        text-overflow:ellipsis;
+                    ">
+                        Current:
+                        {{ form.instance.banner_image.name }}
+                    </small>
 
-                    <img
-                        id="bannerPreview"
-                        class="image-preview"
-                        src="{% if form.instance.banner_image %}{{ form.instance.banner_image.url }}{% endif %}">
+                {% endif %}
 
-                </div>
+                <input
+                    type="file"
+                    name="banner_image"
+                    id="id_banner_image"
+                    accept="image/*">
 
                 {{ form.banner_image.errors }}
 
             </div>
 
+
+            <!-- =================================================
+                 EVENT MODE
+            ================================================== -->
+
             <div class="form-group">
 
-                <label>Event Mode</label>
+                <label>
+                    Event Mode
+                </label>
 
                 {{ form.event_mode }}
 
             </div>
 
+
+            <!-- =================================================
+                 VENUE
+            ================================================== -->
+
             <div class="form-group">
 
-                <label>Venue</label>
+                <label>
+                    Venue
+                </label>
 
                 {{ form.venue }}
 
             </div>
 
+
+            <!-- =================================================
+                 LOCATION
+            ================================================== -->
+
             <div class="form-group">
 
-                <label>Location</label>
+                <label>
+                    Location
+                </label>
 
                 {{ form.location }}
 
             </div>
 
+
+            <!-- =================================================
+                 GOOGLE MAP
+            ================================================== -->
+
             <div class="form-group">
 
-                <label>Google Map</label>
+                <label>
+                    Google Map
+                </label>
 
                 {{ form.google_map }}
 
             </div>
 
+
+            <!-- =================================================
+                 WEBSITE
+            ================================================== -->
+
             <div class="form-group">
 
-                <label>Website</label>
+                <label>
+                    Website
+                </label>
 
                 {{ form.website }}
 
             </div>
 
+
+            <!-- =================================================
+                 REGISTRATION LINK
+            ================================================== -->
+
             <div class="form-group">
 
-                <label>Registration Link</label>
+                <label>
+                    Registration Link
+                </label>
 
                 {{ form.registration_link }}
 
             </div>
 
+
+            <!-- =================================================
+                 START DATE
+            ================================================== -->
+
             <div class="form-group">
 
-                <label>Start Date</label>
+                <label>
+                    Start Date
+                </label>
 
                 {{ form.start_date }}
 
             </div>
 
+
+            <!-- =================================================
+                 END DATE
+            ================================================== -->
+
             <div class="form-group">
 
-                <label>End Date</label>
+                <label>
+                    End Date
+                </label>
 
                 {{ form.end_date }}
 
             </div>
 
+
+            <!-- =================================================
+                 REGISTRATION DEADLINE
+            ================================================== -->
+
             <div class="form-group">
 
-                <label>Registration Deadline</label>
+                <label>
+                    Registration Deadline
+                </label>
 
                 {{ form.registration_deadline }}
 
             </div>
 
+
+            <!-- =================================================
+                 EVENT FEE
+            ================================================== -->
+
             <div class="form-group">
 
-                <label>Event Fee</label>
+                <label>
+                    Event Fee
+                </label>
 
                 {{ form.event_fee }}
 
             </div>
 
+
+            <!-- =================================================
+                 MAXIMUM PARTICIPANTS
+            ================================================== -->
+
             <div class="form-group">
 
-                <label>Maximum Participants</label>
+                <label>
+                    Maximum Participants
+                </label>
 
                 {{ form.max_participants }}
 
             </div>
 
+
+            <!-- =================================================
+                 ELIGIBILITY
+            ================================================== -->
+
             <div class="form-group">
 
-                <label>Eligibility</label>
+                <label>
+                    Eligibility
+                </label>
 
                 {{ form.eligibility }}
 
             </div>
 
+
+            <!-- =================================================
+                 ORGANIZER
+            ================================================== -->
+
             <div class="form-group">
 
-                <label>Organizer</label>
+                <label>
+                    Organizer
+                </label>
 
                 {{ form.organizer }}
 
             </div>
 
+
+            <!-- =================================================
+                 CONTACT PERSON
+            ================================================== -->
+
             <div class="form-group">
 
-                <label>Contact Person</label>
+                <label>
+                    Contact Person
+                </label>
 
                 {{ form.contact_person }}
 
             </div>
 
+
+            <!-- =================================================
+                 CONTACT EMAIL
+            ================================================== -->
+
             <div class="form-group">
 
-                <label>Contact Email</label>
+                <label>
+                    Contact Email
+                </label>
 
                 {{ form.contact_email }}
 
             </div>
 
+
+            <!-- =================================================
+                 CONTACT PHONE
+            ================================================== -->
+
             <div class="form-group">
 
-                <label>Contact Phone</label>
+                <label>
+                    Contact Phone
+                </label>
 
                 {{ form.contact_phone }}
 
             </div>
 
+
+            <!-- =================================================
+                 TAGS
+            ================================================== -->
+
             <div class="form-group">
 
-                <label>Tags</label>
+                <label>
+                    Tags
+                </label>
 
                 {{ form.tags }}
 
             </div>
 
+
+            <!-- =================================================
+                 STATUS
+            ================================================== -->
+
             <div class="form-group">
 
-                <label>Status</label>
+                <label>
+                    Status
+                </label>
 
                 {{ form.status }}
 
             </div>
 
-            <div class="form-group" style="grid-column:1 / -1;">
 
-                <label>Requirements</label>
+            <!-- =================================================
+                 REQUIREMENTS
+            ================================================== -->
+
+            <div
+                class="form-group"
+                style="grid-column:1 / -1;">
+
+                <label>
+                    Requirements
+                </label>
 
                 {{ form.requirements }}
 
             </div>
 
-            <div class="form-group" style="grid-column:1 / -1;">
 
-                <label>Description</label>
+            <!-- =================================================
+                 DESCRIPTION
+            ================================================== -->
+
+            <div
+                class="form-group"
+                style="grid-column:1 / -1;">
+
+                <label>
+                    Description
+                </label>
 
                 {{ form.description }}
 
             </div>
 
+
         </div>
+
+
+        <!-- =====================================================
+             BUTTONS
+        ====================================================== -->
 
         <div class="actions">
 
@@ -264,6 +476,7 @@
 
             </button>
 
+
             <a
                 href="{% url 'event_list' %}"
                 class="btn secondary">
@@ -274,64 +487,9 @@
 
         </div>
 
+
     </form>
 
 </div>
-
-<script>
-
-const eventImage = document.getElementById("id_event_image");
-
-const bannerImage = document.getElementById("id_banner_image");
-
-const eventPreview = document.getElementById("eventPreview");
-
-const bannerPreview = document.getElementById("bannerPreview");
-
-if(eventImage){
-
-    eventImage.addEventListener("change",function(){
-
-        if(this.files.length){
-
-            eventPreview.src = URL.createObjectURL(this.files[0]);
-
-            eventPreview.style.display = "block";
-
-        }
-
-    });
-
-}
-
-if(bannerImage){
-
-    bannerImage.addEventListener("change",function(){
-
-        if(this.files.length){
-
-            bannerPreview.src = URL.createObjectURL(this.files[0]);
-
-            bannerPreview.style.display = "block";
-
-        }
-
-    });
-
-}
-
-if(eventPreview.src){
-
-    eventPreview.style.display = "block";
-
-}
-
-if(bannerPreview.src){
-
-    bannerPreview.style.display = "block";
-
-}
-
-</script>
 
 {% endblock %}

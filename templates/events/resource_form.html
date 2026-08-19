@@ -1,82 +1,200 @@
 {% extends 'base.html' %}
 
 {% block title %}
-{{ title }}
+    {% if form.instance.pk %}
+        Edit Resource
+    {% else %}
+        Add Resource
+    {% endif %}
 {% endblock %}
 
 {% block content %}
 
-<div class="card">
+<div class="card resource-form-card">
 
-    <div class="actions">
+    <!-- =============================================
+         HEADER
+    ============================================= -->
 
-        <h1 style="margin-right:auto;">
+    <div class="resource-form-header">
 
-            {{ title }}
-
+        <h1>
+            {% if form.instance.pk %}
+                Edit Resource
+            {% else %}
+                Add Resource
+            {% endif %}
         </h1>
 
-        <a href="{% url 'resource_list' %}" class="btn secondary">
-
-            ⬅ Back
-
+        <a
+            href="{% url 'resource_list' %}"
+            class="btn secondary">
+            ← Back
         </a>
 
     </div>
+
+
+    <!-- =============================================
+         RESOURCE FORM
+    ============================================= -->
 
     <form method="post">
 
         {% csrf_token %}
 
-        {{ form.non_field_errors }}
 
-        <div class="grid">
+        <div class="resource-form-grid">
 
-            {% for field in form %}
 
-                <div>
+            <!-- =====================================
+                 NAME
+            ====================================== -->
 
-                    <label>
+            <div class="resource-field">
 
-                        {{ field.label }}
+                <label for="{{ form.name.id_for_label }}">
+                    Name
+                </label>
 
-                    </label>
+                {{ form.name }}
 
-                    {{ field }}
+                {% for error in form.name.errors %}
 
-                    {{ field.errors }}
+                    <small class="resource-error">
+                        {{ error }}
+                    </small>
 
-                    {% if field.help_text %}
+                {% endfor %}
 
-                        <small>
+            </div>
 
-                            {{ field.help_text }}
 
-                        </small>
+            <!-- =====================================
+                 RESOURCE TYPE
+            ====================================== -->
 
-                    {% endif %}
+            <div class="resource-field">
 
-                </div>
+                <label for="{{ form.resource_type.id_for_label }}">
+                    Resource Type
+                </label>
 
-            {% endfor %}
+                {{ form.resource_type }}
+
+                {% for error in form.resource_type.errors %}
+
+                    <small class="resource-error">
+                        {{ error }}
+                    </small>
+
+                {% endfor %}
+
+            </div>
+
+
+            <!-- =====================================
+                 QUANTITY
+            ====================================== -->
+
+            <div class="resource-field">
+
+                <label for="{{ form.quantity.id_for_label }}">
+                    Quantity
+                </label>
+
+                {{ form.quantity }}
+
+                {% for error in form.quantity.errors %}
+
+                    <small class="resource-error">
+                        {{ error }}
+                    </small>
+
+                {% endfor %}
+
+            </div>
+
+
+            <!-- =====================================
+                 AVAILABLE QUANTITY
+            ====================================== -->
+
+            <div class="resource-field">
+
+                <label for="{{ form.available_quantity.id_for_label }}">
+                    Available Quantity
+                </label>
+
+                {{ form.available_quantity }}
+
+                {% for error in form.available_quantity.errors %}
+
+                    <small class="resource-error">
+                        {{ error }}
+                    </small>
+
+                {% endfor %}
+
+            </div>
+
+
+            <!-- =====================================
+                 DESCRIPTION
+            ====================================== -->
+
+            <div class="resource-field resource-description">
+
+                <label for="{{ form.description.id_for_label }}">
+                    Description
+                </label>
+
+                {{ form.description }}
+
+                {% for error in form.description.errors %}
+
+                    <small class="resource-error">
+                        {{ error }}
+                    </small>
+
+                {% endfor %}
+
+            </div>
+
 
         </div>
 
-        <div class="actions" style="margin-top:20px;">
 
-            <button type="submit" class="btn success">
+        <!-- =============================================
+             BUTTONS
+        ============================================= -->
 
-                💾 Save Resource
+        <div class="resource-form-actions">
+
+            <button
+                type="submit"
+                class="btn success">
+
+                💾
+                {% if form.instance.pk %}
+                    Update Resource
+                {% else %}
+                    Save Resource
+                {% endif %}
 
             </button>
 
-            <a href="{% url 'resource_list' %}" class="btn secondary">
+
+            <a
+                href="{% url 'resource_list' %}"
+                class="btn secondary">
 
                 Cancel
 
             </a>
 
         </div>
+
 
     </form>
 
