@@ -1,8 +1,11 @@
 import os
+
+from dotenv import load_dotenv
+
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 
-from openai import OpenAI
+from google import genai
 
 from events.models import (
     Event,
@@ -17,11 +20,20 @@ from accounts.models import UserProfile
 
 
 # =========================================================
-# OPENAI CLIENT
+# LOAD .ENV FILE
 # =========================================================
 
-client = OpenAI(
-    api_key=os.environ.get("OPENAI_API_KEY")
+load_dotenv()
+
+
+# =========================================================
+# GEMINI CLIENT
+# =========================================================
+
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
+
+client = genai.Client(
+    api_key=GEMINI_API_KEY
 )
 
 
@@ -80,9 +92,9 @@ def get_event_system_context():
     total_resources = Resource.objects.count()
 
 
-    # -----------------------------------------------------
+    # =====================================================
     # EVENT DETAILS
-    # -----------------------------------------------------
+    # =====================================================
 
     events = Event.objects.all().order_by("-created_at")[:30]
 
@@ -91,47 +103,80 @@ def get_event_system_context():
     for event in events:
 
         event_details.append({
+
             "name": event.name,
+
             "category": str(event.category),
+
             "organizer": event.organizer,
+
             "mode": event.event_mode,
+
             "venue": event.venue,
+
             "location": event.location,
+
             "start_date": str(event.start_date),
+
             "end_date": str(event.end_date),
+
             "registration_deadline": (
                 str(event.registration_deadline)
                 if event.registration_deadline
                 else None
             ),
+
             "fee": str(event.event_fee),
+
             "max_participants": event.max_participants,
+
             "approval_status": event.approval_status,
+
             "status": event.status,
+
             "description": event.description,
+
         })
 
 
     return {
+
         "dashboard": {
+
             "total_events": total_events,
+
             "pending_events": pending_events,
+
             "approved_events": approved_events,
+
             "rejected_events": rejected_events,
+
             "upcoming_events": upcoming_events,
+
             "active_events": active_events,
+
             "completed_events": completed_events,
+
             "cancelled_events": cancelled_events,
+
             "total_registrations": total_registrations,
+
             "total_users": total_users,
+
             "total_organizers": total_organizers,
+
             "total_categories": total_categories,
+
             "total_wishlists": total_wishlists,
+
             "total_venues": total_venues,
+
             "total_resources": total_resources,
+
         },
 
         "events": event_details,
+
     }
 
 
@@ -148,84 +193,132 @@ def ask_ai(request):
     ).strip()
 
 
+    # =====================================================
+    # EMPTY MESSAGE
+    # =====================================================
+
     if not question:
 
         return JsonResponse({
+
             "success": False,
+
             "answer": "Please enter a message."
+
+        })
+
+
+    # =====================================================
+    # CHECK GEMINI KEY
+    # =====================================================
+
+    if not GEMINI_API_KEY:
+
+        return JsonResponse({
+
+            "success": False,
+
+            "answer": (
+                "Gemini API key is not configured. "
+                "Please check your .env file."
+            )
+
         })
 
 
     try:
 
-        # Get current database information
+        # =================================================
+        # GET DATABASE INFORMATION
+        # =================================================
+
         system_data = get_event_system_context()
 
 
-        # -------------------------------------------------
-        # SYSTEM INSTRUCTIONS
-        # -------------------------------------------------
+        # =================================================
+        # AI SYSTEM INSTRUCTIONS
+        # =================================================
 
         system_prompt = """
+
 You are the Smart Event AI Assistant for an Event Management System.
 
-You are a friendly, intelligent conversational assistant.
+You are a friendly, helpful and intelligent assistant.
 
-Your job is to answer the user's questions naturally.
-
-You can answer TWO types of questions:
+You can answer two types of questions:
 
 1. General questions
-2. Questions about the user's Event Management System
+2. Questions about the Event Management System
 
 
-IMPORTANT:
+IMPORTANT RULES:
 
-When the user asks about their Event Management System,
-use the database information provided below.
+When the user asks about the Event Management System,
+use ONLY the database information provided below.
 
-Never invent event numbers, users, registrations,
-organizers, venues or other database information.
+Never invent:
+
+- events
+- users
+- registrations
+- organizers
+- venues
+- resources
+- categories
+- statistics
+- dates
+- fees
 
 If the database information does not contain the answer,
-say that you don't have that information.
+say that the information is not available.
 
 For general questions, answer normally and helpfully.
 
-You should behave like a natural chatbot.
+Do not tell the user that you are using database information.
 
-Do NOT tell the user that you are using database context.
+Do not mention Python, Django, Gemini, API calls or
+internal implementation unless the user specifically
+asks about the technical implementation.
 
-Do NOT mention Python, Django, API calls or internal code
-unless the user specifically asks about the technical
-implementation.
+Keep answers clear and reasonably concise.
 
-Keep normal answers reasonably concise.
+For event questions, provide useful details.
 
-For event management questions, provide useful details.
+You are the Smart Event AI Assistant for this website.
 
-Database information:
+
+DATABASE INFORMATION:
 
 """ + str(system_data)
 
 
-        # -------------------------------------------------
-        # OPENAI REQUEST
-        # -------------------------------------------------
+        # =================================================
+        # GEMINI REQUEST
+        # =================================================
 
-        response = client.responses.create(
+        response = client.models.generate_content(
 
-            model="gpt-5-mini",
+            model="gemini-3.6-flash",
 
-            instructions=system_prompt,
+            contents=question,
 
-            input=question,
+            config={
+                "system_instruction": system_prompt,
+            },
 
         )
 
 
-        answer = response.output_text
+        # =================================================
+        # GET GEMINI ANSWER
+        # =================================================
 
+        answer = response.text
+
+
+        # =================================================
+        # RETURN SUCCESS
+        # =================================================
 
         return JsonResponse({
 
@@ -236,17 +329,28 @@ Database information:
         })
 
 
+    # =====================================================
+    # ERROR HANDLING
+    # =====================================================
+
     except Exception as error:
 
-        print("CHATBOT ERROR:", error)
+        print()
+        print("=" * 70)
+        print("CHATBOT ERROR")
+        print("=" * 70)
+        print(repr(error))
+        print("=" * 70)
+        print()
+
 
         return JsonResponse({
 
             "success": False,
 
             "answer": (
-                "Sorry, I couldn't connect to the AI service "
-                "right now. Please try again."
+                "AI Error: "
+                + str(error)
             ),
 
         })

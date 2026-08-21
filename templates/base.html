@@ -2394,6 +2394,802 @@ a:hover,
 
 }
 
+/* =========================================================
+   USER DASHBOARD - FINAL ALIGNMENT
+========================================================= */
+
+.user-dashboard {
+    width: 100% !important;
+    max-width: 1200px !important;
+    margin: 0 auto !important;
+    padding: 20px !important;
+    box-sizing: border-box !important;
+}
+
+
+/* =========================================================
+   WELCOME
+========================================================= */
+
+.user-dashboard .dashboard-welcome {
+    width: 100% !important;
+    margin: 0 0 14px 0 !important;
+    box-sizing: border-box !important;
+}
+
+.user-dashboard .dashboard-welcome-content {
+    width: 100% !important;
+    min-height: 70px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+
+    gap: 20px !important;
+}
+
+.user-dashboard .dashboard-welcome h1 {
+    margin: 0 0 5px 0 !important;
+}
+
+.user-dashboard .dashboard-welcome p {
+    margin: 0 !important;
+}
+
+
+/* =========================================================
+   STATISTICS - 4 COLUMNS
+========================================================= */
+
+.user-dashboard .dashboard-stats {
+    width: 100% !important;
+
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+
+    gap: 14px !important;
+
+    margin: 0 0 14px 0 !important;
+}
+
+.user-dashboard .dashboard-stat {
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 90px !important;
+
+    margin: 0 !important;
+    padding: 18px !important;
+
+    box-sizing: border-box !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+}
+
+.user-dashboard .dashboard-stat span {
+    display: block !important;
+    margin-bottom: 8px !important;
+
+    font-size: 13px !important;
+    color: var(--muted) !important;
+}
+
+.user-dashboard .dashboard-stat b {
+    display: block !important;
+
+    font-size: 24px !important;
+    color: var(--text) !important;
+}
+
+
+/* =========================================================
+   DASHBOARD SECTION
+========================================================= */
+
+.user-dashboard .dashboard-section {
+    width: 100% !important;
+    margin: 0 0 14px 0 !important;
+    box-sizing: border-box !important;
+}
+
+
+/* =========================================================
+   QUICK ACTIONS - 4 COLUMNS
+========================================================= */
+
+.user-dashboard .dashboard-quick-actions {
+    width: 100% !important;
+
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+
+    gap: 12px !important;
+}
+
+.user-dashboard .dashboard-quick-action {
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 76px !important;
+
+    padding: 15px !important;
+
+    box-sizing: border-box !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    gap: 7px !important;
+
+    text-decoration: none !important;
+    border-radius: 7px !important;
+}
+
+.user-dashboard .quick-icon {
+    font-size: 18px !important;
+}
+
+
+/* =========================================================
+   FEATURED EVENTS HEADER
+========================================================= */
+
+.user-dashboard .dashboard-section-header {
+    width: 100% !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+
+    gap: 10px !important;
+
+    margin-bottom: 14px !important;
+}
+
+.user-dashboard .dashboard-section-header h2 {
+    margin: 0 !important;
+}
+
+
+/* =========================================================
+   FEATURED EVENT LIST
+========================================================= */
+
+.user-dashboard .featured-event-list {
+    width: 100% !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+
+    gap: 12px !important;
+}
+
+
+/* =========================================================
+   FEATURED EVENT - IMAGE / INFO / BUTTONS
+========================================================= */
+
+.user-dashboard .featured-event {
+    width: 100% !important;
+    min-width: 0 !important;
+
+    display: grid !important;
+
+    grid-template-columns: 100px minmax(0, 1fr) auto !important;
+
+    align-items: center !important;
+
+    gap: 16px !important;
+
+    padding: 14px !important;
+
+    box-sizing: border-box !important;
+
+    border: 1px solid var(--border) !important;
+    border-radius: 8px !important;
+}
+
+
+/* IMAGE */
+
+.user-dashboard .featured-event-image {
+    width: 100px !important;
+    height: 70px !important;
+
+    overflow: hidden !important;
+}
+
+.user-dashboard .featured-event-image img {
+    width: 100% !important;
+    height: 70px !important;
+
+    display: block !important;
+
+    object-fit: cover !important;
+
+    border-radius: 8px !important;
+}
+
+.user-dashboard .event-placeholder {
+    width: 100px !important;
+    height: 70px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    background: var(--primary-light) !important;
+
+    border-radius: 8px !important;
+
+    font-size: 28px !important;
+}
+
+
+/* EVENT INFORMATION */
+
+.user-dashboard .featured-event-info {
+    min-width: 0 !important;
+}
+
+.user-dashboard .featured-event-info h3 {
+    margin: 0 0 5px 0 !important;
+
+    font-size: 16px !important;
+
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+.user-dashboard .featured-event-info p {
+    margin: 5px 0 !important;
+}
+
+
+/* BADGES */
+
+.user-dashboard .event-badges {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 5px !important;
+}
+
+
+/* EVENT BUTTONS */
+
+.user-dashboard .featured-event-actions {
+    display: flex !important;
+
+    flex-direction: column !important;
+
+    align-items: stretch !important;
+
+    gap: 8px !important;
+}
+
+.user-dashboard .featured-event-actions .btn {
+    min-width: 65px !important;
+    text-align: center !important;
+}
+
+
+/* =========================================================
+   WISHLIST + CALENDAR
+========================================================= */
+
+.user-dashboard .dashboard-lower-grid {
+    width: 100% !important;
+
+    display: grid !important;
+
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+
+    gap: 14px !important;
+
+    margin-bottom: 14px !important;
+}
+
+.user-dashboard .dashboard-lower-grid .dashboard-section {
+    margin-bottom: 0 !important;
+}
+
+
+/* =========================================================
+   ACTIVITY TABLE
+========================================================= */
+
+.user-dashboard .dashboard-table-wrapper {
+    width: 100% !important;
+    overflow-x: auto !important;
+}
+
+.user-dashboard .dashboard-activity-table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+}
+
+.user-dashboard .dashboard-activity-table th,
+.user-dashboard .dashboard-activity-table td {
+    padding: 10px 12px !important;
+    text-align: left !important;
+
+    border-bottom: 1px solid var(--border) !important;
+}
+
+.user-dashboard .dashboard-activity-table th:first-child,
+.user-dashboard .dashboard-activity-table td:first-child {
+    width: 10% !important;
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 900px) {
+
+    .user-dashboard .dashboard-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
+    .user-dashboard .dashboard-quick-actions {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .user-dashboard {
+        padding: 10px !important;
+    }
+
+    .user-dashboard .dashboard-welcome-content {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+    }
+
+    .user-dashboard .dashboard-stats {
+        grid-template-columns: 1fr !important;
+    }
+
+    .user-dashboard .dashboard-quick-actions {
+        grid-template-columns: 1fr !important;
+    }
+
+    .user-dashboard .dashboard-lower-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    .user-dashboard .featured-event {
+        grid-template-columns: 80px minmax(0, 1fr) !important;
+    }
+
+    .user-dashboard .featured-event-image,
+    .user-dashboard .featured-event-image img {
+        width: 80px !important;
+        height: 65px !important;
+    }
+
+    .user-dashboard .event-placeholder {
+        width: 80px !important;
+        height: 65px !important;
+    }
+
+    .user-dashboard .featured-event-actions {
+        grid-column: 2 !important;
+        flex-direction: row !important;
+    }
+
+}
+
+
+/* =========================================================
+   VERY SMALL MOBILE
+========================================================= */
+
+@media (max-width: 450px) {
+
+    .user-dashboard .featured-event {
+        grid-template-columns: 1fr !important;
+    }
+
+    .user-dashboard .featured-event-image,
+    .user-dashboard .featured-event-image img {
+        width: 100% !important;
+        height: 160px !important;
+    }
+
+    .user-dashboard .event-placeholder {
+        width: 100% !important;
+        height: 160px !important;
+    }
+
+    .user-dashboard .featured-event-actions {
+        grid-column: auto !important;
+    }
+
+}
+
+/* =========================================================
+   ORGANIZER DASHBOARD
+========================================================= */
+
+/* Main dashboard container */
+
+.organizer-dashboard {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.organizer-dashboard .dashboard-header {
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 14px;
+    padding: 20px;
+}
+
+
+.organizer-header {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    box-sizing: border-box;
+}
+
+
+.organizer-header-title {
+    flex: 1;
+    min-width: 0;
+
+    text-align: left;
+}
+
+
+.organizer-header-title h1 {
+    margin: 0;
+
+    color: var(--text);
+
+    font-size: 24px;
+    font-weight: 700;
+
+    text-align: left;
+}
+
+
+.organizer-header-title p {
+    margin: 5px 0 0;
+
+    color: var(--muted);
+
+    font-size: 13px;
+
+    text-align: left;
+}
+
+
+/* Create Event button */
+
+.organizer-header .btn {
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   STATISTICS
+========================================================= */
+
+.organizer-dashboard .stats-grid {
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+    gap: 12px;
+
+    margin-bottom: 14px;
+
+    box-sizing: border-box;
+}
+
+
+.organizer-dashboard .stat {
+    width: 100%;
+    min-width: 0;
+
+    box-sizing: border-box;
+
+    padding: 16px;
+
+    background: var(--card-bg);
+
+    border: 1px solid var(--border);
+
+    border-radius: var(--radius);
+
+    box-shadow: var(--shadow);
+}
+
+
+.organizer-dashboard .stat span {
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: var(--muted);
+
+    font-size: 12px;
+}
+
+
+.organizer-dashboard .stat b {
+    display: block;
+
+    color: var(--text);
+
+    font-size: 22px;
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   MY EVENTS CARD
+========================================================= */
+
+.organizer-dashboard > .card {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    margin-bottom: 14px;
+}
+
+
+/* =========================================================
+   CARD HEADERS
+========================================================= */
+
+.organizer-dashboard .card > .actions {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+
+    box-sizing: border-box;
+}
+
+
+.organizer-dashboard .card > .actions h2 {
+    margin-top: 0;
+    margin-bottom: 0;
+
+    color: var(--text);
+
+    font-size: 17px;
+}
+
+
+/* =========================================================
+   EVENTS TABLE
+========================================================= */
+
+.organizer-dashboard table {
+    width: 100%;
+
+    border-collapse: collapse;
+
+    table-layout: auto;
+}
+
+
+.organizer-dashboard table th,
+.organizer-dashboard table td {
+    padding: 11px 12px;
+
+    text-align: left;
+
+    vertical-align: middle;
+}
+
+
+.organizer-dashboard table th {
+    white-space: nowrap;
+}
+
+
+.organizer-dashboard table td {
+    color: var(--text);
+
+    font-size: 13px;
+}
+
+
+.organizer-dashboard table td strong {
+    color: var(--text);
+}
+
+
+.organizer-dashboard table td small {
+    color: var(--muted);
+}
+
+
+/* =========================================================
+   EVENT ACTIONS
+========================================================= */
+
+.organizer-dashboard table td .actions {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: flex-start;
+
+    gap: 6px;
+
+    flex-wrap: wrap;
+
+    margin: 0;
+}
+
+
+.organizer-dashboard table td .btn {
+    white-space: nowrap;
+
+    font-size: 12px;
+
+    padding: 7px 10px;
+}
+
+
+/* Inline submit form */
+
+.organizer-dashboard .inline {
+    display: inline-flex;
+
+    margin: 0;
+}
+
+
+/* =========================================================
+   EMPTY EVENT MESSAGE
+========================================================= */
+
+.organizer-dashboard .alert {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    margin: 0;
+}
+
+
+/* =========================================================
+   NOTIFICATIONS
+========================================================= */
+
+.organizer-dashboard .event {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    margin-bottom: 8px;
+}
+
+
+.organizer-dashboard .muted {
+    color: var(--muted);
+}
+
+
+/* =========================================================
+   MOBILE / TABLET
+========================================================= */
+
+@media (max-width: 900px) {
+
+    .organizer-dashboard .stats-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+
+@media (max-width: 650px) {
+
+    .organizer-header {
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 12px;
+    }
+
+
+    .organizer-header-title {
+        width: 100%;
+    }
+
+
+    .organizer-header .btn {
+        width: auto;
+    }
+
+
+    .organizer-dashboard .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+
+    .organizer-dashboard table {
+        display: block;
+
+        overflow-x: auto;
+
+        white-space: nowrap;
+    }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 480px) {
+
+    .organizer-dashboard .dashboard-header {
+        padding: 15px;
+    }
+
+
+    .organizer-header-title h1 {
+        font-size: 20px;
+    }
+
+
+    .organizer-header-title p {
+        font-size: 12px;
+    }
+
+
+    .organizer-dashboard .stat {
+        padding: 14px;
+    }
+
+
+    .organizer-dashboard .stat b {
+        font-size: 20px;
+    }
+
+}
+
 </style>
 
 </head>
@@ -3639,6 +4435,216 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 </script>
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js"></script>
+
+
+<!-- =====================================================
+     SMART AI CHATBOT
+====================================================== -->
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const dropdowns = document.querySelectorAll(".sidebar .menu-dropdown");
+
+    dropdowns.forEach(function (dropdown) {
+
+        const summary = dropdown.querySelector("summary");
+
+        if (!summary) return;
+
+        summary.addEventListener("click", function () {
+
+            dropdowns.forEach(function (otherDropdown) {
+
+                if (otherDropdown !== dropdown) {
+                    otherDropdown.removeAttribute("open");
+                }
+
+            });
+
+        });
+
+    });
+
+});
+
+
+
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js"></script>
+
+
+<!-- =====================================================
+     SMART AI CHATBOT
+====================================================== -->
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const input = document.getElementById("smart-ai-input");
+    const sendButton = document.getElementById("smart-ai-send");
+    const messages = document.getElementById("smart-ai-messages");
+
+    if (!input || !sendButton || !messages) {
+        return;
+    }
+
+    function sendMessage() {
+
+        const question = input.value.trim();
+
+        if (!question) {
+            return;
+        }
+
+        const userMessage = document.createElement("div");
+
+        userMessage.className = "smart-ai-message";
+
+        userMessage.innerHTML =
+            "<strong>You:</strong><br>" +
+            question;
+
+        messages.appendChild(userMessage);
+
+        input.value = "";
+
+        const loadingMessage = document.createElement("div");
+
+        loadingMessage.className = "smart-ai-message";
+
+        loadingMessage.textContent = "Thinking...";
+
+        messages.appendChild(loadingMessage);
+
+        fetch("/chatbot/ask/", {
+
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+                "X-CSRFToken": getCookie("csrftoken")
+            },
+
+            body: new URLSearchParams({
+                message: question
+            })
+
+        })
+
+        .then(function (response) {
+            return response.json();
+        })
+
+        .then(function (data) {
+
+            loadingMessage.remove();
+
+            const botMessage = document.createElement("div");
+
+            botMessage.className = "smart-ai-message";
+
+            botMessage.textContent =
+                data.answer || "Sorry, I could not get an answer.";
+
+            messages.appendChild(botMessage);
+
+            messages.scrollTop = messages.scrollHeight;
+
+        })
+
+        .catch(function (error) {
+
+            console.error("AI ERROR:", error);
+
+            loadingMessage.remove();
+
+            const errorMessage = document.createElement("div");
+
+            errorMessage.className = "smart-ai-message";
+
+            errorMessage.textContent =
+                "Sorry, I couldn't connect to the AI assistant.";
+
+            messages.appendChild(errorMessage);
+
+        });
+    }
+
+
+    sendButton.addEventListener("click", function () {
+        sendMessage();
+    });
+
+
+    input.addEventListener("keydown", function (event) {
+
+        if (event.key === "Enter") {
+
+            event.preventDefault();
+
+            sendMessage();
+
+        }
+
+    });
+
+
+    const questionButtons =
+        document.querySelectorAll(
+            ".smart-ai-pills span[data-question]"
+        );
+
+
+    questionButtons.forEach(function (button) {
+
+        button.addEventListener("click", function () {
+
+            input.value =
+                button.getAttribute("data-question");
+
+            sendMessage();
+
+        });
+
+    });
+
+
+    function getCookie(name) {
+
+        let cookieValue = null;
+
+        if (document.cookie && document.cookie !== "") {
+
+            const cookies = document.cookie.split(";");
+
+            for (let i = 0; i < cookies.length; i++) {
+
+                const cookie = cookies[i].trim();
+
+                if (
+                    cookie.substring(
+                        0,
+                        name.length + 1
+                    ) === name + "="
+                ) {
+
+                    cookieValue =
+                        decodeURIComponent(
+                            cookie.substring(name.length + 1)
+                        );
+
+                    break;
+                }
+            }
+        }
+
+        return cookieValue;
+    }
+
+});
+</script>
 
 </body>
 

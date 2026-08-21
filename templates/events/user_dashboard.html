@@ -6,392 +6,312 @@ User Dashboard
 
 {% block content %}
 
-<!-- ==========================
-     WELCOME
-=========================== -->
+<div class="user-dashboard">
 
-<div class="card">
 
-    <div class="actions">
+    <!-- =====================================================
+         WELCOME
+    ====================================================== -->
 
-        <div>
+    <div class="dashboard-welcome card">
 
-            <h1>
-                👋 Welcome,
-                {{ user.username }}
-            </h1>
+        <div class="dashboard-welcome-content">
 
-            <p class="muted">
-                Discover events, join activities and manage your wishlist.
-            </p>
+            <div>
 
-        </div>
+                <h1>
+                    👋 Welcome, {{ user.username }}
+                </h1>
 
-        <a href="{% url 'available_events' %}"
-           class="btn success">
-
-            Browse Events
-
-        </a>
-
-    </div>
-
-</div>
-
-<!-- ==========================
-     STATISTICS
-=========================== -->
-
-<div class="grid">
-
-    <div class="stat">
-
-        <span>Available Events</span>
-
-        <b>{{ available_events_count }}</b>
-
-    </div>
-
-    <div class="stat">
-
-        <span>Joined Events</span>
-
-        <b>{{ joined_events_count }}</b>
-
-    </div>
-
-    <div class="stat">
-
-        <span>Wishlist</span>
-
-        <b>{{ wishlist_count }}</b>
-
-    </div>
-
-    <div class="stat">
-
-        <span>Profile Status</span>
-
-        <b>100%</b>
-
-    </div>
-
-</div>
-
-<!-- ==========================
-     QUICK ACTIONS
-=========================== -->
-
-<div class="card">
-
-    <h2>
-
-        ⚡ Quick Actions
-
-    </h2>
-
-    <div class="grid">
-
-        <a href="{% url 'available_events' %}"
-           class="btn success"
-           style="padding:18px;text-align:center;">
-
-            📅<br><br>
-
-            Browse Events
-
-        </a>
-
-        <a href="{% url 'my_joined_events' %}"
-           class="btn secondary"
-           style="padding:18px;text-align:center;">
-
-            🎟️<br><br>
-
-            My Events
-
-        </a>
-
-        <a href="{% url 'wishlist' %}"
-           class="btn warning"
-           style="padding:18px;text-align:center;">
-
-            ❤️<br><br>
-
-            Wishlist
-
-        </a>
-
-        <a href="{% url 'calendar' %}"
-           class="btn"
-           style="padding:18px;text-align:center;">
-
-            📅<br><br>
-
-            Calendar
-
-        </a>
-
-    </div>
-
-</div>
-
-<!-- ==========================
-     FEATURED EVENTS
-=========================== -->
-
-<div class="card">
-
-    <div class="actions">
-
-        <h2 style="margin-right:auto;">
-
-            ⭐ Featured Events
-
-        </h2>
-
-        <a href="{% url 'available_events' %}"
-           class="btn">
-
-            View All
-
-        </a>
-
-    </div>
-
-    {% if events %}
-
-        {% for event in events|slice:":5" %}
-
-        <div class="event">
-
-            <div style="display:flex;gap:20px;align-items:center;">
-
-                <div>
-
-                    {% if event.event_image %}
-
-                    <img
-                        src="{{ event.event_image.url }}"
-                        width="130"
-                        height="90"
-                        style="
-                            object-fit:cover;
-                            border-radius:10px;
-                        ">
-
-                    {% else %}
-
-                    <div style="
-                        width:130px;
-                        height:90px;
-                        background:#eee;
-                        border-radius:10px;
-                        display:flex;
-                        align-items:center;
-                        justify-content:center;
-                        font-size:35px;
-                    ">
-                        📅
-                    </div>
-
-                    {% endif %}
-
-                </div>
-
-                <div style="flex:1;">
-
-                    <h3>
-
-                        {{ event.name }}
-
-                    </h3>
-
-                    <p class="muted">
-
-                        📍 {{ event.location }}
-
-                    </p>
-
-                    <p>
-
-                        <span class="badge">
-
-                            {{ event.category }}
-
-                        </span>
-
-                        <span class="badge">
-
-                            {{ event.status }}
-
-                        </span>
-
-                    </p>
-
-                    <p>
-
-                        📅
-
-                        {{ event.start_date }}
-
-                        -
-
-                        {{ event.end_date }}
-
-                    </p>
-
-                </div>
-
-                <div>
-
-                    <a
-                        href="{% url 'event_detail' event.pk %}"
-                        class="btn">
-
-                        View
-
-                    </a>
-
-                    <br><br>
-
-                    <a
-                        href="{% url 'join_event' event.pk %}"
-                        class="btn success">
-
-                        Join
-
-                    </a>
-
-                </div>
+                <p class="muted">
+                    Discover events, join activities and manage your wishlist.
+                </p>
 
             </div>
 
-        </div>
+            <a
+                href="{% url 'available_events' %}"
+                class="btn success">
 
-        {% endfor %}
+                Browse Events
 
-    {% else %}
-
-        <div class="alert">
-
-            No events available.
+            </a>
 
         </div>
 
-    {% endif %}
+    </div>
 
-</div>
 
-<!-- ==========================
-     DASHBOARD GRID
-=========================== -->
+    <!-- =====================================================
+         STATISTICS
+    ====================================================== -->
 
-<div class="grid">
+    <div class="dashboard-stats">
 
-    <div class="card">
+        <div class="dashboard-stat card">
 
-        <h2>
+            <span>
+                Available Events
+            </span>
 
-            ❤️ Wishlist
+            <b>
+                {{ available_events_count }}
+            </b>
 
-        </h2>
+        </div>
 
-        <p>
 
-            Saved events are available here.
+        <div class="dashboard-stat card">
 
-        </p>
+            <span>
+                Joined Events
+            </span>
 
-        <a href="{% url 'wishlist' %}"
-           class="btn secondary">
+            <b>
+                {{ joined_events_count }}
+            </b>
 
-            Open Wishlist
+        </div>
 
-        </a>
+
+        <div class="dashboard-stat card">
+
+            <span>
+                Wishlist
+            </span>
+
+            <b>
+                {{ wishlist_count }}
+            </b>
+
+        </div>
+
+
+        <div class="dashboard-stat card">
+
+            <span>
+                Profile Status
+            </span>
+
+            <b>
+                100%
+            </b>
+
+        </div>
 
     </div>
 
-    <div class="card">
 
-        <h2>
+    <!-- =====================================================
+         FEATURED EVENTS
+    ====================================================== -->
 
-            📅 Calendar
+    <div class="dashboard-section card">
 
-        </h2>
+        <div class="dashboard-section-header">
 
-        <p>
+            <h2>
+                ⭐ Featured Events
+            </h2>
 
-            View all your upcoming schedules.
+            <a
+                href="{% url 'available_events' %}"
+                class="btn">
 
-        </p>
+                View All
 
-        <a href="{% url 'calendar' %}"
-           class="btn">
+            </a>
 
-            Open Calendar
+        </div>
 
-        </a>
+
+        {% if events %}
+
+            <div class="featured-event-list">
+
+                {% for event in events|slice:":5" %}
+
+                    <div class="featured-event">
+
+
+                        <!-- EVENT IMAGE -->
+
+                        <div class="featured-event-image">
+
+                            {% if event.event_image %}
+
+                                <img
+                                    src="{{ event.event_image.url }}"
+                                    alt="{{ event.name }}">
+
+                            {% else %}
+
+                                <div class="event-placeholder">
+                                    📅
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- EVENT INFORMATION -->
+
+                        <div class="featured-event-info">
+
+                            <h3>
+                                {{ event.name }}
+                            </h3>
+
+                            <p class="muted">
+                                📍 {{ event.location|default:"Location not specified" }}
+                            </p>
+
+                            <div class="event-badges">
+
+                                <span class="badge">
+                                    {{ event.category }}
+                                </span>
+
+                                <span class="badge">
+                                    {{ event.status }}
+                                </span>
+
+                            </div>
+
+                            <p>
+                                📅
+                                {{ event.start_date }}
+                                -
+                                {{ event.end_date }}
+                            </p>
+
+                        </div>
+
+
+                        <!-- EVENT ACTIONS -->
+
+                        <div class="featured-event-actions">
+
+                            <a
+                                href="{% url 'event_detail' event.pk %}"
+                                class="btn">
+
+                                View
+
+                            </a>
+
+
+                            <a
+                                href="{% url 'join_event' event.pk %}"
+                                class="btn success">
+
+                                Join
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+
+        {% else %}
+
+            <div class="alert">
+
+                No events available.
+
+            </div>
+
+        {% endif %}
 
     </div>
 
-</div>
 
-<!-- ==========================
-     RECENT ACTIVITY
-=========================== -->
+    <!-- =====================================================
+         RECENT ACTIVITY
+    ====================================================== -->
 
-<div class="card">
+    <div class="dashboard-section card">
 
-    <h2>
+        <h2>
+            📌 Recent Activity
+        </h2>
 
-        📌 Recent Activity
 
-    </h2>
+        <div class="dashboard-table-wrapper">
 
-    <table>
+            <table class="dashboard-activity-table">
 
-        <thead>
+                <thead>
 
-            <tr>
+                    <tr>
 
-                <th>#</th>
+                        <th>
+                            #
+                        </th>
 
-                <th>Activity</th>
+                        <th>
+                            Activity
+                        </th>
 
-            </tr>
+                    </tr>
 
-        </thead>
+                </thead>
 
-        <tbody>
 
-            <tr>
+                <tbody>
 
-                <td>1</td>
+                    <tr>
 
-                <td>Logged into the system</td>
+                        <td>
+                            1
+                        </td>
 
-            </tr>
+                        <td>
+                            Logged into the system
+                        </td>
 
-            <tr>
+                    </tr>
 
-                <td>2</td>
 
-                <td>Viewed available events</td>
+                    <tr>
 
-            </tr>
+                        <td>
+                            2
+                        </td>
 
-            <tr>
+                        <td>
+                            Viewed available events
+                        </td>
 
-                <td>3</td>
+                    </tr>
 
-                <td>Opened dashboard</td>
 
-            </tr>
+                    <tr>
 
-        </tbody>
+                        <td>
+                            3
+                        </td>
 
-    </table>
+                        <td>
+                            Opened dashboard
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
 
 </div>
 

@@ -15,45 +15,60 @@
     <div class="card">
 
         {% if event.banner_image %}
+
             <img
                 src="{{ event.banner_image.url }}"
                 alt="{{ event.name }}"
                 style="width:100%; height:320px; object-fit:cover; border-radius:10px;">
+
         {% endif %}
+
 
         <div class="actions">
 
-            <a href="{% url 'available_events' %}"
-               class="btn secondary">
+            <a
+                href="{% url 'available_events' %}"
+                class="btn secondary">
+
                 ← Back
+
             </a>
+
 
             <div style="margin-left:auto; display:flex; gap:10px;">
 
                 {% if not is_wishlisted %}
 
-                    <form method="post"
-                          action="{% url 'add_to_wishlist' event.pk %}">
+                    <form
+                        method="post"
+                        action="{% url 'add_to_wishlist' event.pk %}">
 
                         {% csrf_token %}
 
-                        <input type="hidden"
-                               name="next"
-                               value="{% url 'event_detail' event.pk %}">
+                        <input
+                            type="hidden"
+                            name="next"
+                            value="{% url 'event_detail' event.pk %}">
 
-                        <button type="submit"
-                                class="btn warning">
+                        <button
+                            type="submit"
+                            class="btn warning">
+
                             ❤️ Wishlist
+
                         </button>
 
                     </form>
 
                 {% endif %}
 
+
+                <!-- SHARE -->
+
                 <button
                     type="button"
                     class="btn secondary"
-                    onclick="navigator.share ? navigator.share({title:'{{ event.name }}',url:window.location.href}) : alert('Copy this URL to share.')">
+                    onclick="copyEventLink()">
 
                     📤 Share
 
@@ -72,6 +87,7 @@
 
     <div class="grid">
 
+
         <!-- LEFT SIDE -->
 
         <div class="card">
@@ -85,47 +101,93 @@
 
             {% endif %}
 
+
             <h1>
                 {{ event.name }}
             </h1>
 
+
             <p>
+
                 <span class="badge">
                     {{ event.category }}
                 </span>
+
             </p>
+
 
             <table style="width:100%;">
 
                 <tr>
-                    <th>Organizer</th>
-                    <td>{{ event.organizer|default:"-" }}</td>
-                </tr>
 
-                <tr>
-                    <th>Mode</th>
-                    <td>{{ event.get_event_mode_display|default:"-" }}</td>
-                </tr>
+                    <th>
+                        Organizer
+                    </th>
 
-                <tr>
-                    <th>Status</th>
-                    <td>{{ event.status|default:"-" }}</td>
-                </tr>
-
-                <tr>
-                    <th>Fee</th>
-                    <td>₹ {{ event.event_fee|default:"0.00" }}</td>
-                </tr>
-
-                <tr>
-                    <th>Participants</th>
                     <td>
+                        {{ event.organizer|default:"-" }}
+                    </td>
+
+                </tr>
+
+
+                <tr>
+
+                    <th>
+                        Mode
+                    </th>
+
+                    <td>
+                        {{ event.get_event_mode_display|default:"-" }}
+                    </td>
+
+                </tr>
+
+
+                <tr>
+
+                    <th>
+                        Status
+                    </th>
+
+                    <td>
+                        {{ event.status|default:"-" }}
+                    </td>
+
+                </tr>
+
+
+                <tr>
+
+                    <th>
+                        Fee
+                    </th>
+
+                    <td>
+                        ₹ {{ event.event_fee|default:"0.00" }}
+                    </td>
+
+                </tr>
+
+
+                <tr>
+
+                    <th>
+                        Participants
+                    </th>
+
+                    <td>
+
                         {{ participant_count }}
 
                         {% if event.max_participants %}
+
                             / {{ event.max_participants }}
+
                         {% endif %}
+
                     </td>
+
                 </tr>
 
             </table>
@@ -141,66 +203,111 @@
                 Event Details
             </h2>
 
+
             <table style="width:100%;">
 
                 <tr>
-                    <th>Start Date</th>
+
+                    <th>
+                        Start Date
+                    </th>
+
                     <td>
                         {{ event.start_date|date:"M d, Y"|default:"-" }}
                     </td>
+
                 </tr>
 
+
                 <tr>
-                    <th>End Date</th>
+
+                    <th>
+                        End Date
+                    </th>
+
                     <td>
                         {{ event.end_date|date:"M d, Y"|default:"-" }}
                     </td>
+
                 </tr>
 
+
                 <tr>
-                    <th>Registration Deadline</th>
+
+                    <th>
+                        Registration Deadline
+                    </th>
+
                     <td>
                         {{ event.registration_deadline|date:"M d, Y"|default:"-" }}
                     </td>
+
                 </tr>
 
+
                 <tr>
-                    <th>Venue</th>
+
+                    <th>
+                        Venue
+                    </th>
+
                     <td>
                         {{ event.venue|default:"-" }}
                     </td>
+
                 </tr>
 
+
                 <tr>
-                    <th>Location</th>
+
+                    <th>
+                        Location
+                    </th>
+
                     <td>
                         {{ event.location|default:"-" }}
                     </td>
+
                 </tr>
 
+
                 <tr>
-                    <th>Eligibility</th>
+
+                    <th>
+                        Eligibility
+                    </th>
+
                     <td>
                         {{ event.eligibility|default:"-" }}
                     </td>
+
                 </tr>
 
+
                 <tr>
-                    <th>Tags</th>
+
+                    <th>
+                        Tags
+                    </th>
+
                     <td>
                         {{ event.tags|default:"-" }}
                     </td>
+
                 </tr>
 
             </table>
+
 
             {% if event.google_map %}
 
                 <br>
 
-                <a href="{{ event.google_map }}"
-                   target="_blank"
-                   class="btn secondary">
+                <a
+                    href="{{ event.google_map }}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="btn secondary">
 
                     📍 Open Google Map
 
@@ -224,7 +331,9 @@
         </h2>
 
         <div>
+
             {{ event.description|linebreaks }}
+
         </div>
 
     </div>
@@ -241,7 +350,9 @@
         </h2>
 
         <div>
+
             {{ event.requirements|linebreaks }}
+
         </div>
 
     </div>
@@ -257,37 +368,62 @@
             Contact Information
         </h2>
 
+
         <table style="width:100%;">
 
             <tr>
-                <th>Person</th>
+
+                <th>
+                    Person
+                </th>
+
                 <td>
                     {{ event.contact_person|default:"-" }}
                 </td>
+
             </tr>
 
+
             <tr>
-                <th>Email</th>
+
+                <th>
+                    Email
+                </th>
+
                 <td>
                     {{ event.contact_email|default:"-" }}
                 </td>
+
             </tr>
 
+
             <tr>
-                <th>Phone</th>
+
+                <th>
+                    Phone
+                </th>
+
                 <td>
                     {{ event.contact_phone|default:"-" }}
                 </td>
+
             </tr>
 
+
             <tr>
-                <th>Website</th>
+
+                <th>
+                    Website
+                </th>
+
                 <td>
 
                     {% if event.website %}
 
-                        <a href="{{ event.website }}"
-                           target="_blank">
+                        <a
+                            href="{{ event.website }}"
+                            target="_blank"
+                            rel="noopener noreferrer">
 
                             {{ event.website }}
 
@@ -300,6 +436,7 @@
                     {% endif %}
 
                 </td>
+
             </tr>
 
         </table>
@@ -315,11 +452,13 @@
 
         <div class="actions">
 
+
             {% if event.registration_link %}
 
                 <a
                     href="{{ event.registration_link }}"
                     target="_blank"
+                    rel="noopener noreferrer"
                     class="btn">
 
                     🌐 Official Registration
@@ -365,10 +504,78 @@
 
             {% endif %}
 
+
         </div>
 
     </div>
 
 </div>
+
+
+<!-- =====================================================
+     SHARE / COPY EVENT LINK
+====================================================== -->
+
+<script>
+
+function copyEventLink() {
+
+    const eventUrl = window.location.href;
+
+    if (navigator.clipboard && window.isSecureContext) {
+
+        navigator.clipboard.writeText(eventUrl)
+            .then(function () {
+
+                alert("Event link copied successfully!");
+
+            })
+            .catch(function () {
+
+                fallbackCopy(eventUrl);
+
+            });
+
+    } else {
+
+        fallbackCopy(eventUrl);
+
+    }
+
+}
+
+
+function fallbackCopy(text) {
+
+    const textArea = document.createElement("textarea");
+
+    textArea.value = text;
+
+    textArea.style.position = "fixed";
+    textArea.style.left = "-999999px";
+    textArea.style.top = "-999999px";
+
+    document.body.appendChild(textArea);
+
+    textArea.focus();
+    textArea.select();
+
+    try {
+
+        document.execCommand("copy");
+
+        alert("Event link copied successfully!");
+
+    } catch (error) {
+
+        alert("Unable to copy the event link.");
+
+    }
+
+    document.body.removeChild(textArea);
+
+}
+
+</script>
 
 {% endblock %}
