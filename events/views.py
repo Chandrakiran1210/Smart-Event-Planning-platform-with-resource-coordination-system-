@@ -1360,6 +1360,7 @@ def event_detail(request, pk):
         'events/event_detail.html',
         context
     )
+
 # =========================================================
 # EVENT QR CODE
 # =========================================================
@@ -1374,7 +1375,6 @@ def event_qr(request, pk):
 
     # Admin can view any event QR
     # Organizer can view only their own event QR
-
     if not (
         is_admin(request.user)
         or (
@@ -1386,13 +1386,33 @@ def event_qr(request, pk):
             'You cannot view the QR code for this event.'
         )
 
-    # URL that the QR code will open
+    # =====================================================
+    # QR CODE URL
+    # =====================================================
+    #
+    # IMPORTANT:
+    # The QR code now opens the registration URL.
+    #
+    # When a user scans this QR:
+    #
+    # QR Scanner
+    #      ↓
+    # scan_register
+    #      ↓
+    # Check registration
+    #      ↓
+    # Register user
+    #
+    # =====================================================
 
     event_url = request.build_absolute_uri(
-    reverse('event_detail', args=[event.pk])
-)
-    # Generate QR Code
+        reverse(
+            'scan_register',
+            args=[event.pk]
+        )
+    )
 
+    # Generate QR Code
     qr = qrcode.make(event_url)
 
     # =====================================================
@@ -1418,23 +1438,33 @@ def event_qr(request, pk):
 
         poster = Image.new(
             'RGB',
-            (poster_width, poster_height),
+            (
+                poster_width,
+                poster_height
+            ),
             'white'
         )
 
         draw = ImageDraw.Draw(poster)
 
         # Center QR code
+        qr_x = (
+            poster_width - qr_size
+        ) // 2
 
-        qr_x = (poster_width - qr_size) // 2
         qr_y = 120
 
         poster.paste(
             qr,
-            (qr_x, qr_y)
+            (
+                qr_x,
+                qr_y
+            )
         )
 
-        # Event details
+        # =================================================
+        # EVENT DETAILS
+        # =================================================
 
         details = [
             f"EVENT: {event.name}",
@@ -1450,19 +1480,14 @@ def event_qr(request, pk):
         ]
 
         # Starting position below QR
-
         y_position = 650
 
         draw.text(
-            (poster_width // 2, 70),
+            (
+                poster_width // 2,
+                70
+            ),
             "EVENT REGISTRATION",
-            fill='black',
-            anchor='mm'
-        )
-
-        draw.text(
-            (poster_width // 2, 95),
-            "Scan QR Code to Register",
             fill='black',
             anchor='mm'
         )
@@ -1470,26 +1495,31 @@ def event_qr(request, pk):
         for detail in details:
 
             draw.text(
-                (50, y_position),
+                (
+                    50,
+                    y_position
+                ),
                 detail,
                 fill='black'
             )
 
-            y_position += 38
+            y_position += 35
 
-        # Save poster
+        # =================================================
+        # RETURN DOWNLOADABLE POSTER
+        # =================================================
 
-        buffer = BytesIO()
+        poster_buffer = BytesIO()
 
         poster.save(
-            buffer,
+            poster_buffer,
             format='PNG'
         )
 
-        buffer.seek(0)
+        poster_buffer.seek(0)
 
         response = HttpResponse(
-            buffer.getvalue(),
+            poster_buffer.getvalue(),
             content_type='image/png'
         )
 
@@ -1497,13 +1527,13 @@ def event_qr(request, pk):
             'Content-Disposition'
         ] = (
             f'attachment; '
-            f'filename="event_qr_{event.pk}.png"'
+            f'filename="event_{event.pk}_qr.png"'
         )
 
         return response
 
     # =====================================================
-    # DISPLAY QR ON PAGE
+    # DISPLAY QR PAGE
     # =====================================================
 
     buffer = BytesIO()
@@ -1512,8 +1542,6 @@ def event_qr(request, pk):
         buffer,
         format='PNG'
     )
-
-    # Convert QR image to base64
 
     qr_code = base64.b64encode(
         buffer.getvalue()
@@ -1530,6 +1558,190 @@ def event_qr(request, pk):
         'events/event_qr.html',
         context
     )
+
+
+# =========================================================
+# SCAN QR → AUTOMATICALLY REGISTER USER
+# =========================================================
+
+@login_required
+def scan_register(request, pk):
+
+    # =====================================================
+    # GET EVENT
+    # =====================================================
+
+    event = get_object_or_404(
+        Event,
+        pk=pk,
+        approval_status='APPROVED'
+    )
+
+    # =====================================================
+    # CURRENT DATE
+    # =====================================================
+
+    today = timezone.localdate()
+
+    # =====================================================
+    # CHECK EVENT STATUS
+    # =====================================================
+
+    if event.status in (
+        'Cancelled',
+        'Completed'
+    ):
+
+        messages.error(
+            request,
+            'Registration is closed for this event.'
+        )
+
+        return redirect(
+            'event_detail',
+            pk=event.pk
+        )
+
+    # =====================================================
+    # CHECK REGISTRATION DEADLINE
+    # =====================================================
+
+    if (
+        event.registration_deadline
+        and event.registration_deadline < today
+    ):
+
+        messages.error(
+            request,
+            'Registration is closed for this event.'
+        )
+
+        return redirect(
+            'event_detail',
+            pk=event.pk
+        )
+
+    # =====================================================
+    # CHECK MAX PARTICIPANTS
+    # =====================================================
+
+    if (
+        event.max_participants
+        and event.registrations.count()
+        >= event.max_participants
+    ):
+
+        messages.error(
+            request,
+            'This event is full.'
+        )
+
+        return redirect(
+            'event_detail',
+            pk=event.pk
+        )
+
+    # =====================================================
+    # CHECK ALREADY REGISTERED
+    # =====================================================
+
+    existing_registration = (
+        EventRegistration.objects.filter(
+            user=request.user,
+            event=event
+        ).first()
+    )
+
+    if existing_registration:
+
+        messages.info(
+            request,
+            'Already Scanned — You are already registered for this event.'
+        )
+
+        return redirect(
+            'my_joined_events'
+        )
+
+    # =====================================================
+    # CREATE REGISTRATION
+    # =====================================================
+
+    registration = EventRegistration.objects.create(
+        user=request.user,
+        event=event
+    )
+
+    # =====================================================
+    # GENERATE USER REGISTRATION QR CODE
+    # =====================================================
+
+    qr_data = (
+        f"User: {request.user.username}\n"
+        f"Event: {event.name}\n"
+        f"Registration ID: {registration.id}"
+    )
+
+    qr = qrcode.make(
+        qr_data
+    )
+
+    buffer = BytesIO()
+
+    qr.save(
+        buffer,
+        format='PNG'
+    )
+
+    filename = (
+        f"qr_{registration.id}.png"
+    )
+
+    registration.qr_code.save(
+        filename,
+        File(buffer),
+        save=True
+    )
+
+    # =====================================================
+    # USER NOTIFICATION
+    # =====================================================
+
+    notify(
+        request.user,
+        f'You joined {event.name}.',
+        event
+    )
+
+    # =====================================================
+    # ORGANIZER NOTIFICATION
+    # =====================================================
+
+    if event.owner:
+
+        notify(
+            event.owner,
+            f'{request.user.username} joined {event.name}.',
+            event
+        )
+
+    # =====================================================
+    # SUCCESS MESSAGE
+    # =====================================================
+
+    messages.success(
+        request,
+        'Event registration successful!'
+    )
+
+    # =====================================================
+    # REDIRECT TO JOINED EVENTS
+    # =====================================================
+
+    return redirect(
+        'my_joined_events'
+    )
+
 
 # =========================================================
 # JOIN EVENT

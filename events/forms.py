@@ -8,6 +8,7 @@ from .models import (
     Resource,
 )
 
+
 # =========================================================
 # EVENT CATEGORY FORM
 # =========================================================
@@ -18,31 +19,63 @@ class EventCategoryForm(forms.ModelForm):
         model = EventCategory
 
         fields = [
-    'name',
-    'category_code',
-    'priority',
-    'description',
-    'category_image',
-]
+            'name',
+            'category_code',
+            'priority',
+            'description',
+            'category_image',
+        ]
+
         widgets = {
-                    'category_image': forms.ClearableFileInput(
-    attrs={
-        'accept': 'image/*'
-    }
-),
+            'category_image': forms.ClearableFileInput(
+                attrs={
+                    'accept': 'image/*'
+                }
+            ),
+
             'name': forms.Select(
                 choices=[
                     ('', '-- Select Category --'),
-                    ('Job Opportunities', 'Job Opportunities'),
-                    ('Internships', 'Internships'),
-                    ('Hackathons & Coding Contests', 'Hackathons & Coding Contests'),
-                    ('Technical Workshops', 'Technical Workshops'),
-                    ('Training & Certification', 'Training & Certification'),
-                    ('Higher Education', 'Higher Education'),
-                    ('Competitive Exams', 'Competitive Exams'),
-                    ('Career Fairs & Job Fairs', 'Career Fairs & Job Fairs'),
-                    ('Tech Talks & Seminars', 'Tech Talks & Seminars'),
-                    ('Startup & Entrepreneurship', 'Startup & Entrepreneurship'),
+                    (
+                        'Job Opportunities',
+                        'Job Opportunities'
+                    ),
+                    (
+                        'Internships',
+                        'Internships'
+                    ),
+                    (
+                        'Hackathons & Coding Contests',
+                        'Hackathons & Coding Contests'
+                    ),
+                    (
+                        'Technical Workshops',
+                        'Technical Workshops'
+                    ),
+                    (
+                        'Training & Certification',
+                        'Training & Certification'
+                    ),
+                    (
+                        'Higher Education',
+                        'Higher Education'
+                    ),
+                    (
+                        'Competitive Exams',
+                        'Competitive Exams'
+                    ),
+                    (
+                        'Career Fairs & Job Fairs',
+                        'Career Fairs & Job Fairs'
+                    ),
+                    (
+                        'Tech Talks & Seminars',
+                        'Tech Talks & Seminars'
+                    ),
+                    (
+                        'Startup & Entrepreneurship',
+                        'Startup & Entrepreneurship'
+                    ),
                 ]
             ),
 
@@ -70,184 +103,226 @@ class EventCategoryForm(forms.ModelForm):
 class EventForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
-
         super().__init__(*args, **kwargs)
 
-        self.fields["venue"].queryset = Venue.objects.filter(
-            is_available=True
-        )
+        # =====================================================
+        # VENUE DROPDOWN
+        # =====================================================
+        # Event.venue is a CharField.
+        # Therefore, venues are added manually as choices.
+        #
+        # ALL venues are shown here, regardless of
+        # is_available status.
+        # =====================================================
 
-        self.fields["venue"].empty_label = "Select Venue"
+        venues = Venue.objects.all().order_by('name')
+
+        venue_choices = [
+            ('', 'Select Venue')
+        ]
+
+        for venue in venues:
+            venue_choices.append(
+                (
+                    venue.name,
+                    f'{venue.name} - {venue.location}'
+                )
+            )
+
+        self.fields['venue'].choices = venue_choices
 
     class Meta:
-
         model = Event
 
         fields = [
-
             'name',
-
             'category',
-
             'event_image',
-
             'banner_image',
-
             'event_mode',
-
             'venue',
-
             'location',
-
             'google_map',
-
             'website',
-
             'registration_link',
-
             'start_date',
-
             'end_date',
-
             'registration_deadline',
-
             'event_fee',
-
             'max_participants',
-
             'eligibility',
-
             'organizer',
-
             'contact_person',
-
             'contact_email',
-
             'contact_phone',
-
             'tags',
-
             'requirements',
-
             'status',
-
             'description',
-
         ]
 
         widgets = {
-
-            'name': forms.TextInput(attrs={
-                'placeholder': 'Event Name'
-            }),
+            'name': forms.TextInput(
+                attrs={
+                    'placeholder': 'Event Name'
+                }
+            ),
 
             'category': forms.Select(),
 
-            'event_image': forms.ClearableFileInput(attrs={
-                'accept': 'image/*'
-            }),
+            'event_image': forms.ClearableFileInput(
+                attrs={
+                    'accept': 'image/*'
+                }
+            ),
 
-            'banner_image': forms.ClearableFileInput(attrs={
-                'accept': 'image/*'
-            }),
+            'banner_image': forms.ClearableFileInput(
+                attrs={
+                    'accept': 'image/*'
+                }
+            ),
 
             'event_mode': forms.Select(),
 
             'venue': forms.Select(),
 
-            'location': forms.TextInput(attrs={
-                'placeholder': 'City / State'
-            }),
+            'location': forms.TextInput(
+                attrs={
+                    'placeholder': 'City / State'
+                }
+            ),
 
-            'google_map': forms.URLInput(attrs={
-                'placeholder': 'Google Maps Link'
-            }),
+            'google_map': forms.URLInput(
+                attrs={
+                    'placeholder': 'Google Maps link'
+                }
+            ),
 
-            'website': forms.URLInput(attrs={
-                'placeholder': 'Official Website'
-            }),
+            'website': forms.URLInput(
+                attrs={
+                    'placeholder': 'Official Website'
+                }
+            ),
 
-            'registration_link': forms.URLInput(attrs={
-                'placeholder': 'Registration Link'
-            }),
+            'registration_link': forms.URLInput(
+                attrs={
+                    'placeholder': 'Registration Link'
+                }
+            ),
 
-            'start_date': forms.DateInput(attrs={
-                'type': 'date'
-            }),
+            'start_date': forms.DateInput(
+                attrs={
+                    'type': 'date'
+                }
+            ),
 
-            'end_date': forms.DateInput(attrs={
-                'type': 'date'
-            }),
+            'end_date': forms.DateInput(
+                attrs={
+                    'type': 'date'
+                }
+            ),
 
-            'registration_deadline': forms.DateInput(attrs={
-                'type': 'date'
-            }),
+            'registration_deadline': forms.DateInput(
+                attrs={
+                    'type': 'date'
+                }
+            ),
 
-            'event_fee': forms.NumberInput(attrs={
-                'placeholder': '0'
-            }),
+            'event_fee': forms.NumberInput(
+                attrs={
+                    'placeholder': '0'
+                }
+            ),
 
-            'max_participants': forms.NumberInput(attrs={
-                'placeholder': '100'
-            }),
+            'max_participants': forms.NumberInput(
+                attrs={
+                    'placeholder': '100'
+                }
+            ),
 
-            'eligibility': forms.TextInput(attrs={
-                'placeholder': 'Eligibility'
-            }),
+            'eligibility': forms.TextInput(
+                attrs={
+                    'placeholder': 'Eligibility'
+                }
+            ),
 
-            'organizer': forms.TextInput(attrs={
-                'placeholder': 'Organizer Name'
-            }),
+            'organizer': forms.TextInput(
+                attrs={
+                    'placeholder': 'Organizer Name'
+                }
+            ),
 
-            'contact_person': forms.TextInput(attrs={
-                'placeholder': 'Contact Person'
-            }),
+            'contact_person': forms.TextInput(
+                attrs={
+                    'placeholder': 'Contact Person'
+                }
+            ),
 
-            'contact_email': forms.EmailInput(attrs={
-                'placeholder': 'Email'
-            }),
+            'contact_email': forms.EmailInput(
+                attrs={
+                    'placeholder': 'Email'
+                }
+            ),
 
-            'contact_phone': forms.TextInput(attrs={
-                'placeholder': 'Phone Number'
-            }),
+            'contact_phone': forms.TextInput(
+                attrs={
+                    'placeholder': 'Phone Number'
+                }
+            ),
 
-            'tags': forms.TextInput(attrs={
-                'placeholder': 'AI, Hackathon, Workshop'
-            }),
+            'tags': forms.TextInput(
+                attrs={
+                    'placeholder': 'AI, Hackathon, Workshop'
+                }
+            ),
 
-            'requirements': forms.Textarea(attrs={
-                'rows': 4,
-                'placeholder': 'Requirements'
-            }),
+            'requirements': forms.Textarea(
+                attrs={
+                    'rows': 4,
+                    'placeholder': 'Requirements'
+                }
+            ),
 
-            'description': forms.Textarea(attrs={
-                'rows': 6,
-                'placeholder': 'Event Description'
-            }),
+            'description': forms.Textarea(
+                attrs={
+                    'rows': 6,
+                    'placeholder': 'Event Description'
+                }
+            ),
 
             'status': forms.Select(),
-
         }
 
     def clean(self):
-
         cleaned_data = super().clean()
 
-        start = cleaned_data.get('start_date')
+        start = cleaned_data.get(
+            'start_date'
+        )
 
-        end = cleaned_data.get('end_date')
+        end = cleaned_data.get(
+            'end_date'
+        )
 
-        deadline = cleaned_data.get('registration_deadline')
+        deadline = cleaned_data.get(
+            'registration_deadline'
+        )
+
+        # =====================================================
+        # END DATE VALIDATION
+        # =====================================================
 
         if start and end and end < start:
-
             self.add_error(
                 'end_date',
                 'End date cannot be before start date.'
             )
 
-        if start and deadline and deadline > start:
+        # =====================================================
+        # REGISTRATION DEADLINE VALIDATION
+        # =====================================================
 
+        if start and deadline and deadline > start:
             self.add_error(
                 'registration_deadline',
                 'Registration deadline must be before start date.'
@@ -256,28 +331,21 @@ class EventForm(forms.ModelForm):
         return cleaned_data
 
 
-    # =========================================================
+# =========================================================
 # VENUE FORM
 # =========================================================
 
 class VenueForm(forms.ModelForm):
 
     class Meta:
-
         model = Venue
 
         fields = [
-
-            "name",
-
-            "location",
-
-            "capacity",
-
-            "description",
-
-            "is_available",
-
+            'name',
+            'location',
+            'capacity',
+            'description',
+            'is_available',
         ]
 
 
@@ -288,19 +356,12 @@ class VenueForm(forms.ModelForm):
 class ResourceForm(forms.ModelForm):
 
     class Meta:
-
         model = Resource
 
         fields = [
-
-            "name",
-
-            "resource_type",
-
-            "quantity",
-
-            "available_quantity",
-
-            "description",
-
+            'name',
+            'resource_type',
+            'quantity',
+            'available_quantity',
+            'description',
         ]

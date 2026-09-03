@@ -1,302 +1,302 @@
-{% extends 'base.html' %}
-
-{% block title %}
-Event QR Code
-{% endblock %}
+{% extends "base.html" %}
 
 {% block content %}
 
 <style>
 
-    /* =====================================================
-       EVENT QR PAGE
-    ===================================================== */
+/* =========================================================
+   PAGE
+   ========================================================= */
+
+.qr-page {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+
+/* =========================================================
+   QR CARD
+   ========================================================= */
+
+.qr-card {
+    background: white;
+    border-radius: 20px;
+    padding: 35px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.10);
+}
+
+
+/* =========================================================
+   TITLE
+   ========================================================= */
+
+.qr-title {
+    font-size: 30px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.qr-event-name {
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 25px;
+}
+
+
+/* =========================================================
+   QR IMAGE
+   ========================================================= */
+
+.qr-image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 25px 0;
+}
+
+.qr-image {
+    width: 350px;
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+
+/* =========================================================
+   URL
+   ========================================================= */
+
+.qr-url {
+    margin: 20px auto;
+    padding: 15px;
+    max-width: 650px;
+    background: #f5f5f5;
+    border-radius: 10px;
+    word-break: break-all;
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   REGISTER SCAN BUTTON
+   ========================================================= */
+
+.qr-register-text {
+    display: inline-block;
+    margin-top: 20px;
+    color: #2563eb;
+    font-size: 18px;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.qr-scan-btn {
+    border: none;
+    background: none;
+    cursor: pointer;
+    width: 100%;
+    font-family: inherit;
+    padding: 10px;
+}
+
+.qr-scan-btn:hover {
+    color: #1d4ed8;
+}
+
+
+/* =========================================================
+   DOWNLOAD BUTTON
+   ========================================================= */
+
+.qr-download-btn {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 12px 24px;
+    background: #2563eb;
+    color: white;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.qr-download-btn:hover {
+    background: #1d4ed8;
+}
+
+
+/* =========================================================
+   BACK BUTTON
+   ========================================================= */
+
+.qr-back-btn {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 20px;
+    background: #6b7280;
+    color: white;
+    border-radius: 10px;
+    text-decoration: none;
+}
+
+.qr-back-btn:hover {
+    background: #4b5563;
+}
+
+
+/* =========================================================
+   SCANNER MODAL
+   ========================================================= */
+
+.qr-scanner-modal {
+    display: none;
+
+    position: fixed;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    background: rgba(0, 0, 0, 0.75);
+
+    z-index: 9999;
+
+    justify-content: center;
+    align-items: center;
+
+    padding: 20px;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   SCANNER BOX
+   ========================================================= */
+
+.qr-scanner-box {
+    width: 100%;
+    max-width: 500px;
+
+    background: white;
+
+    border-radius: 20px;
+
+    padding: 25px;
+
+    text-align: center;
+
+    box-sizing: border-box;
+
+    box-shadow:
+        0 20px 50px rgba(0, 0, 0, 0.30);
+}
+
+
+/* =========================================================
+   SCANNER TITLE
+   ========================================================= */
+
+.qr-scanner-title {
+    margin-top: 0;
+    margin-bottom: 10px;
+
+    font-size: 24px;
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   SCANNER DESCRIPTION
+   ========================================================= */
+
+.qr-scanner-description {
+    margin-bottom: 20px;
+
+    color: #6b7280;
+
+    font-size: 15px;
+}
+
+
+/* =========================================================
+   QR READER
+   ========================================================= */
+
+#qr-reader {
+    width: 100%;
+    max-width: 450px;
+
+    margin: 0 auto 20px auto;
+}
+
+
+/* =========================================================
+   CLOSE BUTTON
+   ========================================================= */
+
+.qr-close-btn {
+    border: none;
+
+    background: #dc2626;
+
+    color: white;
+
+    padding: 12px 25px;
+
+    border-radius: 10px;
+
+    cursor: pointer;
+
+    font-size: 16px;
+
+    font-weight: 600;
+}
+
+.qr-close-btn:hover {
+    background: #b91c1c;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
 
     .qr-page {
-        width: 100%;
-        min-height: calc(100vh - 100px);
-
-        display: flex;
-        justify-content: center;
-        align-items: flex-start;
-
-        padding: 25px 20px;
-        box-sizing: border-box;
+        margin: 20px auto;
+        padding: 10px;
     }
-
 
     .qr-card {
-        width: 100%;
-        max-width: 520px;
-
-        background: var(--card-bg);
-        border: 1px solid var(--border);
-        border-radius: 14px;
-
-        padding: 28px 30px;
-
-        box-shadow: var(--shadow);
-
-        text-align: center;
-        box-sizing: border-box;
+        padding: 20px;
     }
-
-
-    /* =====================================================
-       HEADER
-    ===================================================== */
 
     .qr-title {
-        margin: 0;
-
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-
-        color: var(--text);
-        font-size: 25px;
-        font-weight: 700;
+        font-size: 24px;
     }
-
-
-    .qr-subtitle {
-        margin: 7px 0 22px;
-
-        color: var(--muted);
-        font-size: 13px;
-    }
-
-
-    /* =====================================================
-       QR IMAGE
-    ===================================================== */
-
-    .qr-image-box {
-        width: 220px;
-        height: 220px;
-
-        margin: 0 auto 24px;
-
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        background: #ffffff;
-
-        border: 1px solid var(--border);
-        border-radius: 10px;
-
-        padding: 12px;
-
-        box-sizing: border-box;
-    }
-
-
-    .qr-image {
-        width: 190px;
-        height: 190px;
-
-        display: block;
-
-        object-fit: contain;
-    }
-
-
-    /* =====================================================
-       EVENT INFORMATION
-    ===================================================== */
 
     .qr-event-name {
-        margin: 0 0 5px;
-
-        color: var(--text);
-        font-size: 20px;
-        font-weight: 700;
+        font-size: 19px;
     }
 
-
-    .qr-event-info {
-        margin: 4px 0;
-
-        color: var(--muted);
-        font-size: 12px;
-        line-height: 1.5;
+    .qr-image {
+        width: 280px;
     }
 
-
-    .qr-event-info strong {
-        color: var(--text);
-        font-weight: 600;
+    .qr-scanner-box {
+        padding: 15px;
     }
 
-
-    .qr-register-text {
-        margin: 20px 0 18px;
-
-        color: var(--text);
-        font-size: 13px;
-        font-weight: 600;
+    .qr-scanner-title {
+        font-size: 21px;
     }
 
-
-    /* =====================================================
-       BUTTONS
-    ===================================================== */
-
-    .qr-actions {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        gap: 10px;
-        flex-wrap: wrap;
-
-        margin-top: 8px;
-    }
-
-
-    .qr-action-btn {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-
-        min-width: 110px;
-
-        padding: 9px 14px;
-
-        border-radius: 7px;
-
-        font-size: 12px;
-        font-weight: 600;
-
-        text-decoration: none;
-
-        cursor: pointer;
-
-        box-sizing: border-box;
-
-        transition: 0.2s ease;
-    }
-
-
-    .qr-action-btn:hover {
-        transform: translateY(-1px);
-    }
-
-
-    .qr-open-btn {
-        background: var(--primary);
-        color: #ffffff;
-        border: 1px solid var(--primary);
-    }
-
-
-    .qr-open-btn:hover {
-        opacity: 0.9;
-    }
-
-
-    .qr-download-btn {
-        background: var(--card-bg);
-        color: var(--text);
-        border: 1px solid var(--border);
-    }
-
-
-    .qr-download-btn:hover {
-        background: var(--primary-light);
-        color: var(--primary);
-    }
-
-
-    .qr-print-btn {
-        background: var(--card-bg);
-        color: var(--text);
-        border: 1px solid var(--border);
-    }
-
-
-    .qr-print-btn:hover {
-        background: var(--primary-light);
-        color: var(--primary);
-    }
-
-
-    /* =====================================================
-       MOBILE
-    ===================================================== */
-
-    @media (max-width: 600px) {
-
-        .qr-page {
-            padding: 15px 10px;
-        }
-
-        .qr-card {
-            padding: 22px 16px;
-        }
-
-        .qr-title {
-            font-size: 21px;
-        }
-
-        .qr-image-box {
-            width: 200px;
-            height: 200px;
-        }
-
-        .qr-image {
-            width: 172px;
-            height: 172px;
-        }
-
-        .qr-actions {
-            flex-direction: column;
-        }
-
-        .qr-action-btn {
-            width: 100%;
-            max-width: 220px;
-        }
-
-    }
-
-
-    /* =====================================================
-       PRINT
-    ===================================================== */
-
-    @media print {
-
-        body * {
-            visibility: hidden;
-        }
-
-        .qr-card,
-        .qr-card * {
-            visibility: visible;
-        }
-
-        .qr-page {
-            position: absolute;
-            left: 0;
-            top: 0;
-
-            width: 100%;
-            padding: 0;
-        }
-
-        .qr-card {
-            box-shadow: none;
-            border: none;
-        }
-
-        .qr-actions {
-            display: none;
-        }
-
-    }
+}
 
 </style>
 
@@ -305,139 +305,383 @@ Event QR Code
 
     <div class="qr-card">
 
-
         <!-- =================================================
-             HEADER
+             TITLE
         ================================================== -->
 
         <h1 class="qr-title">
-            📱 Event QR Code
+            Event Registration QR
         </h1>
 
 
-        <p class="qr-subtitle">
-            Scan this QR code to view and register for the event.
-        </p>
+        <!-- =================================================
+             EVENT NAME
+        ================================================== -->
+
+        <div class="qr-event-name">
+
+            {{ event.name }}
+
+        </div>
 
 
         <!-- =================================================
              QR CODE
         ================================================== -->
 
-        <div class="qr-image-box">
+        <div class="qr-image-container">
 
             <img
                 src="data:image/png;base64,{{ qr_code }}"
+                alt="Event Registration QR Code"
                 class="qr-image"
-                alt="Event QR Code">
+            >
 
         </div>
 
 
         <!-- =================================================
-             EVENT DETAILS
+             QR URL
         ================================================== -->
 
-        <h2 class="qr-event-name">
-            {{ event.name }}
-        </h2>
+        <div class="qr-url">
 
+            {{ event_url }}
 
-        <p class="qr-event-info">
-            <strong>Category:</strong>
-            {{ event.category }}
-        </p>
-
-
-        <p class="qr-event-info">
-            <strong>Organizer:</strong>
-            {{ event.organizer }}
-        </p>
-
-
-        <p class="qr-event-info">
-            <strong>Date:</strong>
-            {{ event.start_date|date:"d M Y" }}
-
-            {% if event.end_date %}
-                - {{ event.end_date|date:"d M Y" }}
-            {% endif %}
-        </p>
-
-
-        <p class="qr-event-info">
-            <strong>Mode:</strong>
-            {{ event.event_mode }}
-        </p>
-
-
-        <p class="qr-event-info">
-            <strong>Registration Fee:</strong>
-            ₹{{ event.event_fee }}
-        </p>
-
-
-        {% if event.registration_deadline %}
-
-            <p class="qr-event-info">
-                <strong>Registration Deadline:</strong>
-                {{ event.registration_deadline|date:"d M Y" }}
-            </p>
-
-        {% endif %}
-
-
-        <p class="qr-register-text">
-            Scan to Register
-        </p>
+        </div>
 
 
         <!-- =================================================
-             ACTION BUTTONS
+             SCAN TO REGISTER
         ================================================== -->
 
-        <div class="qr-actions">
+        <button
+            type="button"
+            class="qr-register-text qr-scan-btn"
+            onclick="openQRScanner()"
+        >
+
+            📷 Scan to Register
+
+        </button>
 
 
-            <!-- OPEN EVENT -->
+        <!-- =================================================
+             DOWNLOAD QR
+        ================================================== -->
+
+        <div>
 
             <a
-                href="{% url 'event_detail' event.pk %}"
-                class="qr-action-btn qr-open-btn">
-
-                🔗 Open Event
-
-            </a>
-
-
-            <!-- DOWNLOAD QR -->
-
-            <a
-                href="{% url 'event_qr' event.pk %}?download=1"
-                class="qr-action-btn qr-download-btn">
+                href="?download=1"
+                class="qr-download-btn"
+            >
 
                 ⬇ Download QR
 
             </a>
 
-
-            <!-- PRINT QR -->
-
-            <button
-                type="button"
-                onclick="window.print()"
-                class="qr-action-btn qr-print-btn">
-
-                🖨 Print QR
-
-            </button>
-
-
         </div>
 
+
+        <!-- =================================================
+             BACK
+        ================================================== -->
+
+        <div>
+
+            <a
+                href="{% url 'event_list' %}"
+                class="qr-back-btn"
+            >
+
+                ← Back to Events
+
+            </a>
+
+        </div>
 
     </div>
 
 </div>
+
+
+<!-- =========================================================
+     QR SCANNER MODAL
+========================================================= -->
+
+<div
+    id="qrScannerModal"
+    class="qr-scanner-modal"
+>
+
+    <div class="qr-scanner-box">
+
+        <h2 class="qr-scanner-title">
+
+            📷 Scan Event QR
+
+        </h2>
+
+
+        <p class="qr-scanner-description">
+
+            Point your camera at the event QR code.
+
+        </p>
+
+
+        <div id="qr-reader"></div>
+
+
+        <button
+            type="button"
+            onclick="closeQRScanner()"
+            class="qr-close-btn"
+        >
+
+            ✕ Close
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     HTML5 QR CODE LIBRARY
+========================================================= -->
+
+<script
+    src="https://unpkg.com/html5-qrcode"
+    type="text/javascript">
+</script>
+
+
+<!-- =========================================================
+     QR SCANNER JAVASCRIPT
+========================================================= -->
+
+<script>
+
+let qrScanner = null;
+
+let isScanning = false;
+
+
+// =========================================================
+// OPEN QR SCANNER
+// =========================================================
+
+function openQRScanner() {
+
+    const modal =
+        document.getElementById(
+            "qrScannerModal"
+        );
+
+
+    modal.style.display = "flex";
+
+
+    // Prevent multiple scanner instances
+    if (isScanning) {
+
+        return;
+
+    }
+
+
+    isScanning = true;
+
+
+    qrScanner =
+        new Html5Qrcode(
+            "qr-reader"
+        );
+
+
+    qrScanner.start(
+
+        {
+            facingMode: "environment"
+        },
+
+        {
+            fps: 10,
+
+            qrbox: {
+                width: 250,
+                height: 250
+            }
+        },
+
+
+        // =================================================
+        // QR SUCCESS
+        // =================================================
+
+        function(decodedText) {
+
+            console.log(
+                "QR Scanned:",
+                decodedText
+            );
+
+
+            // Stop camera
+            if (qrScanner) {
+
+                qrScanner.stop()
+
+                    .then(function() {
+
+                        qrScanner.clear();
+
+                        qrScanner = null;
+
+                        isScanning = false;
+
+
+                        // =================================================
+                        // OPEN URL INSIDE QR CODE
+                        // =================================================
+
+                        window.location.href =
+                            decodedText;
+
+                    })
+
+                    .catch(function(error) {
+
+                        console.error(
+                            "Scanner stop error:",
+                            error
+                        );
+
+
+                        qrScanner = null;
+
+                        isScanning = false;
+
+
+                        // Open scanned URL
+                        window.location.href =
+                            decodedText;
+
+                    });
+
+            }
+
+            else {
+
+                isScanning = false;
+
+                window.location.href =
+                    decodedText;
+
+            }
+
+        },
+
+
+        // =================================================
+        // SCANNING ERROR
+        // =================================================
+
+        function(errorMessage) {
+
+            /*
+             * This function is called continuously while
+             * the camera is searching for a QR code.
+             *
+             * Temporary errors are ignored.
+             */
+
+        }
+
+    )
+
+    .catch(function(error) {
+
+        console.error(
+            "Camera Error:",
+            error
+        );
+
+
+        isScanning = false;
+
+
+        alert(
+            "Unable to access camera. Please allow camera permission and try again."
+        );
+
+
+        closeQRScanner();
+
+    });
+
+}
+
+
+// =========================================================
+// CLOSE QR SCANNER
+// =========================================================
+
+function closeQRScanner() {
+
+    const modal =
+        document.getElementById(
+            "qrScannerModal"
+        );
+
+
+    if (qrScanner) {
+
+        qrScanner.stop()
+
+            .then(function() {
+
+                qrScanner.clear();
+
+                qrScanner = null;
+
+                isScanning = false;
+
+                modal.style.display = "none";
+
+            })
+
+            .catch(function(error) {
+
+                console.error(
+                    "Scanner close error:",
+                    error
+                );
+
+
+                qrScanner = null;
+
+                isScanning = false;
+
+                modal.style.display = "none";
+
+            });
+
+    }
+
+    else {
+
+        isScanning = false;
+
+        modal.style.display = "none";
+
+    }
+
+}
+
+</script>
 
 {% endblock %}
